@@ -1,0 +1,18 @@
+# One feed URL per line. Lines starting with # are ignored.
+# This is a starter list of well-known AI news sources.
+# Verify each URL still works (feeds move/rename occasionally) and add/remove as you like.
+# Tip: most publications list their feed at <site>/feed or <site>/rss.
+
+https://openai.com/news/rss.xml
+https://www.anthropic.com/rss.xml
+https://blog.google/technology/ai/rss/
+https://deepmind.google/blog/rss.xml
+https://www.technologyreview.com/topic/artificial-intelligence/feed
+https://venturebeat.com/category/ai/feed/
+https://techcrunch.com/category/artificial-intelligence/feed/
+https://www.theverge.com/artificial-intelligence/rss/index.xml
+https://www.wired.com/feed/tag/ai/latest/rss
+https://www.zdnet.com/topic/artificial-intelligence/rss.xml
+https://hnrss.org/newest?q=AI+OR+LLM+OR+%22machine+learning%22
+https://www.marktechpost.com/feed/
+https://www.artificialintelligence-news.com/feed/
