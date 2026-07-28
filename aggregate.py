@@ -17,8 +17,12 @@ import argparse
 import concurrent.futures
 import datetime as dt
 import html
+import json
+import os
 import re
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from difflib import SequenceMatcher
@@ -30,6 +34,12 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 )
 HTTP_TIMEOUT = 12
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash-lite")
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+GEMINI_TIMEOUT = 20
+MAX_GEMINI_CALLS = 60  # bound API usage per run (free-tier friendly)
 IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
 OG_IMAGE_RE = re.compile(
     r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)["\'][^>]+content=["\']([^"\']+)["\']',
@@ -221,6 +231,72 @@ def augment_leads(clusters):
                 lead["image"] = meta["image"]
             if not lead.get("summary") and meta.get("summary") and not looks_like_caption(meta["summary"]):
                 lead["summary"] = meta["summary"][:400]
+
+
+def gemini_summarize(title, source, excerpt, link):
+    """Ask Gemini for a tight 2-3 sentence news-card summary. Returns None on
+    any failure (missing key, network error, quota, blocked response) so
+    callers fall back to the text-extracted summary instead of breaking."""
+    if not GEMINI_API_KEY:
+        return None
+    prompt = (
+        "Write a concise, factual 2-3 sentence summary (about 40-50 words "
+        "total) of this news story, suitable for a headline card. Plain "
+        "prose only — no markdown, no bullet points, no preamble like "
+        "'Here is a summary', don't editorialize.\n\n"
+        f"Headline: {title}\n"
+        f"Source: {source}\n"
+        f"Excerpt: {excerpt[:1500] if excerpt else '(none — infer only from the headline)'}"
+    )
+    body = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.3, "maxOutputTokens": 200},
+    }).encode("utf-8")
+    headers = {"Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY}
+
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(GEMINI_URL, data=body, headers=headers)
+            with urllib.request.urlopen(req, timeout=GEMINI_TIMEOUT) as resp:
+                payload = json.loads(resp.read())
+            text_out = payload["candidates"][0]["content"]["parts"][0]["text"]
+            return clean_html(text_out) or None
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < 2:
+                time.sleep(2 ** attempt * 3)
+                continue
+            print(f"[warn] Gemini summarize failed ({e.code}) for {link}: {e}", file=sys.stderr)
+            return None
+        except Exception as e:
+            print(f"[warn] Gemini summarize failed for {link}: {e}", file=sys.stderr)
+            return None
+    return None
+
+
+def gemini_summarize_leads(clusters):
+    """Replace each story's summary with a real LLM-written one via Gemini,
+    when GEMINI_API_KEY is configured. No key set (e.g. running locally
+    without exporting it) silently keeps the existing text-extracted
+    summaries — this step is purely additive."""
+    if not GEMINI_API_KEY:
+        return
+    leads = [g[0] for g in clusters][:MAX_GEMINI_CALLS]
+    if not leads:
+        return
+    print(f"Summarizing {len(leads)} stories with Gemini ({GEMINI_MODEL})...")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
+        future_to_lead = {
+            ex.submit(gemini_summarize, lead["title"], lead["source"], lead["summary"], lead["link"]): lead
+            for lead in leads
+        }
+        for future in concurrent.futures.as_completed(future_to_lead):
+            lead = future_to_lead[future]
+            try:
+                result = future.result()
+            except Exception:
+                result = None
+            if result:
+                lead["summary"] = result
 
 
 def cluster_articles(articles, threshold=0.45, window_hours=72):
@@ -471,6 +547,7 @@ def main():
     print(f"Grouped into {len(clusters)} stories.")
 
     augment_leads(clusters)
+    gemini_summarize_leads(clusters)
 
     render(clusters, args.out)
     print(f"Wrote {args.out}")

@@ -25,6 +25,8 @@ jobs:
 
       - name: Run aggregator
         run: python3 aggregate.py --feeds feeds.txt --out docs/index.html --days 4
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Commit updated page
         run: |

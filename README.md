@@ -15,8 +15,10 @@ into every source. No login, no server, no monthly cost.
   titles (word overlap + text similarity) within a rolling time window, and
   writes a static `docs/index.html`. For each story it also picks a thumbnail
   image (from the feed's media tags, an embedded `<img>`, or — as a fallback,
-  bounded to ~40 requests per run — the article page's `og:image`) and a
-  3-line text summary from the feed's own description.
+  bounded to ~40 requests per run — the article page's `og:image`), and a
+  3-line summary — a real Gemini-written one if `GEMINI_API_KEY` is set
+  (see below), otherwise a text-extracted excerpt from the feed's own
+  description.
 - `.github/workflows/build.yml` — a GitHub Action that runs the script every
   2 hours and publishes the result via **GitHub Pages** — completely free
   for a public repo.
@@ -58,12 +60,27 @@ That's it — from then on it updates itself every 2 hours for $0.
   open docs/index.html
   ```
 
+## LLM summaries (optional)
+
+Set a `GEMINI_API_KEY` repo secret (**Settings → Secrets and variables →
+Actions**; get a free key at [Google AI Studio](https://aistudio.google.com/apikey))
+and `aggregate.py` will ask Gemini (`gemini-2.5-flash-lite` by default —
+override with a `GEMINI_MODEL` env var) to write a real 2-3 sentence summary
+for each story instead of using the text-extracted excerpt. It's called once
+per story (bounded to `MAX_GEMINI_CALLS = 60` per run) and falls back
+silently to the text-extracted summary on any failure — no key, quota limit,
+network error, or blocked response — so the page always builds successfully
+either way. The free tier comfortably covers a run every 2 hours.
+
+Running locally without exporting `GEMINI_API_KEY` skips this step entirely
+and behaves exactly as before.
+
 ## A note on the "grouping" approach
 
 This groups stories using title/text similarity within a time window — it's
 a simple, transparent method, not an LLM. It works well for near-duplicate
 headlines about the same launch/event (which is most of what makes feeds feel
 redundant). It won't catch stories that are worded very differently but
-about the same underlying event. If you want LLM-based grouping (better
-recall, but requires an API key and has a small ongoing cost per run), say
-the word and I'll swap the clustering step for an embeddings-based one.
+about the same underlying event. If you want LLM-based grouping too (better
+recall, but calls the API more often), say the word and I'll swap the
+clustering step for an embeddings-based one.
