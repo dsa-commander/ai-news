@@ -364,11 +364,13 @@ PAGE_TEMPLATE = """<!doctype html>
     background: var(--card); border: 1px solid var(--border);
     border-radius: 10px; margin-bottom: 12px; overflow: hidden;
   }}
-  .story summary {{
+  .story summary, a.story-link {{
     cursor: pointer; list-style: none; padding: 14px 16px;
     display: flex; gap: 12px; align-items: flex-start;
+    text-decoration: none; color: inherit;
   }}
   .story summary::-webkit-details-marker {{ display: none; }}
+  a.story-link:hover .story-title {{ text-decoration: underline; }}
   .story-thumb {{
     width: 84px; height: 84px; flex: 0 0 auto; border-radius: 8px;
     object-fit: cover; background: var(--border);
@@ -412,7 +414,7 @@ PAGE_TEMPLATE = """<!doctype html>
 <body>
 <header>
   <h1>🧠 AI News</h1>
-  <p>Same-story articles are grouped together. Tap a headline to see every source.</p>
+  <p>Same-story articles are grouped together — tap to see every source. Single-source stories link straight to the article.</p>
 </header>
 <main>
 {stories}
@@ -453,6 +455,18 @@ STORY_TEMPLATE = """<details class="story">
 </details>
 """
 
+SINGLE_STORY_TEMPLATE = """<a class="story story-link" href="{link}" target="_blank" rel="noopener">
+  {thumb}
+  <div class="story-body">
+    <div class="story-head">
+      <span class="story-title">{title}</span>
+      <span class="story-meta">{when}</span>
+    </div>
+    {snippet}
+  </div>
+</a>
+"""
+
 THUMB_TEMPLATE = (
     '<img class="story-thumb" src="{src}" alt="" loading="lazy" '
     "onerror=\"this.onerror=null;this.src='" + PLACEHOLDER_THUMB + "'\">"
@@ -468,12 +482,24 @@ SOURCE_ITEM_TEMPLATE = """<div class="source-item">
 
 def render_story(group):
     lead = group[0]
-    badge = f'<span class="badge">{len(group)} sources</span>' if len(group) > 1 else ""
     when = lead["published"].strftime("%H:%M UTC")
     image_src = lead.get("image") or PLACEHOLDER_THUMB
     thumb = THUMB_TEMPLATE.format(src=html.escape(image_src))
     snippet_text = three_line_summary(lead["summary"])
     snippet = f'<div class="story-snippet">{html.escape(snippet_text)}</div>' if snippet_text else ""
+
+    if len(group) == 1:
+        # Only one source for this story — link straight to the article
+        # instead of expanding into a redundant one-item source list.
+        return SINGLE_STORY_TEMPLATE.format(
+            link=html.escape(lead["link"]),
+            thumb=thumb,
+            title=html.escape(lead["title"]),
+            when=when,
+            snippet=snippet,
+        )
+
+    badge = f'<span class="badge">{len(group)} sources</span>'
     source_items = "".join(
         SOURCE_ITEM_TEMPLATE.format(
             source=html.escape(a["source"]),

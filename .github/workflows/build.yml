@@ -23,8 +23,13 @@ jobs:
       - name: Install dependencies
         run: pip install feedparser
 
-      - name: TEMP list gemini models
-        run: curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${{ secrets.GEMINI_API_KEY }}" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(m['name'], m.get('supportedGenerationMethods')) for m in d.get('models',[])]"
+      - name: TEMP test gemini generateContent
+        run: |
+          curl -s -i -X POST \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent" \
+            -H "Content-Type: application/json" \
+            -H "x-goog-api-key: ${{ secrets.GEMINI_API_KEY }}" \
+            -d '{"contents":[{"parts":[{"text":"Say hi in 3 words."}]}]}'
 
       - name: Run aggregator
         run: python3 aggregate.py --feeds feeds.txt --out docs/index.html --days 4
