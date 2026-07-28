@@ -19,6 +19,7 @@ import datetime as dt
 import html
 import re
 import sys
+import urllib.parse
 import urllib.request
 from difflib import SequenceMatcher
 
@@ -34,8 +35,22 @@ OG_IMAGE_RE = re.compile(
     r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)["\'][^>]+content=["\']([^"\']+)["\']',
     re.IGNORECASE,
 )
+OG_DESCRIPTION_RE = re.compile(
+    r'<meta[^>]+(?:property|name)=["\'](?:og:description|description)["\'][^>]+content=["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
 MAX_OG_FETCHES = 40  # bound extra per-article HTTP calls to keep runs fast
 HN_BOILERPLATE_RE = re.compile(r"article url:.*points:\s*\d+.*#\s*comments:\s*\d+", re.IGNORECASE | re.DOTALL)
+
+# Generic "no photo" icon shown when a story has no usable image.
+_PLACEHOLDER_SVG = (
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 84'>"
+    "<rect width='84' height='84' rx='8' fill='#20242e'/>"
+    "<circle cx='30' cy='32' r='7' fill='#3a4150'/>"
+    "<path d='M14 62 L34 40 L48 54 L58 44 L70 62 Z' fill='#3a4150'/>"
+    "</svg>"
+)
+PLACEHOLDER_THUMB = "data:image/svg+xml," + urllib.parse.quote(_PLACEHOLDER_SVG)
 
 STOPWORDS = {
     "the", "a", "an", "and", "or", "of", "to", "in", "on", "for", "with",
@@ -68,6 +83,13 @@ def three_line_summary(text, max_sentences=3, max_chars=280):
     return out
 
 
+def looks_like_caption(text):
+    """Heuristic for feeds (e.g. Google's blog) that put the hero image's alt
+    text in <description> instead of real content: real prose has sentence
+    punctuation, a bare image caption usually doesn't."""
+    return bool(text) and len(text) < 220 and not re.search(r"[.!?]", text)
+
+
 def fetch_url(url):
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
     with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:
@@ -93,17 +115,24 @@ def entry_image(entry, raw_html):
     return None
 
 
-def fetch_og_image(article_url):
+def fetch_og_meta(article_url):
     """Fallback: fetch the article page and pull its og:image/twitter:image
-    meta tag. Only called for cluster leads that have no image from the feed."""
+    and og:description meta tags. Only called for cluster leads missing an
+    image and/or a usable summary from the feed itself."""
     try:
         req = urllib.request.Request(article_url, headers={"User-Agent": USER_AGENT})
         with urllib.request.urlopen(req, timeout=6) as resp:
             chunk = resp.read(65536).decode("utf-8", errors="ignore")
-        m = OG_IMAGE_RE.search(chunk)
-        return m.group(1) if m else None
     except Exception:
-        return None
+        return {}
+    meta = {}
+    m = OG_IMAGE_RE.search(chunk)
+    if m:
+        meta["image"] = html.unescape(m.group(1))
+    m = OG_DESCRIPTION_RE.search(chunk)
+    if m:
+        meta["summary"] = html.unescape(m.group(1))
+    return meta
 
 
 def tokenize(title):
@@ -156,6 +185,8 @@ def fetch_articles(feed_urls, since):
             summary = clean_html(raw_html)
             if HN_BOILERPLATE_RE.search(summary):
                 summary = ""  # hnrss descriptions are just "Article URL / Points / Comments", not real content
+            elif looks_like_caption(summary):
+                summary = ""  # e.g. Google's blog RSS puts the hero image's alt text here
             link = entry.get("link", "")
             image = entry_image(entry, raw_html or raw_content)
             articles.append({
@@ -169,21 +200,27 @@ def fetch_articles(feed_urls, since):
     return articles
 
 
-def attach_lead_images(clusters):
-    """For each story's lead article, fill in a missing image by fetching
-    the article page's og:image — bounded and run concurrently so it stays
-    fast even across dozens of clusters."""
-    leads_needing_fetch = [g[0] for g in clusters if not g[0].get("image")][:MAX_OG_FETCHES]
+def augment_leads(clusters):
+    """For each story's lead article, fill in a missing image and/or summary
+    by fetching the article page's og:image/og:description — bounded and run
+    concurrently so it stays fast even across dozens of clusters."""
+    leads_needing_fetch = [
+        g[0] for g in clusters if not g[0].get("image") or not g[0].get("summary")
+    ][:MAX_OG_FETCHES]
     if not leads_needing_fetch:
         return
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex:
-        future_to_lead = {ex.submit(fetch_og_image, lead["link"]): lead for lead in leads_needing_fetch if lead["link"]}
+        future_to_lead = {ex.submit(fetch_og_meta, lead["link"]): lead for lead in leads_needing_fetch if lead["link"]}
         for future in concurrent.futures.as_completed(future_to_lead):
             lead = future_to_lead[future]
             try:
-                lead["image"] = future.result()
+                meta = future.result()
             except Exception:
-                pass
+                continue
+            if not lead.get("image") and meta.get("image"):
+                lead["image"] = meta["image"]
+            if not lead.get("summary") and meta.get("summary") and not looks_like_caption(meta["summary"]):
+                lead["summary"] = meta["summary"][:400]
 
 
 def cluster_articles(articles, threshold=0.45, window_hours=72):
@@ -280,6 +317,19 @@ PAGE_TEMPLATE = """<!doctype html>
     display: inline-block; background: #22303f; color: var(--accent);
     font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; margin-left: 8px;
   }}
+  .day-heading {{
+    font-size: 1rem; font-weight: 700; margin: 22px 4px 10px; color: var(--text);
+  }}
+  main > *:first-child .day-heading {{ margin-top: 0; }}
+  details.day-collapsed {{ margin-bottom: 12px; }}
+  details.day-collapsed > summary.day-heading {{
+    cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px;
+    margin: 22px 0 0; padding: 12px 16px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 10px;
+  }}
+  details.day-collapsed > summary.day-heading::-webkit-details-marker {{ display: none; }}
+  details.day-collapsed[open] > summary.day-heading {{ border-radius: 10px 10px 0 0; margin-bottom: 10px; }}
+  .day-stories {{ padding-top: 2px; }}
   .updated {{ color: var(--muted); font-size: 0.78rem; text-align: center; padding: 20px 0; }}
 </style>
 </head>
@@ -294,6 +344,20 @@ PAGE_TEMPLATE = """<!doctype html>
 </main>
 </body>
 </html>
+"""
+
+DAY_OPEN_TEMPLATE = """<section class="day-section">
+  <h2 class="day-heading">{label}</h2>
+  {stories}
+</section>
+"""
+
+DAY_COLLAPSED_TEMPLATE = """<details class="day-section day-collapsed">
+  <summary class="day-heading">{label} <span class="badge">{count} stories</span></summary>
+  <div class="day-stories">
+    {stories}
+  </div>
+</details>
 """
 
 STORY_TEMPLATE = """<details class="story">
@@ -313,7 +377,10 @@ STORY_TEMPLATE = """<details class="story">
 </details>
 """
 
-THUMB_TEMPLATE = '<img class="story-thumb" src="{src}" alt="" loading="lazy" onerror="this.remove()">'
+THUMB_TEMPLATE = (
+    '<img class="story-thumb" src="{src}" alt="" loading="lazy" '
+    "onerror=\"this.onerror=null;this.src='" + PLACEHOLDER_THUMB + "'\">"
+)
 
 SOURCE_ITEM_TEMPLATE = """<div class="source-item">
   <div class="source-name">{source}</div>
@@ -323,34 +390,61 @@ SOURCE_ITEM_TEMPLATE = """<div class="source-item">
 """
 
 
-def render(clusters, out_path):
-    story_html = []
-    for group in clusters:
-        lead = group[0]
-        badge = f'<span class="badge">{len(group)} sources</span>' if len(group) > 1 else ""
-        when = lead["published"].strftime("%b %d, %H:%M UTC")
-        thumb = THUMB_TEMPLATE.format(src=html.escape(lead["image"])) if lead.get("image") else ""
-        snippet_text = three_line_summary(lead["summary"])
-        snippet = f'<div class="story-snippet">{html.escape(snippet_text)}</div>' if snippet_text else ""
-        source_items = "".join(
-            SOURCE_ITEM_TEMPLATE.format(
-                source=html.escape(a["source"]),
-                link=html.escape(a["link"]),
-                title=html.escape(a["title"]),
-                summary=html.escape(a["summary"]),
-            )
-            for a in group
+def render_story(group):
+    lead = group[0]
+    badge = f'<span class="badge">{len(group)} sources</span>' if len(group) > 1 else ""
+    when = lead["published"].strftime("%H:%M UTC")
+    image_src = lead.get("image") or PLACEHOLDER_THUMB
+    thumb = THUMB_TEMPLATE.format(src=html.escape(image_src))
+    snippet_text = three_line_summary(lead["summary"])
+    snippet = f'<div class="story-snippet">{html.escape(snippet_text)}</div>' if snippet_text else ""
+    source_items = "".join(
+        SOURCE_ITEM_TEMPLATE.format(
+            source=html.escape(a["source"]),
+            link=html.escape(a["link"]),
+            title=html.escape(a["title"]),
+            summary=html.escape(a["summary"]),
         )
-        story_html.append(STORY_TEMPLATE.format(
-            thumb=thumb,
-            title=html.escape(lead["title"]),
-            badge=badge,
-            when=when,
-            snippet=snippet,
-            source_items=source_items,
-        ))
+        for a in group
+    )
+    return STORY_TEMPLATE.format(
+        thumb=thumb,
+        title=html.escape(lead["title"]),
+        badge=badge,
+        when=when,
+        snippet=snippet,
+        source_items=source_items,
+    )
+
+
+def group_by_day(clusters):
+    """Bucket stories by the UTC calendar date of their lead article,
+    newest day first."""
+    groups = {}
+    for group in clusters:
+        day = group[0]["published"].date()
+        groups.setdefault(day, []).append(group)
+    return sorted(groups.items(), key=lambda kv: kv[0], reverse=True)
+
+
+def render(clusters, out_path):
+    today = dt.datetime.now(dt.timezone.utc).date()
+    section_html = []
+    for day, day_clusters in group_by_day(clusters):
+        stories = "".join(render_story(g) for g in day_clusters)
+        if day == today:
+            label = f"Today — {day.strftime('%b %d, %Y')}"
+            section_html.append(DAY_OPEN_TEMPLATE.format(label=label, stories=stories))
+        else:
+            if day == today - dt.timedelta(days=1):
+                label = f"Yesterday — {day.strftime('%b %d, %Y')}"
+            else:
+                label = day.strftime("%A, %b %d, %Y")
+            section_html.append(DAY_COLLAPSED_TEMPLATE.format(
+                label=label, count=len(day_clusters), stories=stories,
+            ))
     page = PAGE_TEMPLATE.format(
-        stories="\n".join(story_html) if story_html else "<p>No articles found in this window.</p>",
+        stories="\n".join(section_html) if section_html else "<p>No articles found in this window.</p>",
         updated=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
     )
     with open(out_path, "w", encoding="utf-8") as f:
@@ -376,7 +470,7 @@ def main():
     clusters = cluster_articles(articles, threshold=args.threshold)
     print(f"Grouped into {len(clusters)} stories.")
 
-    attach_lead_images(clusters)
+    augment_leads(clusters)
 
     render(clusters, args.out)
     print(f"Wrote {args.out}")
