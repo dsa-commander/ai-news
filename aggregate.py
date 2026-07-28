@@ -127,9 +127,11 @@ def fetch_url(url):
         return resp.read()
 
 
-def entry_image(entry, raw_html):
+def entry_image(entry, html_bodies):
     """Best-effort image URL straight from the feed entry: media:content,
-    media:thumbnail, an image enclosure, or the first <img> in the HTML body."""
+    media:thumbnail, an image enclosure, or the first <img> found across
+    html_bodies (checked in order — e.g. summary then full content, since a
+    short summary often lacks an image the full body has)."""
     for media in entry.get("media_content", []) or []:
         if media.get("url") and (media.get("medium") in (None, "image") or "image" in (media.get("type") or "")):
             return media["url"]
@@ -139,10 +141,11 @@ def entry_image(entry, raw_html):
     for enc in entry.get("enclosures", []) or []:
         if enc.get("url") and "image" in (enc.get("type") or ""):
             return enc["url"]
-    if raw_html:
-        m = IMG_TAG_RE.search(raw_html)
-        if m:
-            return m.group(1)
+    for raw in html_bodies:
+        if raw:
+            m = IMG_TAG_RE.search(raw)
+            if m:
+                return m.group(1)
     return None
 
 
@@ -228,7 +231,7 @@ def fetch_articles(feed_urls, since):
             elif looks_like_caption(summary):
                 summary = ""  # e.g. Google's blog RSS puts the hero image's alt text here
             link = entry.get("link", "")
-            image = entry_image(entry, raw_html or raw_content)
+            image = entry_image(entry, [raw_html, raw_content])
             articles.append({
                 "title": title,
                 "summary": summary[:400],
@@ -264,6 +267,20 @@ def dedupe_by_link(articles):
             by_link[key] = a
         order.append(a)
     return order
+
+
+def backfill_lead_image_from_sources(clusters):
+    """If a story's lead article has no image but another source covering the
+    same story does, use that instead of spending an extra network request
+    on og:image (or falling all the way back to the placeholder)."""
+    for group in clusters:
+        lead = group[0]
+        if lead.get("image"):
+            continue
+        for a in group[1:]:
+            if a.get("image"):
+                lead["image"] = a["image"]
+                break
 
 
 def augment_leads(clusters):
@@ -713,6 +730,7 @@ def main():
     clusters = cluster_articles(articles, threshold=args.threshold)
     print(f"Grouped into {len(clusters)} stories.")
 
+    backfill_lead_image_from_sources(clusters)
     augment_leads(clusters)
     gemini_summarize_leads(clusters)
 

@@ -30,6 +30,10 @@ https://www.artificialintelligence-news.com/feed/
 https://simonwillison.net/atom/everything/
 https://www.interconnects.ai/feed
 
+# --- Daily digests --- (one entry per day, multi-topic title — shows as a
+# single roundup card rather than per-story, unlike everything else above)
+https://tldr.tech/api/rss/ai
+
 # --- Aggregator --- (points/comments from these feed items power the "hot" ranking)
 https://hnrss.org/newest?q=AI+OR+LLM+OR+%22machine+learning%22
 https://hnrss.org/best?q=AI+OR+LLM+OR+%22machine+learning%22

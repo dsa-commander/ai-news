@@ -9,14 +9,19 @@ into every source. No login, no server, no monthly cost.
 
 - `feeds.txt` — the list of RSS feeds to pull from (one URL per line).
   Curated and verified working as of 2026-07-28: a mix of AI-lab blogs,
-  AI-specific sections of tech publications, independent commentary, and
-  two Hacker News search feeds (newest + best — see "Hot ranking" below).
+  AI-specific sections of tech publications, independent commentary, a daily
+  digest (TLDR AI), and two Hacker News search feeds (newest + best — see
+  "Hot ranking" below). Only RSS/Atom sources — no HTML scraping (fragile,
+  breaks on redesigns, higher maintenance than this project aims for); a
+  source needs a feed to be included. Some well-known AI newsletters (e.g.
+  The Rundown AI) don't publish one and so aren't in the list.
 - `aggregate.py` — fetches every feed, groups same-story articles by comparing
   titles (word overlap + text similarity) within a rolling time window, and
   writes a static `docs/index.html`. For each story it also picks a thumbnail
-  image (from the feed's media tags, an embedded `<img>`, or — as a fallback,
-  bounded to ~40 requests per run — the article page's `og:image`), and a
-  3-line summary — a real Gemini-written one if `GEMINI_API_KEY` is set
+  image (from the feed's media tags, an embedded `<img>` in the summary or
+  full content, any other source covering the same story, or — as a last
+  resort, bounded to ~40 requests per run — the article page's `og:image`),
+  and a 3-line summary — a real Gemini-written one if `GEMINI_API_KEY` is set
   (see below), otherwise a text-extracted excerpt from the feed's own
   description.
 - `.github/workflows/build.yml` — a GitHub Action that runs the script
