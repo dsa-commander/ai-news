@@ -22,6 +22,7 @@ import math
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -40,6 +41,7 @@ GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-flash-lite-latest")
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 GEMINI_TIMEOUT = 20
 MAX_GEMINI_CALLS = 60  # bound API usage per run (free-tier friendly)
+GEMINI_MAX_RATE_LIMIT_WAITS = 6  # cap total per-minute-cap waits per run
 IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
 OG_IMAGE_RE = re.compile(
     r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)["\'][^>]+content=["\']([^"\']+)["\']',
@@ -288,17 +290,48 @@ def augment_leads(clusters):
 
 
 class GeminiQuotaExhausted(Exception):
-    """Raised on a 429 so the caller can stop the whole batch instead of
-    burning through every remaining call for the same failure (Gemini's free
-    tier quota for a model is commonly a fixed per-day cap, not a per-minute
-    one — retrying doesn't help within a single run)."""
+    """429 from a per-day (or unrecognized) quota window — waiting within a
+    single run won't help, so the caller stops the whole batch."""
+
+
+class GeminiRateLimited(Exception):
+    """429 from a per-minute/per-hour quota window — recoverable within a
+    single run by waiting out the window."""
+    def __init__(self, retry_seconds, body):
+        self.retry_seconds = retry_seconds
+        super().__init__(body)
+
+
+def _parse_quota_error(body_bytes):
+    """Parse a 429 error body into (is_per_day_cap, suggested_retry_seconds).
+    Google reports the exact quotaId (e.g. "...PerDay..." vs "...PerMinute...")
+    and a retryDelay hint — use both so we only wait out limits that will
+    actually reset before the run ends. Defaults to "per-day" (i.e. don't
+    retry) if the body doesn't match the expected shape, since blindly
+    retrying against an unknown cap just wastes time on guaranteed failures."""
+    try:
+        details = json.loads(body_bytes).get("error", {}).get("details", [])
+        quota_id, retry_seconds = "", 20
+        for d in details:
+            type_ = d.get("@type", "")
+            if type_.endswith("QuotaFailure"):
+                for v in d.get("violations", []):
+                    quota_id = v.get("quotaId", "") or quota_id
+            elif type_.endswith("RetryInfo"):
+                digits = re.sub(r"[^\d]", "", d.get("retryDelay", "") or "")
+                if digits:
+                    retry_seconds = int(digits)
+        return ("PerDay" in quota_id if quota_id else True), retry_seconds
+    except Exception:
+        return True, 20
 
 
 def gemini_summarize(title, source, excerpt, link):
     """Ask Gemini for a tight 2-3 sentence news-card summary. Returns None on
     a recoverable, single-request failure (network error, blocked response)
     so the caller falls back to the text-extracted summary. Raises
-    GeminiQuotaExhausted on a 429."""
+    GeminiQuotaExhausted or GeminiRateLimited on a 429, depending on which
+    kind of quota window was hit."""
     prompt = (
         "Write a concise, factual 2-3 sentence summary (about 40-50 words "
         "total) of this news story, suitable for a headline card. Plain "
@@ -321,7 +354,11 @@ def gemini_summarize(title, source, excerpt, link):
         return clean_html(text_out) or None
     except urllib.error.HTTPError as e:
         if e.code == 429:
-            raise GeminiQuotaExhausted(str(e)) from e
+            error_body = e.read()
+            is_per_day, retry_seconds = _parse_quota_error(error_body)
+            if is_per_day:
+                raise GeminiQuotaExhausted(error_body.decode("utf-8", errors="ignore")) from e
+            raise GeminiRateLimited(retry_seconds, error_body.decode("utf-8", errors="ignore")) from e
         print(f"[warn] Gemini summarize failed ({e.code}) for {link}: {e}", file=sys.stderr)
         return None
     except Exception as e:
@@ -331,11 +368,14 @@ def gemini_summarize(title, source, excerpt, link):
 
 def gemini_summarize_leads(clusters):
     """Replace each story's summary with a real LLM-written one via Gemini,
-    when GEMINI_API_KEY is configured. Stops the whole batch as soon as the
-    API reports quota exhaustion (the free tier can be as low as ~20
-    requests/day for a given model) instead of wasting calls on guaranteed
-    failures. No key set (e.g. running locally without exporting it)
-    silently keeps the existing text-extracted summaries."""
+    when GEMINI_API_KEY is configured. On a per-minute/hour rate limit,
+    waits out the suggested delay and retries the same story (bounded to
+    GEMINI_MAX_RATE_LIMIT_WAITS total waits per run) — Gemini's free tier
+    for this model resets every minute, so most of the batch still gets a
+    real summary, just spread over a few minutes. On a per-day cap, or once
+    the wait budget is used up, stops the batch and leaves the rest on
+    text-extracted summaries. No key set (e.g. running locally without
+    exporting it) silently keeps the existing text-extracted summaries."""
     if not GEMINI_API_KEY:
         return
     leads = [g[0] for g in clusters][:MAX_GEMINI_CALLS]
@@ -343,16 +383,32 @@ def gemini_summarize_leads(clusters):
         return
     print(f"Summarizing up to {len(leads)} stories with Gemini ({GEMINI_MODEL})...")
     done = 0
-    for lead in leads:
+    waits_used = 0
+    i = 0
+    while i < len(leads):
+        lead = leads[i]
         try:
             result = gemini_summarize(lead["title"], lead["source"], lead["summary"], lead["link"])
         except GeminiQuotaExhausted as e:
             print(f"[warn] Gemini quota exhausted after {done} summaries, using text-extracted "
                   f"summaries for the rest: {e}", file=sys.stderr)
             break
+        except GeminiRateLimited as e:
+            if waits_used >= GEMINI_MAX_RATE_LIMIT_WAITS:
+                print(f"[warn] Gemini still rate-limited after {waits_used} waits, using "
+                      f"text-extracted summaries for the rest: {e}", file=sys.stderr)
+                break
+            wait = min(e.retry_seconds, 30) + 1
+            print(f"[info] Gemini per-minute limit hit at story {i + 1}/{len(leads)}, "
+                  f"waiting {wait}s...", file=sys.stderr)
+            time.sleep(wait)
+            waits_used += 1
+            continue  # retry the same story
+        waits_used = 0
         if result:
             lead["summary"] = result
             done += 1
+        i += 1
     if done:
         print(f"Gemini summarized {done}/{len(leads)} stories.")
 

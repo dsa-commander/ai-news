@@ -27,21 +27,6 @@ jobs:
       - name: Install dependencies
         run: pip install feedparser
 
-      - name: TEMP burn quota and show exact error
-        run: |
-          for i in $(seq 1 25); do
-            curl -s -o /tmp/resp.json -w "call $i: HTTP %{http_code}\n" -X POST \
-              "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent" \
-              -H "Content-Type: application/json" \
-              -H "x-goog-api-key: ${{ secrets.GEMINI_API_KEY }}" \
-              -d '{"contents":[{"parts":[{"text":"Say hi."}]}]}'
-            if grep -q '"code": 429' /tmp/resp.json; then
-              echo "--- full error body ---"
-              cat /tmp/resp.json
-              break
-            fi
-          done
-
       - name: Run aggregator
         run: python3 aggregate.py --feeds feeds.txt --out docs/index.html --days 4
         env:

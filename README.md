@@ -98,23 +98,32 @@ silently to the text-extracted summary on any failure — no key, quota limit,
 network error, or blocked response — so the page always builds successfully
 either way.
 
-**Free-tier quota is small and per-model/per-day**, not per-minute, and
-appears to differ by exact model string on a given key: on a brand-new key
-we found the versioned model names (`gemini-2.5-flash-lite`,
+**Free-tier quota varies by exact model string, and by quota window** — on
+one key we found the versioned model names (`gemini-2.5-flash-lite`,
 `gemini-2.0-flash-lite`, `gemini-2.0-flash`) either blocked entirely or
-capped at ~20 requests/day (shown in the error:
-`GenerateRequestsPerDayPerProjectPerModel-FreeTier`), while the `-latest`
-aliases (`gemini-flash-lite-latest`, `gemini-flash-latest`) had working
-quota — hence the default above. If you hit quota on your key too, check
+capped at ~20 requests/**day**, while `gemini-flash-lite-latest` (the
+default above — Google rolls `-latest` forward to newer model generations
+over time) is capped at 15 requests/**minute** instead — a much friendlier
+limit, since it resets every minute rather than for the rest of the day.
+`aggregate.py` tells the two apart from the 429 body's `quotaId`
+(`...PerDay...` vs `...PerMinute...`/`...PerHour...`): a per-day cap stops
+the whole Gemini batch immediately (waiting won't help within one run), but
+a per-minute cap waits out the suggested delay and retries — up to
+`GEMINI_MAX_RATE_LIMIT_WAITS = 6` times — so most of the batch still gets a
+real summary, just spread over a few minutes. Either way, whatever's left
+over falls back to the text-extracted summary and the page still builds
+fine. If you hit quota on your key too, check
 `https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY` for
 what's available, or just try another model via `GEMINI_MODEL`.
-`aggregate.py` stops the whole Gemini batch the moment it sees a 429 rather
-than wasting calls retrying, so hitting a cap just means the rest of that
-run's stories (and any later runs the same day) quietly use the
-text-extracted summary until the quota resets — the page still builds fine.
-For guaranteed coverage on every run, enable billing on the key's Google
-Cloud project (this model is inexpensive per request) to move off the
-free-tier cap.
+
+Note that a **consumer Gemini/Google AI Pro subscription does not raise
+this** — we confirmed empirically that the same key still hits the free-tier
+cap (error explicitly says `generate_content_free_tier_requests`) regardless
+of any personal AI subscription tied to the Google account. Free-tier API
+quota is a property of the **Google Cloud project** the key belongs to; to
+remove the cap, enable Cloud Billing on that specific project (this model is
+inexpensive per request) — a personal subscription and API billing are
+separate systems.
 
 Running locally without exporting `GEMINI_API_KEY` skips this step entirely
 and behaves exactly as before.
