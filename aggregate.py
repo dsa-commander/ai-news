@@ -51,7 +51,7 @@ OG_DESCRIPTION_RE = re.compile(
     r'<meta[^>]+(?:property|name)=["\'](?:og:description|description)["\'][^>]+content=["\']([^"\']+)["\']',
     re.IGNORECASE,
 )
-MAX_OG_FETCHES = 40  # bound extra per-article HTTP calls to keep runs fast
+MAX_OG_FETCHES = 100  # bound extra per-article HTTP calls to keep runs fast
 HN_BOILERPLATE_RE = re.compile(r"article url:.*points:\s*\d+.*#\s*comments:\s*\d+", re.IGNORECASE | re.DOTALL)
 HN_POINTS_RE = re.compile(r"points:\s*(\d+)", re.IGNORECASE)
 HN_COMMENTS_RE = re.compile(r"#\s*comments:\s*(\d+)", re.IGNORECASE)
@@ -149,15 +149,28 @@ def entry_image(entry, html_bodies):
     return None
 
 
+OG_FETCH_USER_AGENT = "WhatsApp/2.0"  # link-preview bots (WhatsApp, Facebook, Slack, ...)
+# are commonly allowlisted even by paywalled sites (confirmed on WSJ, which 401s a
+# regular browser UA) since sites want their og:image/description to show up in
+# link previews — exactly the metadata we're after here, nothing paywalled.
+
+
 def fetch_og_meta(article_url):
     """Fallback: fetch the article page and pull its og:image/twitter:image
     and og:description meta tags. Only called for cluster leads missing an
-    image and/or a usable summary from the feed itself."""
-    try:
-        req = urllib.request.Request(article_url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=6) as resp:
-            chunk = resp.read(65536).decode("utf-8", errors="ignore")
-    except Exception:
+    image and/or a usable summary from the feed itself. Tries a link-preview
+    bot UA first, then a regular browser UA, since different sites block
+    different ones."""
+    chunk = None
+    for ua in (OG_FETCH_USER_AGENT, USER_AGENT):
+        try:
+            req = urllib.request.Request(article_url, headers={"User-Agent": ua})
+            with urllib.request.urlopen(req, timeout=6) as resp:
+                chunk = resp.read(65536).decode("utf-8", errors="ignore")
+            break
+        except Exception:
+            continue
+    if chunk is None:
         return {}
     meta = {}
     m = OG_IMAGE_RE.search(chunk)

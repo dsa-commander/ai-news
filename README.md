@@ -20,8 +20,13 @@ into every source. No login, no server, no monthly cost.
   writes a static `docs/index.html`. For each story it also picks a thumbnail
   image (from the feed's media tags, an embedded `<img>` in the summary or
   full content, any other source covering the same story, or — as a last
-  resort, bounded to ~40 requests per run — the article page's `og:image`),
-  and a 3-line summary — a real Gemini-written one if `GEMINI_API_KEY` is set
+  resort, bounded to `MAX_OG_FETCHES = 100` requests per run — the article
+  page's `og:image`). That last-resort fetch tries a link-preview bot User-
+  Agent (`WhatsApp/2.0`) before a regular browser one, since paywalled sites
+  (confirmed on WSJ, which 401s a normal request) commonly allowlist
+  link-preview bots so their og:image/description still show up when shared
+  — exactly the metadata we want, nothing paywalled. And a 3-line summary —
+  a real Gemini-written one if `GEMINI_API_KEY` is set
   (see below), otherwise a text-extracted excerpt from the feed's own
   description.
 - `.github/workflows/build.yml` — a GitHub Action that runs the script
