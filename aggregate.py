@@ -14,13 +14,28 @@ Usage:
     python3 aggregate.py --feeds feeds.txt --out docs/index.html --days 4
 """
 import argparse
+import concurrent.futures
 import datetime as dt
 import html
 import re
 import sys
+import urllib.request
 from difflib import SequenceMatcher
 
 import feedparser
+
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+)
+HTTP_TIMEOUT = 12
+IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
+OG_IMAGE_RE = re.compile(
+    r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)["\'][^>]+content=["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+MAX_OG_FETCHES = 40  # bound extra per-article HTTP calls to keep runs fast
+HN_BOILERPLATE_RE = re.compile(r"article url:.*points:\s*\d+.*#\s*comments:\s*\d+", re.IGNORECASE | re.DOTALL)
 
 STOPWORDS = {
     "the", "a", "an", "and", "or", "of", "to", "in", "on", "for", "with",
@@ -39,6 +54,56 @@ def clean_html(raw):
     text = re.sub(r"<[^>]+>", " ", raw)
     text = html.unescape(text)
     return re.sub(r"\s+", " ", text).strip()
+
+
+def three_line_summary(text, max_sentences=3, max_chars=280):
+    """First few sentences of a summary, capped in length so it renders as
+    roughly a 3-line snippet regardless of how CSS line-clamp handles it."""
+    if not text:
+        return ""
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    out = " ".join(sentences[:max_sentences]).strip()
+    if len(out) > max_chars:
+        out = out[:max_chars].rsplit(" ", 1)[0] + "…"
+    return out
+
+
+def fetch_url(url):
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
+    with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:
+        return resp.read()
+
+
+def entry_image(entry, raw_html):
+    """Best-effort image URL straight from the feed entry: media:content,
+    media:thumbnail, an image enclosure, or the first <img> in the HTML body."""
+    for media in entry.get("media_content", []) or []:
+        if media.get("url") and (media.get("medium") in (None, "image") or "image" in (media.get("type") or "")):
+            return media["url"]
+    for thumb in entry.get("media_thumbnail", []) or []:
+        if thumb.get("url"):
+            return thumb["url"]
+    for enc in entry.get("enclosures", []) or []:
+        if enc.get("url") and "image" in (enc.get("type") or ""):
+            return enc["url"]
+    if raw_html:
+        m = IMG_TAG_RE.search(raw_html)
+        if m:
+            return m.group(1)
+    return None
+
+
+def fetch_og_image(article_url):
+    """Fallback: fetch the article page and pull its og:image/twitter:image
+    meta tag. Only called for cluster leads that have no image from the feed."""
+    try:
+        req = urllib.request.Request(article_url, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(req, timeout=6) as resp:
+            chunk = resp.read(65536).decode("utf-8", errors="ignore")
+        m = OG_IMAGE_RE.search(chunk)
+        return m.group(1) if m else None
+    except Exception:
+        return None
 
 
 def tokenize(title):
@@ -64,7 +129,12 @@ def fetch_articles(feed_urls, since):
         if not url or url.startswith("#"):
             continue
         try:
-            parsed = feedparser.parse(url)
+            raw = fetch_url(url)
+        except Exception as e:
+            print(f"[warn] failed to fetch {url}: {e}", file=sys.stderr)
+            continue
+        try:
+            parsed = feedparser.parse(raw)
         except Exception as e:
             print(f"[warn] failed to parse {url}: {e}", file=sys.stderr)
             continue
@@ -80,16 +150,40 @@ def fetch_articles(feed_urls, since):
             if published < since:
                 continue
             title = entry.get("title", "(untitled)").strip()
-            summary = clean_html(entry.get("summary", "") or entry.get("description", ""))
+            raw_html = entry.get("summary", "") or entry.get("description", "")
+            content_list = entry.get("content") or []
+            raw_content = content_list[0].get("value", "") if content_list else ""
+            summary = clean_html(raw_html)
+            if HN_BOILERPLATE_RE.search(summary):
+                summary = ""  # hnrss descriptions are just "Article URL / Points / Comments", not real content
             link = entry.get("link", "")
+            image = entry_image(entry, raw_html or raw_content)
             articles.append({
                 "title": title,
                 "summary": summary[:400],
                 "link": link,
                 "source": source_name,
                 "published": published,
+                "image": image,
             })
     return articles
+
+
+def attach_lead_images(clusters):
+    """For each story's lead article, fill in a missing image by fetching
+    the article page's og:image — bounded and run concurrently so it stays
+    fast even across dozens of clusters."""
+    leads_needing_fetch = [g[0] for g in clusters if not g[0].get("image")][:MAX_OG_FETCHES]
+    if not leads_needing_fetch:
+        return
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex:
+        future_to_lead = {ex.submit(fetch_og_image, lead["link"]): lead for lead in leads_needing_fetch if lead["link"]}
+        for future in concurrent.futures.as_completed(future_to_lead):
+            lead = future_to_lead[future]
+            try:
+                lead["image"] = future.result()
+            except Exception:
+                pass
 
 
 def cluster_articles(articles, threshold=0.45, window_hours=72):
@@ -159,12 +253,22 @@ PAGE_TEMPLATE = """<!doctype html>
   }}
   .story summary {{
     cursor: pointer; list-style: none; padding: 14px 16px;
-    display: flex; gap: 10px; align-items: baseline; justify-content: space-between;
+    display: flex; gap: 12px; align-items: flex-start;
   }}
   .story summary::-webkit-details-marker {{ display: none; }}
+  .story-thumb {{
+    width: 84px; height: 84px; flex: 0 0 auto; border-radius: 8px;
+    object-fit: cover; background: var(--border);
+  }}
+  .story-body {{ flex: 1 1 auto; min-width: 0; }}
+  .story-head {{ display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }}
   .story-title {{ font-size: 1rem; font-weight: 600; }}
   .story-meta {{ color: var(--muted); font-size: 0.78rem; white-space: nowrap; padding-left: 10px;}}
-  .story-snippet {{ color: var(--muted); font-size: 0.88rem; padding: 0 16px 14px; margin-top: -6px; }}
+  .story-snippet {{
+    color: var(--muted); font-size: 0.88rem; margin-top: 4px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }}
   .sources {{ border-top: 1px solid var(--border); padding: 6px 16px 14px; }}
   .source-item {{ padding: 10px 0; border-bottom: 1px solid var(--border); }}
   .source-item:last-child {{ border-bottom: none; }}
@@ -194,15 +298,22 @@ PAGE_TEMPLATE = """<!doctype html>
 
 STORY_TEMPLATE = """<details class="story">
   <summary>
-    <span class="story-title">{title}{badge}</span>
-    <span class="story-meta">{when}</span>
+    {thumb}
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">{title}{badge}</span>
+        <span class="story-meta">{when}</span>
+      </div>
+      {snippet}
+    </div>
   </summary>
-  <div class="story-snippet">{snippet}</div>
   <div class="sources">
     {source_items}
   </div>
 </details>
 """
+
+THUMB_TEMPLATE = '<img class="story-thumb" src="{src}" alt="" loading="lazy" onerror="this.remove()">'
 
 SOURCE_ITEM_TEMPLATE = """<div class="source-item">
   <div class="source-name">{source}</div>
@@ -218,6 +329,9 @@ def render(clusters, out_path):
         lead = group[0]
         badge = f'<span class="badge">{len(group)} sources</span>' if len(group) > 1 else ""
         when = lead["published"].strftime("%b %d, %H:%M UTC")
+        thumb = THUMB_TEMPLATE.format(src=html.escape(lead["image"])) if lead.get("image") else ""
+        snippet_text = three_line_summary(lead["summary"])
+        snippet = f'<div class="story-snippet">{html.escape(snippet_text)}</div>' if snippet_text else ""
         source_items = "".join(
             SOURCE_ITEM_TEMPLATE.format(
                 source=html.escape(a["source"]),
@@ -228,10 +342,11 @@ def render(clusters, out_path):
             for a in group
         )
         story_html.append(STORY_TEMPLATE.format(
+            thumb=thumb,
             title=html.escape(lead["title"]),
             badge=badge,
             when=when,
-            snippet=html.escape(lead["summary"][:220]),
+            snippet=snippet,
             source_items=source_items,
         ))
     page = PAGE_TEMPLATE.format(
@@ -260,6 +375,8 @@ def main():
 
     clusters = cluster_articles(articles, threshold=args.threshold)
     print(f"Grouped into {len(clusters)} stories.")
+
+    attach_lead_images(clusters)
 
     render(clusters, args.out)
     print(f"Wrote {args.out}")
