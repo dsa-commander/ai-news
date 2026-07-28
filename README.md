@@ -64,23 +64,30 @@ That's it — from then on it updates itself every 2 hours for $0.
 
 Set a `GEMINI_API_KEY` repo secret (**Settings → Secrets and variables →
 Actions**; get a free key at [Google AI Studio](https://aistudio.google.com/apikey))
-and `aggregate.py` will ask Gemini (`gemini-2.5-flash-lite` by default —
+and `aggregate.py` will ask Gemini (`gemini-flash-lite-latest` by default —
 override with a `GEMINI_MODEL` env var) to write a real 2-3 sentence summary
 for each story instead of using the text-extracted excerpt. It falls back
 silently to the text-extracted summary on any failure — no key, quota limit,
 network error, or blocked response — so the page always builds successfully
 either way.
 
-**Free-tier quota is small and per-model/per-day**, not per-minute — a brand
-new API key's project can be as low as ~20 requests/day for a given model
-(shown in the error when you hit it: `GenerateRequestsPerDayPerProjectPerModel-FreeTier`).
+**Free-tier quota is small and per-model/per-day**, not per-minute, and
+appears to differ by exact model string on a given key: on a brand-new key
+we found the versioned model names (`gemini-2.5-flash-lite`,
+`gemini-2.0-flash-lite`, `gemini-2.0-flash`) either blocked entirely or
+capped at ~20 requests/day (shown in the error:
+`GenerateRequestsPerDayPerProjectPerModel-FreeTier`), while the `-latest`
+aliases (`gemini-flash-lite-latest`, `gemini-flash-latest`) had working
+quota — hence the default above. If you hit quota on your key too, check
+`https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY` for
+what's available, or just try another model via `GEMINI_MODEL`.
 `aggregate.py` stops the whole Gemini batch the moment it sees a 429 rather
-than wasting calls retrying, so hitting this just means the rest of that
+than wasting calls retrying, so hitting a cap just means the rest of that
 run's stories (and any later runs the same day) quietly use the
 text-extracted summary until the quota resets — the page still builds fine.
-If you want every story to get a real LLM summary on every 2-hour run,
-enable billing on the key's Google Cloud project (`gemini-2.5-flash-lite` is
-inexpensive per request) to move off the free-tier cap.
+For guaranteed coverage on every run, enable billing on the key's Google
+Cloud project (this model is inexpensive per request) to move off the
+free-tier cap.
 
 Running locally without exporting `GEMINI_API_KEY` skips this step entirely
 and behaves exactly as before.
