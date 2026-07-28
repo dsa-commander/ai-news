@@ -25,12 +25,22 @@
   }
   .story summary {
     cursor: pointer; list-style: none; padding: 14px 16px;
-    display: flex; gap: 10px; align-items: baseline; justify-content: space-between;
+    display: flex; gap: 12px; align-items: flex-start;
   }
   .story summary::-webkit-details-marker { display: none; }
+  .story-thumb {
+    width: 84px; height: 84px; flex: 0 0 auto; border-radius: 8px;
+    object-fit: cover; background: var(--border);
+  }
+  .story-body { flex: 1 1 auto; min-width: 0; }
+  .story-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
   .story-title { font-size: 1rem; font-weight: 600; }
   .story-meta { color: var(--muted); font-size: 0.78rem; white-space: nowrap; padding-left: 10px;}
-  .story-snippet { color: var(--muted); font-size: 0.88rem; padding: 0 16px 14px; margin-top: -6px; }
+  .story-snippet {
+    color: var(--muted); font-size: 0.88rem; margin-top: 4px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .sources { border-top: 1px solid var(--border); padding: 6px 16px 14px; }
   .source-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
   .source-item:last-child { border-bottom: none; }
@@ -53,15 +63,335 @@
 <main>
 <details class="story">
   <summary>
-    <span class="story-title">XMPP Agent Gateway: A protocol for discovering and invoking AI agents</span>
-    <span class="story-meta">Jul 28, 12:55 UTC</span>
+    <img class="story-thumb" src="https://research.eye.security/wp-content/uploads/PhaaS-article-thumbnail-image.png" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">How AI is powering business email compromise at scale</span>
+        <span class="story-meta">Jul 28, 13:21 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://romanbsd.github.io/xmpp-agent-gateway/ Comments URL: https://news.ycombinator.com/item?id=49083076 Points: 1 # Comments: 0</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://research.eye.security/phishing-as-a-service-inside-two-ai-powered-phishing-kits-that-automate-bec/" target="_blank" rel="noopener">How AI is powering business email compromise at scale</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2021/11/GettyImages-1236309559.jpg?w=1024" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Recursive Superintelligence signs $410 compute deal with Amazon</span>
+        <span class="story-meta">Jul 28, 13:19 UTC</span>
+      </div>
+      <div class="story-snippet">Recursive’s $400 million outlay represents the bulk of the company’s fundraising to date.</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
+  <a href="https://techcrunch.com/2026/07/28/recursive-superintelligence-signs-400-compute-deal-with-amazon/" target="_blank" rel="noopener">Recursive Superintelligence signs $410 compute deal with Amazon</a>
+  <div class="source-summary">Recursive’s $400 million outlay represents the bulk of the company’s fundraising to date.</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="http://markbhall.dev/og.png" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">My local LLM scored 6/6. It was wrong every time</span>
+        <span class="story-meta">Jul 28, 13:16 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://markbhall.dev/writing/my-local-llm-scored-6-of-6/" target="_blank" rel="noopener">My local LLM scored 6/6. It was wrong every time</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">New HIV vaccine shows unprecedented success in preclinical study</span>
+        <span class="story-meta">Jul 28, 13:12 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://www.lji.org/news-events/news/post/new-hiv-vaccine-shows-unprecedented-success-in-preclinical-study/" target="_blank" rel="noopener">New HIV vaccine shows unprecedented success in preclinical study</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://dinjure.com/og.png" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Show HN: Dinjure – Bulls and Cows in one HTML file, with a fallible AI</span>
+        <span class="story-meta">Jul 28, 13:10 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://dinjure.com/" target="_blank" rel="noopener">Show HN: Dinjure – Bulls and Cows in one HTML file, with a fallible AI</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://opengraph.githubassets.com/8fb051282c06d056d6f9b4b27c30b70c6796b7be29905cdec6445edb458dae59/schildep/verified-3d-mesh-intersection" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Show HN: Formally verified 3D CSG: Trust 93 lines spec, not 1000 lines AI code</span>
+        <span class="story-meta">Jul 28, 13:07 UTC</span>
+      </div>
+      <div class="story-snippet">To my knowledge, this is the first formally verified implementation of a 3D constructive solid geometry (CSG) operation: mesh intersection, implemented in Lean 4 and verified against a concise specification that pins down the surface of the resulting mesh exactly and guarantees…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://github.com/schildep/verified-3d-mesh-intersection" target="_blank" rel="noopener">Show HN: Formally verified 3D CSG: Trust 93 lines spec, not 1000 lines AI code</a>
+  <div class="source-summary">To my knowledge, this is the first formally verified implementation of a 3D constructive solid geometry (CSG) operation: mesh intersection, implemented in Lean 4 and verified against a concise specification that pins down the surface of the resulting mesh exactly and guarantees practical well-formedness conditions on the triangulation. This project is also an experiment in avoiding having to trust</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Securing the Future of AI Agents</span>
+        <span class="story-meta">Jul 28, 13:06 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://deepmind.google/blog/securing-the-future-of-ai-agents/" target="_blank" rel="noopener">Securing the Future of AI Agents</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/66294c0dc06bc9275cba93a84e6baed88521c2d7/417_0_4666_3734/master/4666.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=0b1a8c3e824aebe6fdfcac7cccc0f2d1" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Debate over AI’s future divides Silicon Valley as China gains ground</span>
+        <span class="story-meta">Jul 28, 13:04 UTC</span>
+      </div>
+      <div class="story-snippet">Open-source questions stir frank discussion – and both sides have clear economic incentives for where they land Hello, and welcome to TechScape. This week we’ll be looking at a debate over the future of artificial intelligence that’s dividing the tech industry, as well as how…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/technology/2026/jul/27/silicon-valley-ai-open-source-china" target="_blank" rel="noopener">Debate over AI’s future divides Silicon Valley as China gains ground</a>
+  <div class="source-summary">Open-source questions stir frank discussion – and both sides have clear economic incentives for where they land Hello, and welcome to TechScape. This week we’ll be looking at a debate over the future of artificial intelligence that’s dividing the tech industry, as well as how the European Union gave Google a slap on the wrist for anti-competitive behavior. And we’ll also catch you up on the avalan</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Tenir: A Counter-Pressure Architecture for Safe Agentic AI Under Irreversibly</span>
+        <span class="story-meta">Jul 28, 13:03 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://zenodo.org/records/21277138" target="_blank" rel="noopener">Tenir: A Counter-Pressure Architecture for Safe Agentic AI Under Irreversibly</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://opengraph.githubassets.com/166484b3f4e75e5459b7e221d11898837e52777e517e038d436eccc8677cb4cf/VictorTaelin/OptMem" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">OptMem – Permanent memory for AI agents</span>
+        <span class="story-meta">Jul 28, 13:02 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://github.com/VictorTaelin/OptMem" target="_blank" rel="noopener">OptMem – Permanent memory for AI agents</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Using AI for Automated Tasks</span>
+        <span class="story-meta">Jul 28, 13:00 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://visualgui.com/2026/07/28/using-ai-for-automated-tasks/" target="_blank" rel="noopener">Using AI for Automated Tasks</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://galjot.si/_blog/img/2026/ai-developers-bukowski-social.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">What AI developers could learn from Charles Bukowski?</span>
+        <span class="story-meta">Jul 28, 13:00 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://galjot.si/what-ai-developers-could-learn-from-charles-bukowski" target="_blank" rel="noopener">What AI developers could learn from Charles Bukowski?</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AI_Mode_real_world.max-600x600.format-webp.webp" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">5 ways AI Mode in Search helps you enjoy the real world</span>
+        <span class="story-meta">Jul 28, 13:00 UTC</span>
+      </div>
+      <div class="story-snippet">Illustration of a black magnifying glass in a white circle on green grass surrounded by items related to fun activities like tennis and games</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI</div>
+  <a href="https://blog.google/products-and-platforms/products/search/ai-mode-real-world-tips/" target="_blank" rel="noopener">5 ways AI Mode in Search helps you enjoy the real world</a>
+  <div class="source-summary">Illustration of a black magnifying glass in a white circle on green grass surrounded by items related to fun activities like tennis and games</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Dinner_parties.max-600x600.format-webp.webp" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">5 ways to host the ultimate dinner party with Google Search</span>
+        <span class="story-meta">Jul 28, 13:00 UTC</span>
+      </div>
+      <div class="story-snippet">An illustrated black magnifying glass with a sparkle in a white circle surrounded by a dinner party tablescape</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI</div>
+  <a href="https://blog.google/products-and-platforms/products/search/dinner-party-hosting-tips/" target="_blank" rel="noopener">5 ways to host the ultimate dinner party with Google Search</a>
+  <div class="source-summary">An illustrated black magnifying glass with a sparkle in a white circle surrounded by a dinner party tablescape</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI meets Cryptography 3: What AI Found in Bron Labs&#x27;s bron-crypto</span>
+        <span class="story-meta">Jul 28, 12:57 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
+  <a href="https://blog.zksecurity.xyz/posts/bron-bugs/" target="_blank" rel="noopener">AI meets Cryptography 3: What AI Found in Bron Labs&#x27;s bron-crypto</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://xmpp.org/images/logos/xmpp-logo-text-banner.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">XMPP Agent Gateway: A protocol for discovering and invoking AI agents</span>
+        <span class="story-meta">Jul 28, 12:55 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://romanbsd.github.io/xmpp-agent-gateway/" target="_blank" rel="noopener">XMPP Agent Gateway: A protocol for discovering and invoking AI agents</a>
-  <div class="source-summary">Article URL: https://romanbsd.github.io/xmpp-agent-gateway/ Comments URL: https://news.ycombinator.com/item?id=49083076 Points: 1 # Comments: 0</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -69,15 +399,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Show HN: Preloop: Open-source control plane for AI agents. See, govern, cut cost</span>
-    <span class="story-meta">Jul 28, 12:50 UTC</span>
+    <img class="story-thumb" src="https://repository-images.githubusercontent.com/1131305895/0c343c50-5796-465b-abd6-52f289c89727" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Show HN: Preloop: Open-source control plane for AI agents. See, govern, cut cost</span>
+        <span class="story-meta">Jul 28, 12:50 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://github.com/preloop/preloop Comments URL: https://news.ycombinator.com/item?id=49083015 Points: 1 # Comments: 1</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://github.com/preloop/preloop" target="_blank" rel="noopener">Show HN: Preloop: Open-source control plane for AI agents. See, govern, cut cost</a>
-  <div class="source-summary">Article URL: https://github.com/preloop/preloop Comments URL: https://news.ycombinator.com/item?id=49083015 Points: 1 # Comments: 1</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -85,15 +420,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Show HN: Banksia – Build and run adaptable, accountable AI teams</span>
-    <span class="story-meta">Jul 28, 12:50 UTC</span>
+    <img class="story-thumb" src="https://opengraph.githubassets.com/b040a8a8f3558e82bda53544a71b31e204a2e1d4e06465308b7448541e7b93b3/ringlochid/banksia" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Show HN: Banksia – Build and run adaptable, accountable AI teams</span>
+        <span class="story-meta">Jul 28, 12:50 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://github.com/ringlochid/banksia Comments URL: https://news.ycombinator.com/item?id=49083014 Points: 1 # Comments: 0</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://github.com/ringlochid/banksia" target="_blank" rel="noopener">Show HN: Banksia – Build and run adaptable, accountable AI teams</a>
-  <div class="source-summary">Article URL: https://github.com/ringlochid/banksia Comments URL: https://news.ycombinator.com/item?id=49083014 Points: 1 # Comments: 0</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -101,15 +441,41 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Puck AI – Visual AI builder embedded in your app</span>
-    <span class="story-meta">Jul 28, 12:45 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/dead-internet-theory-come-true.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">It Seems a Lot Like Dead Internet Has Actually Come True</span>
+        <span class="story-meta">Jul 28, 12:49 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;Agentic AI activity is driving a lot of the browser activity you&#x27;re seeing.&quot; The post It Seems a Lot Like Dead Internet Has Actually Come True appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://puckeditor.com/blog/puck-ai Comments URL: https://news.ycombinator.com/item?id=49082979 Points: 1 # Comments: 1</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/dead-internet-theory-come-true" target="_blank" rel="noopener">It Seems a Lot Like Dead Internet Has Actually Come True</a>
+  <div class="source-summary">&quot;Agentic AI activity is driving a lot of the browser activity you&#x27;re seeing.&quot; The post It Seems a Lot Like Dead Internet Has Actually Come True appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://puckeditor.com/social.png" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Puck AI – Visual AI builder embedded in your app</span>
+        <span class="story-meta">Jul 28, 12:45 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://puckeditor.com/blog/puck-ai" target="_blank" rel="noopener">Puck AI – Visual AI builder embedded in your app</a>
-  <div class="source-summary">Article URL: https://puckeditor.com/blog/puck-ai Comments URL: https://news.ycombinator.com/item?id=49082979 Points: 1 # Comments: 1</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -117,31 +483,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">You&#x27;ve been using your power bank wrong, and airline rules make that obvious</span>
-    <span class="story-meta">Jul 28, 12:44 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI Latency Is a Feature, Not a Bug</span>
+        <span class="story-meta">Jul 28, 12:35 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">Many of the things you&#x27;re not allowed to do on an aircraft are things you shouldn&#x27;t be doing at all.</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/youve-been-using-your-power-bank-wrong-and-airline-rules-make-that-obvious/" target="_blank" rel="noopener">You&#x27;ve been using your power bank wrong, and airline rules make that obvious</a>
-  <div class="source-summary">Many of the things you&#x27;re not allowed to do on an aircraft are things you shouldn&#x27;t be doing at all.</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">AI Latency Is a Feature, Not a Bug</span>
-    <span class="story-meta">Jul 28, 12:35 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://taceoincidunt909269.substack.com/p/ai-latency-is-a-feature-not-a-bug Comments URL: https://news.ycombinator.com/item?id=49082875 Points: 2 # Comments: 0</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://taceoincidunt909269.substack.com/p/ai-latency-is-a-feature-not-a-bug" target="_blank" rel="noopener">AI Latency Is a Feature, Not a Bug</a>
-  <div class="source-summary">Article URL: https://taceoincidunt909269.substack.com/p/ai-latency-is-a-feature-not-a-bug Comments URL: https://news.ycombinator.com/item?id=49082875 Points: 2 # Comments: 0</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -149,15 +504,41 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Use Your Brain: Engineering Standards in the Age of LLM</span>
-    <span class="story-meta">Jul 28, 12:29 UTC</span>
+    <img class="story-thumb" src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25472503/STK271_PERPLEXITY_C.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Perplexity’s Personal Computer turns Windows PCs into AI agents</span>
+        <span class="story-meta">Jul 28, 12:30 UTC</span>
+      </div>
+      <div class="story-snippet">Perplexity has expanded its agentic Personal Computer tool to Windows, allowing computers running the world&#x27;s most popular OS to be used as a locally run AI system. Like the Mac version that Perplexity launched in April, Personal Computer for Windows operates like a…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://pgaleone.eu/ai/2026/07/26/use-your-brain/ Comments URL: https://news.ycombinator.com/item?id=49082812 Points: 4 # Comments: 1</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/971750/perplexity-personal-computer-windows-ai-agents" target="_blank" rel="noopener">Perplexity’s Personal Computer turns Windows PCs into AI agents</a>
+  <div class="source-summary">Perplexity has expanded its agentic Personal Computer tool to Windows, allowing computers running the world&#x27;s most popular OS to be used as a locally run AI system. Like the Mac version that Perplexity launched in April, Personal Computer for Windows operates like a &quot;general-purpose digital worker&quot; that can access local files and apps to perform […]</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://pgaleone.eu/images/me.jpeg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Use Your Brain: Engineering Standards in the Age of LLM</span>
+        <span class="story-meta">Jul 28, 12:29 UTC</span>
+      </div>
+      
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://pgaleone.eu/ai/2026/07/26/use-your-brain/" target="_blank" rel="noopener">Use Your Brain: Engineering Standards in the Age of LLM</a>
-  <div class="source-summary">Article URL: https://pgaleone.eu/ai/2026/07/26/use-your-brain/ Comments URL: https://news.ycombinator.com/item?id=49082812 Points: 4 # Comments: 1</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -165,15 +546,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Show HN: Segue – Save context in one AI, load it in another by a short handle</span>
-    <span class="story-meta">Jul 28, 12:27 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Show HN: Segue – Save context in one AI, load it in another by a short handle</span>
+        <span class="story-meta">Jul 28, 12:27 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://segue.ai/ Comments URL: https://news.ycombinator.com/item?id=49082779 Points: 6 # Comments: 0</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://segue.ai/" target="_blank" rel="noopener">Show HN: Segue – Save context in one AI, load it in another by a short handle</a>
-  <div class="source-summary">Article URL: https://segue.ai/ Comments URL: https://news.ycombinator.com/item?id=49082779 Points: 6 # Comments: 0</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -181,31 +567,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">How much RAM does your phone really need in 2026?</span>
-    <span class="story-meta">Jul 28, 12:21 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI revenues are growing fast, but not fast enough</span>
+        <span class="story-meta">Jul 28, 12:19 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">Manufacturers keep putting more and more memory into new phones, and we&#x27;re the ones paying for it.</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/how-much-ram-does-your-phone-really-need-in-2026/" target="_blank" rel="noopener">How much RAM does your phone really need in 2026?</a>
-  <div class="source-summary">Manufacturers keep putting more and more memory into new phones, and we&#x27;re the ones paying for it.</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">AI revenues are growing fast, but not fast enough</span>
-    <span class="story-meta">Jul 28, 12:19 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://www.economist.com/finance-and-economics/2026/07/28/ai-revenues-are-growing-fast-but-not-fast-enough Comments URL: https://news.ycombinator.com/item?id=49082706 Points: 3 # Comments: 0</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
   <a href="https://www.economist.com/finance-and-economics/2026/07/28/ai-revenues-are-growing-fast-but-not-fast-enough" target="_blank" rel="noopener">AI revenues are growing fast, but not fast enough</a>
-  <div class="source-summary">Article URL: https://www.economist.com/finance-and-economics/2026/07/28/ai-revenues-are-growing-fast-but-not-fast-enough Comments URL: https://news.ycombinator.com/item?id=49082706 Points: 3 # Comments: 0</div>
+  <div class="source-summary"></div>
 </div>
 
   </div>
@@ -213,10 +588,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Show HN: Hotcell – local sandboxes for AI agents</span>
-    <span class="story-meta">Jul 28, 12:17 UTC</span>
+    <img class="story-thumb" src="https://opengraph.githubassets.com/b94ad301bddfc9ed1760127178e9c466d7c9e75becf2488a48cc5f9ab7efbe8b/sinameraji/hotcell" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Show HN: Hotcell – local sandboxes for AI agents</span>
+        <span class="story-meta">Jul 28, 12:17 UTC</span>
+      </div>
+      <div class="story-snippet">Hi HN! Sina here. i wanted to share this open source project (apache 2.0) that i&#x27;ve been working on for the past month or so.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Hi HN! Sina here. i wanted to share this open source project (apache 2.0) that i&#x27;ve been working on for the past month or so. it&#x27;s called hotcell and it lets you create/pause/manage sandboxes on any device (your laptop, </div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
@@ -229,15 +609,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Microsoft Quicksand: Sandbox your AI agent without Docker or WSL</span>
-    <span class="story-meta">Jul 28, 12:16 UTC</span>
+    <img class="story-thumb" src="https://platform.theverge.com/wp-content/uploads/sites/2/2025/11/RING.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Smart rings are looking like my kind of AI gadget</span>
+        <span class="story-meta">Jul 28, 12:00 UTC</span>
+      </div>
+      <div class="story-snippet">Over the last few months, I&#x27;ve spent a lot of time talking to my computer. One underrated feature of the LLM revolution has been a remarkable leap in all kinds of dictation technology - even the fastest, cheapest models are getting very good at understanding and processing…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Article URL: https://github.com/microsoft/quicksand Comments URL: https://news.ycombinator.com/item?id=49082666 Points: 2 # Comments: 0</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://github.com/microsoft/quicksand" target="_blank" rel="noopener">Microsoft Quicksand: Sandbox your AI agent without Docker or WSL</a>
-  <div class="source-summary">Article URL: https://github.com/microsoft/quicksand Comments URL: https://news.ycombinator.com/item?id=49082666 Points: 2 # Comments: 0</div>
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/gadgets/971744/smart-ring-ai-gadget-stream-index" target="_blank" rel="noopener">Smart rings are looking like my kind of AI gadget</a>
+  <div class="source-summary">Over the last few months, I&#x27;ve spent a lot of time talking to my computer. One underrated feature of the LLM revolution has been a remarkable leap in all kinds of dictation technology - even the fastest, cheapest models are getting very good at understanding and processing speech. I&#x27;ve tested lots of these apps, from […]</div>
 </div>
 
   </div>
@@ -245,207 +630,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">AIO Launcher is one of the coolest minimal Android launchers I&#x27;ve used - and it&#x27;s free</span>
-    <span class="story-meta">Jul 28, 12:16 UTC</span>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a629130d1a4f0b18c5d7b7e/master/pass/Big-Interview-UV-Solo-AG-Sulzberger-Business-1189291051.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Can the New York Times Save Journalism From Our AI Overlords?</span>
+        <span class="story-meta">Jul 28, 10:30 UTC</span>
+      </div>
+      <div class="story-snippet">In 2023, the Times sued OpenAI and Microsoft for copyright infringement. They’ve since spent more than $20 million on the case, and publisher A.G. Sulzberger has no plans to stop fighting it.</div>
+    </div>
   </summary>
-  <div class="story-snippet">A minimal Android launcher can simplify your phone interactions, but simple doesn&#x27;t have to mean boring.</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/aio-launcher-is-the-coolest-minimal-launcher/" target="_blank" rel="noopener">AIO Launcher is one of the coolest minimal Android launchers I&#x27;ve used - and it&#x27;s free</a>
-  <div class="source-summary">A minimal Android launcher can simplify your phone interactions, but simple doesn&#x27;t have to mean boring.</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">My 5 favorite Windows Insider features in 2026 so far</span>
-    <span class="story-meta">Jul 28, 12:14 UTC</span>
-  </summary>
-  <div class="story-snippet">Microsoft&#x27;s Windows 11 insider builds let you preview and try upcoming new features and settings. Here are my five favorites this year so far and how you can check them out.</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/my-5-favorite-windows-insider-features-in-2026-so-far/" target="_blank" rel="noopener">My 5 favorite Windows Insider features in 2026 so far</a>
-  <div class="source-summary">Microsoft&#x27;s Windows 11 insider builds let you preview and try upcoming new features and settings. Here are my five favorites this year so far and how you can check them out.</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">My Secret AI Bookmark That Hypercharged My Comms</span>
-    <span class="story-meta">Jul 28, 11:59 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://grokimage.ai/ Comments URL: https://news.ycombinator.com/item?id=49082526 Points: 2 # Comments: 0</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://grokimage.ai/" target="_blank" rel="noopener">My Secret AI Bookmark That Hypercharged My Comms</a>
-  <div class="source-summary">Article URL: https://grokimage.ai/ Comments URL: https://news.ycombinator.com/item?id=49082526 Points: 2 # Comments: 0</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">The AI risk is inside the labs</span>
-    <span class="story-meta">Jul 28, 11:58 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://www.antirez.com/news/172 Comments URL: https://news.ycombinator.com/item?id=49082511 Points: 3 # Comments: 0</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://www.antirez.com/news/172" target="_blank" rel="noopener">The AI risk is inside the labs</a>
-  <div class="source-summary">Article URL: https://www.antirez.com/news/172 Comments URL: https://news.ycombinator.com/item?id=49082511 Points: 3 # Comments: 0</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">How Nvidia Builds Open Models for the Age of AI</span>
-    <span class="story-meta">Jul 28, 11:57 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://blog.bytebytego.com/p/how-nvidia-builds-open-models-for Comments URL: https://news.ycombinator.com/item?id=49082499 Points: 2 # Comments: 0</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://blog.bytebytego.com/p/how-nvidia-builds-open-models-for" target="_blank" rel="noopener">How Nvidia Builds Open Models for the Age of AI</a>
-  <div class="source-summary">Article URL: https://blog.bytebytego.com/p/how-nvidia-builds-open-models-for Comments URL: https://news.ycombinator.com/item?id=49082499 Points: 2 # Comments: 0</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Collabora Online 26.04: Your Documents, Your AI, Your Decade of Data Sovereignty</span>
-    <span class="story-meta">Jul 28, 11:38 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://www.collaboraonline.com/blog/cool-26-04-release/ Comments URL: https://news.ycombinator.com/item?id=49082356 Points: 2 # Comments: 0</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://www.collaboraonline.com/blog/cool-26-04-release/" target="_blank" rel="noopener">Collabora Online 26.04: Your Documents, Your AI, Your Decade of Data Sovereignty</a>
-  <div class="source-summary">Article URL: https://www.collaboraonline.com/blog/cool-26-04-release/ Comments URL: https://news.ycombinator.com/item?id=49082356 Points: 2 # Comments: 0</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Amazon overhauls its AI strategy, winding down most flagship models</span>
-    <span class="story-meta">Jul 28, 11:37 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://www.businessinsider.com/amazon-overhauls-ai-strategy-phasing-out-most-nova-models-2026-7 Comments URL: https://news.ycombinator.com/item?id=49082344 Points: 4 # Comments: 2</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://www.businessinsider.com/amazon-overhauls-ai-strategy-phasing-out-most-nova-models-2026-7" target="_blank" rel="noopener">Amazon overhauls its AI strategy, winding down most flagship models</a>
-  <div class="source-summary">Article URL: https://www.businessinsider.com/amazon-overhauls-ai-strategy-phasing-out-most-nova-models-2026-7 Comments URL: https://news.ycombinator.com/item?id=49082344 Points: 4 # Comments: 2</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Did AI Hack HuggingFace?</span>
-    <span class="story-meta">Jul 28, 11:10 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://www.youtube.com/watch?v=q2KCrmQz9WE Comments URL: https://news.ycombinator.com/item?id=49082150 Points: 2 # Comments: 1</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://www.youtube.com/watch?v=q2KCrmQz9WE" target="_blank" rel="noopener">Did AI Hack HuggingFace?</a>
-  <div class="source-summary">Article URL: https://www.youtube.com/watch?v=q2KCrmQz9WE Comments URL: https://news.ycombinator.com/item?id=49082150 Points: 2 # Comments: 1</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Show HN: DynoTable – The DynamoDB GUI with real SQL and your AI agent</span>
-    <span class="story-meta">Jul 28, 11:07 UTC</span>
-  </summary>
-  <div class="story-snippet">I&#x27;ve been using DynamoDB every day for work and I needed a fast, keyboard first, modern desktop client that will allow me to query, aggregate, edit items in few clicks and that integrates well with Claude Code or Codex. </div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://dynotable.com/" target="_blank" rel="noopener">Show HN: DynoTable – The DynamoDB GUI with real SQL and your AI agent</a>
-  <div class="source-summary">I&#x27;ve been using DynamoDB every day for work and I needed a fast, keyboard first, modern desktop client that will allow me to query, aggregate, edit items in few clicks and that integrates well with Claude Code or Codex. I didn&#x27;t like any existing solutions. I have been using Dynobase for some time but its quite outdated by now and there are no new versions since 2023. DynoTable is a fast, keyboard</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Building the enterprise environment for agentic AI<span class="badge">2 sources</span></span>
-    <span class="story-meta">Jul 28, 11:01 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://www.technologyreview.com/2026/07/27/1140668/building-the-enterprise-environment-for-agentic-ai/ Comments URL: https://news.ycombinator.com/item?id=49082086 Points: 3 # Comments: 0</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://www.technologyreview.com/2026/07/27/1140668/building-the-enterprise-environment-for-agentic-ai/" target="_blank" rel="noopener">Building the enterprise environment for agentic AI</a>
-  <div class="source-summary">Article URL: https://www.technologyreview.com/2026/07/27/1140668/building-the-enterprise-environment-for-agentic-ai/ Comments URL: https://news.ycombinator.com/item?id=49082086 Points: 3 # Comments: 0</div>
-</div>
-<div class="source-item">
-  <div class="source-name">Artificial intelligence – MIT Technology Review</div>
-  <a href="https://www.technologyreview.com/2026/07/27/1140668/building-the-enterprise-environment-for-agentic-ai/" target="_blank" rel="noopener">Building the enterprise environment for agentic AI</a>
-  <div class="source-summary">For the enterprise, the promise of agentic AI is much more than just a better chatbot. It is software agents that execute business tasks end-to-end across people, business workflows, data, and systems. The platform best-suited to run agents is built with proper CPU capacity, resilient data access, policy-aware tool use, observability, memory management, and the…</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">The Prompt Atlas: a map of the games people ask an AI to build</span>
-    <span class="story-meta">Jul 28, 10:48 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://rosebud.ai/prompt-atlas Comments URL: https://news.ycombinator.com/item?id=49081981 Points: 2 # Comments: 1</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://rosebud.ai/prompt-atlas" target="_blank" rel="noopener">The Prompt Atlas: a map of the games people ask an AI to build</a>
-  <div class="source-summary">Article URL: https://rosebud.ai/prompt-atlas Comments URL: https://news.ycombinator.com/item?id=49081981 Points: 2 # Comments: 1</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">When AI Makes 0-Days Feel Like N-Days</span>
-    <span class="story-meta">Jul 28, 10:40 UTC</span>
-  </summary>
-  <div class="story-snippet">Article URL: https://starlabs.sg/blog/2026/07-when-ai-makes-0-days-feel-like-n-days/ Comments URL: https://news.ycombinator.com/item?id=49081928 Points: 2 # Comments: 0</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;</div>
-  <a href="https://starlabs.sg/blog/2026/07-when-ai-makes-0-days-feel-like-n-days/" target="_blank" rel="noopener">When AI Makes 0-Days Feel Like N-Days</a>
-  <div class="source-summary">Article URL: https://starlabs.sg/blog/2026/07-when-ai-makes-0-days-feel-like-n-days/ Comments URL: https://news.ycombinator.com/item?id=49081928 Points: 2 # Comments: 0</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Can the New York Times Save Journalism From Our AI Overlords?</span>
-    <span class="story-meta">Jul 28, 10:30 UTC</span>
-  </summary>
-  <div class="story-snippet">In 2023, the Times sued OpenAI and Microsoft for copyright infringement. They’ve since spent more than $20 million on the case, and publisher A.G. Sulzberger has no plans to stop fighting it.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -458,10 +651,57 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Silicon Valley’s Next IPO Billionaires Are Coming. Nonprofits Are Ready for Them</span>
-    <span class="story-meta">Jul 28, 10:00 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/34aa043f13c985d1b218aa0b10b50ebe1ce6313f/250_0_2500_2000/master/2500.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=5827419dfd7dc6741397530838bf7aab" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">How do we prevent AI agents from going rogue? It starts with a new kind of measurement | Bruce Schneier and Barath Raghavan</span>
+        <span class="story-meta">Jul 28, 10:00 UTC</span>
+      </div>
+      <div class="story-snippet">Like genies of folklore, AI agents take their instructions literally – to potentially disastrous effect. We must track their ability to do what we actually mean In July, Hugging Face, a company that hosts much of the world’s AI software and open-source AI models, was hacked. A…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Anthropic and OpenAI employees are expected to give generously after their companies go public. “It’s going to be a wild ride,” says one nonprofit leader.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/commentisfree/2026/jul/28/rogue-ai-agent-instructions" target="_blank" rel="noopener">How do we prevent AI agents from going rogue? It starts with a new kind of measurement | Bruce Schneier and Barath Raghavan</a>
+  <div class="source-summary">Like genies of folklore, AI agents take their instructions literally – to potentially disastrous effect. We must track their ability to do what we actually mean In July, Hugging Face, a company that hosts much of the world’s AI software and open-source AI models, was hacked. A malicious dataset had been used to run code on one of its servers. Whoever was behind it captured internal security creden</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/2830eb38a2dc5fcf309cd54b4a9eea6d361b07be/0_0_2500_2000/master/2500.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=be5ede399c38b9bc97a771a869383de8" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Spies in the sky: how worried should we be about the arrival of AI-enabled smart lamp-posts?</span>
+        <span class="story-meta">Jul 28, 10:00 UTC</span>
+      </div>
+      <div class="story-snippet">The new breed of camera-equipped streetlights has the potential to fight crime and track down missing persons. Or will it just take Britain one step closer to a surveillance state? How would you feel if your neighbourhood lamp-posts could recognise your number plate, and also…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/world/2026/jul/28/spies-in-sky-worried-ai-enabled-smart-lamp-posts-surveillance" target="_blank" rel="noopener">Spies in the sky: how worried should we be about the arrival of AI-enabled smart lamp-posts?</a>
+  <div class="source-summary">The new breed of camera-equipped streetlights has the potential to fight crime and track down missing persons. Or will it just take Britain one step closer to a surveillance state? How would you feel if your neighbourhood lamp-posts could recognise your number plate, and also your face? Maybe you wouldn’t mind, given how long we’ve had automatic number plate recognition and CCTV. What about if tha</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a63fc68cbf9442761b08e12/master/pass/How-Nonprofits-Preparing-for-Flood-of-Philanthropy-After-Anthropic-OpenAI-Go-Public-Business.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Silicon Valley’s Next IPO Billionaires Are Coming. Nonprofits Are Ready for Them</span>
+        <span class="story-meta">Jul 28, 10:00 UTC</span>
+      </div>
+      <div class="story-snippet">Anthropic and OpenAI employees are expected to give generously after their companies go public. “It’s going to be a wild ride,” says one nonprofit leader.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -474,10 +714,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Samsung’s chip workers are jumping ship to rival SK Hynix</span>
-    <span class="story-meta">Jul 28, 09:18 UTC</span>
+    <img class="story-thumb" src="https://wp.technologyreview.com/wp-content/uploads/2026/07/chip-money.jpg?resize=1200,600" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Samsung’s chip workers are jumping ship to rival SK Hynix</span>
+        <span class="story-meta">Jul 28, 09:18 UTC</span>
+      </div>
+      <div class="story-snippet">Lee, an engineer at Samsung’s semiconductor division, clocks out when his shift ends. He used to work longer hours, going the extra mile to excel at his projects. But lately, he’s been coming straight home to work on his job application for the chipmaker’s South Korean rival SK…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Lee, an engineer at Samsung’s semiconductor division, clocks out when his shift ends. He used to work longer hours, going the extra mile to excel at his projects. But lately, he’s been coming straight home to work on his</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Artificial intelligence – MIT Technology Review</div>
@@ -490,15 +735,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Get Spotify&#x27;s student discount plus Hulu for just $6 a month - here&#x27;s how</span>
-    <span class="story-meta">Jul 28, 09:00 UTC</span>
+    <img class="story-thumb" src="https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STK419_DEEPFAKE_CVIRGINIA_F.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Hugging Face is being used to easily undress women and children</span>
+        <span class="story-meta">Jul 28, 09:07 UTC</span>
+      </div>
+      <div class="story-snippet">Hugging Face is being used to make nonconsensual deepfakes, and the popular open-source AI model repository is doing very little to prevent it. That&#x27;s according to a new report published by the European nonprofit AI Forensics, which found that seven out of the top nine image…</div>
+    </div>
   </summary>
-  <div class="story-snippet">If you&#x27;re a college student, Spotify has an exclusive bundle that can save you cash on music and streaming. Here&#x27;s how to get it.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/how-to-get-a-spotify-premium-student-discount/" target="_blank" rel="noopener">Get Spotify&#x27;s student discount plus Hulu for just $6 a month - here&#x27;s how</a>
-  <div class="source-summary">If you&#x27;re a college student, Spotify has an exclusive bundle that can save you cash on music and streaming. Here&#x27;s how to get it.</div>
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/971723/hugging-face-nudify-deepfake-undress-women-children" target="_blank" rel="noopener">Hugging Face is being used to easily undress women and children</a>
+  <div class="source-summary">Hugging Face is being used to make nonconsensual deepfakes, and the popular open-source AI model repository is doing very little to prevent it. That&#x27;s according to a new report published by the European nonprofit AI Forensics, which found that seven out of the top nine image editing models hosted by Hugging Face readily complied with […]</div>
 </div>
 
   </div>
@@ -506,15 +756,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I wore the two best Amazfit smartwatches for a month - Is the flagship worth $230 more?</span>
-    <span class="story-meta">Jul 28, 08:30 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/eed769a799be66f4834320b43e40a5f5b9900b16/742_0_5000_4000/master/5000.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=a8d4211e8ac61921a44c7d0183e79297" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI sell-off intensifies as investors ditch chip stocks</span>
+        <span class="story-meta">Jul 28, 09:03 UTC</span>
+      </div>
+      <div class="story-snippet">Samsung and SK Hynix fall by more than 10% amid renewed fears over AI spending and Chinese competition Business live – latest updates The sell-off in AI stocks has intensified, driving South Korea’s stock market down to its lowest level in three months. Investors continued to…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Is the Amazfit Cheetah 2 Ultra worth the extra cost versus the Amazfit Balance 3? Here&#x27;s what I found after living with both for a month.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/amazfit-cheetah-2-ultra-vs-amazfit-balance-3/" target="_blank" rel="noopener">I wore the two best Amazfit smartwatches for a month - Is the flagship worth $230 more?</a>
-  <div class="source-summary">Is the Amazfit Cheetah 2 Ultra worth the extra cost versus the Amazfit Balance 3? Here&#x27;s what I found after living with both for a month.</div>
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/business/2026/jul/28/ai-sell-off-chip-stocks-sk-hynix-samsung" target="_blank" rel="noopener">AI sell-off intensifies as investors ditch chip stocks</a>
+  <div class="source-summary">Samsung and SK Hynix fall by more than 10% amid renewed fears over AI spending and Chinese competition Business live – latest updates The sell-off in AI stocks has intensified, driving South Korea’s stock market down to its lowest level in three months. Investors continued to ditch chip stocks on Tuesday, amid rising concerns about the huge amount of borrowing among AI companies to fund their data</div>
 </div>
 
   </div>
@@ -522,10 +777,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Hugging Face Has a Deepfake Nudes Problem</span>
-    <span class="story-meta">Jul 28, 05:30 UTC</span>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a67cfabae27b42b1eabd681/master/pass/Security_HuggingFaceHasaDeepfakeNudesProblem_v1.gif" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Hugging Face Has a Deepfake Nudes Problem</span>
+        <span class="story-meta">Jul 28, 05:30 UTC</span>
+      </div>
+      <div class="story-snippet">Researchers tested top image editing models on Hugging Face and found they could easily create explicit deepfakes—and 1,000 image editing prompts show how people use the software.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Researchers tested top image editing models on Hugging Face and found they could easily create explicit deepfakes—and 1,000 image editing prompts show how people use the software.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -538,10 +798,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Cursor makes its biggest India push yet ahead of SpaceX acquisition with localized pricing</span>
-    <span class="story-meta">Jul 28, 04:30 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/07/cursor.jpg?resize=1200,800" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Cursor makes its biggest India push yet ahead of SpaceX acquisition with localized pricing</span>
+        <span class="story-meta">Jul 28, 04:30 UTC</span>
+      </div>
+      <div class="story-snippet">Cursor says India is now its third-largest market globally and plans to expand local hiring and enterprise sales.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Cursor says India is now its third-largest market globally and plans to expand local hiring and enterprise sales.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -554,10 +819,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Anthropic’s Dario Amodei responds: doesn’t oppose open-weight models, but fears Chinese AI</span>
-    <span class="story-meta">Jul 28, 00:13 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/03/Dario-Amodei-Anthropic-viva-tech.jpg?w=1024" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Anthropic’s Dario Amodei responds: doesn’t oppose open-weight models, but fears Chinese AI</span>
+        <span class="story-meta">Jul 28, 00:13 UTC</span>
+      </div>
+      <div class="story-snippet">Anthropic founder and CEO Dario Amodei made his views clear about open-weight models and China&#x27;s growing AI capabilities.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Anthropic founder and CEO Dario Amodei made his views clear about open-weight models and China&#x27;s growing AI capabilities.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -570,10 +840,99 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Satya Nadella says companies that trust one AI for everything may not survive</span>
-    <span class="story-meta">Jul 27, 21:17 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">moonshotai/Kimi-K3</span>
+        <span class="story-meta">Jul 27, 23:39 UTC</span>
+      </div>
+      <div class="story-snippet">moonshotai/Kimi-K3 As promised earlier this month , Moonshot have released the weights for their excellent 2.8 trillion parameter Kimi K3. They&#x27;re a hefty 1.56TB on Hugging Face. Kimi introduced their own janky modified version of the MIT license with K2 back in July 2025.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Companies without their own models — or without a layer of AI infrastructure known as AI gateways to separate their prompts from the model itself — will be in trouble, Nadella says.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Simon Willison&#x27;s Weblog</div>
+  <a href="https://simonwillison.net/2026/Jul/27/kimi-k3/#atom-everything" target="_blank" rel="noopener">moonshotai/Kimi-K3</a>
+  <div class="source-summary">moonshotai/Kimi-K3 As promised earlier this month , Moonshot have released the weights for their excellent 2.8 trillion parameter Kimi K3. They&#x27;re a hefty 1.56TB on Hugging Face. Kimi introduced their own janky modified version of the MIT license with K2 back in July 2025. That license just added this paragraph requiring attribution beyond a certain size of commercial entity: Our only modification</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://cdn.arstechnica.net/wp-content/uploads/2025/09/microsoft-logo-1024x648.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Microsoft unveils AI security tools it says outperform competing platforms</span>
+        <span class="story-meta">Jul 27, 21:56 UTC</span>
+      </div>
+      <div class="story-snippet">Microsoft says tools cost less than competing ones and outperform them, too.</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI - Ars Technica</div>
+  <a href="https://arstechnica.com/security/2026/07/microsoft-unveils-ai-security-tools-it-says-outperform-competing-platforms/" target="_blank" rel="noopener">Microsoft unveils AI security tools it says outperform competing platforms</a>
+  <div class="source-summary">Microsoft says tools cost less than competing ones and outperform them, too.</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">An opinionated guide to which AI to use to do stuff</span>
+        <span class="story-meta">Jul 27, 21:55 UTC</span>
+      </div>
+      <div class="story-snippet">An opinionated guide to which AI to use to do stuff It&#x27;s interesting watching the evolution of Ethan Mollick&#x27;s guide over time. A year ago it was still all about chat - ChatGPT, Claude, Gemini - with o3, Claude 4 Opus, and Gemini 2.5 Pro as the models and Deep Research as a…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Simon Willison&#x27;s Weblog</div>
+  <a href="https://simonwillison.net/2026/Jul/27/an-opinionated-guide-to-which-ai-to-use-to-do-stuff/#atom-everything" target="_blank" rel="noopener">An opinionated guide to which AI to use to do stuff</a>
+  <div class="source-summary">An opinionated guide to which AI to use to do stuff It&#x27;s interesting watching the evolution of Ethan Mollick&#x27;s guide over time. A year ago it was still all about chat - ChatGPT, Claude, Gemini - with o3, Claude 4 Opus, and Gemini 2.5 Pro as the models and Deep Research as a useful alternative mode. Today it&#x27;s much more about agentic systems - &quot;where the AI is capable of doing the equivalent of man</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/openai-rogue-hack-ai-suspicion-chatgpt.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Suspicion Grows About OpenAI’s Tale About Its Rogue Hacker AI</span>
+        <span class="story-meta">Jul 27, 21:47 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;Loudly proclaim how dangerous AI is, and investors will hear how powerful it is.&quot; The post Suspicion Grows About OpenAI’s Tale About Its Rogue Hacker AI appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/openai-rogue-hack-ai-suspicion-chatgpt" target="_blank" rel="noopener">Suspicion Grows About OpenAI’s Tale About Its Rogue Hacker AI</a>
+  <div class="source-summary">&quot;Loudly proclaim how dangerous AI is, and investors will hear how powerful it is.&quot; The post Suspicion Grows About OpenAI’s Tale About Its Rogue Hacker AI appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2023/11/GettyImages-1778706501.jpg?resize=1200,675" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Satya Nadella says companies that trust one AI for everything may not survive</span>
+        <span class="story-meta">Jul 27, 21:17 UTC</span>
+      </div>
+      <div class="story-snippet">Companies without their own models — or without a layer of AI infrastructure known as AI gateways to separate their prompts from the model itself — will be in trouble, Nadella says.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -586,10 +945,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">PSA: Your Claude shared chats and Artifacts may have ended up on Google</span>
-    <span class="story-meta">Jul 27, 20:19 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/07/facepalm-statue.jpg?resize=1200,688" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">PSA: Your Claude shared chats and Artifacts may have ended up on Google</span>
+        <span class="story-meta">Jul 27, 20:19 UTC</span>
+      </div>
+      <div class="story-snippet">The issue appears to have originated from Claude’s “share chat” feature, which allows users to create links that enable anyone with the assigned URL view a conversation or project.</div>
+    </div>
   </summary>
-  <div class="story-snippet">The issue appears to have originated from Claude’s “share chat” feature, which allows users to create links that enable anyone with the assigned URL view a conversation or project.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -602,10 +966,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Private Claude Chats Exposed in Google and Bing Search Results</span>
-    <span class="story-meta">Jul 27, 20:08 UTC</span>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a678683a61c4389773966d4/master/pass/Security_GoogleSearchScrew-UpExposedPrivateClaudeChat-.gif" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Private Claude Chats Exposed in Google and Bing Search Results</span>
+        <span class="story-meta">Jul 27, 20:08 UTC</span>
+      </div>
+      <div class="story-snippet">The screwup shows how tricky it can be to stop web crawlers from making ostensibly private conversations with AI chatbots entirely too public.</div>
+    </div>
   </summary>
-  <div class="story-snippet">The screwup shows how tricky it can be to stop web crawlers from making ostensibly private conversations with AI chatbots entirely too public.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -618,10 +987,36 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Microsoft launches its first cybersecurity model, plus a new agentic cybersecurity system</span>
-    <span class="story-meta">Jul 27, 18:32 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/high-school-teacher-arrested-clapping-data-center-activist.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">High School Teacher Arrested for Clapping in Support of Anti-Data Center Activists</span>
+        <span class="story-meta">Jul 27, 19:49 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;I think we&#x27;re all in a state of fear because of what this government&#x27;s doing to us.&quot; The post High School Teacher Arrested for Clapping in Support of Anti-Data Center Activists appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">Microsoft bolstered its AI cybersecurity offerings this week with the launch of its first AI security model and a new security platform.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/high-school-teacher-arrested-clapping-data-center-activist" target="_blank" rel="noopener">High School Teacher Arrested for Clapping in Support of Anti-Data Center Activists</a>
+  <div class="source-summary">&quot;I think we&#x27;re all in a state of fear because of what this government&#x27;s doing to us.&quot; The post High School Teacher Arrested for Clapping in Support of Anti-Data Center Activists appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/07/IMG_4458.jpeg?resize=1200,900" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Microsoft launches its first cybersecurity model, plus a new agentic cybersecurity system</span>
+        <span class="story-meta">Jul 27, 18:32 UTC</span>
+      </div>
+      <div class="story-snippet">Microsoft bolstered its AI cybersecurity offerings this week with the launch of its first AI security model and a new security platform.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -634,10 +1029,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">OpenAI called the Hugging Face attack unprecedented. But we’ve been here before.</span>
-    <span class="story-meta">Jul 27, 18:00 UTC</span>
+    <img class="story-thumb" src="https://wp.technologyreview.com/wp-content/uploads/2026/07/redteam-faceoff.jpg?resize=1200,600" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">OpenAI called the Hugging Face attack unprecedented. But we’ve been here before.</span>
+        <span class="story-meta">Jul 27, 18:00 UTC</span>
+      </div>
+      <div class="story-snippet">This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. Reading OpenAI’s account last week of how some of its models broke their containment and hacked into the computer systems of Hugging Face,…</div>
+    </div>
   </summary>
-  <div class="story-snippet">This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. Reading OpenAI’s account last week of how some of its models broke their containme</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Artificial intelligence – MIT Technology Review</div>
@@ -650,15 +1050,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I&#x27;m recommending this 14-inch HP laptop to almost everyone in 2026 - even with the RAM crisis</span>
-    <span class="story-meta">Jul 27, 17:54 UTC</span>
+    <img class="story-thumb" src="https://assets.rbl.ms/67541140/origin.png" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Why AI-Driven Cognitive Systems Are Redefining Radar and Electronic Warfare</span>
+        <span class="story-meta">Jul 27, 17:54 UTC</span>
+      </div>
+      <div class="story-snippet">An overview of how mode-agile threats challenge static library radar/EW systems, and how AI/ML cognitive architectures enable adaptive, real-time countermeasures. What Attendees will Learn Why mode-agile threats render static library systems ineffective — Explore how wartime…</div>
+    </div>
   </summary>
-  <div class="story-snippet">HP&#x27;s OmniBook Ultra 14 combines a sleek design and OLED display with the kind of performance professionals appreciate.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/hp-omnibook-ultra-14-2026-review/" target="_blank" rel="noopener">I&#x27;m recommending this 14-inch HP laptop to almost everyone in 2026 - even with the RAM crisis</a>
-  <div class="source-summary">HP&#x27;s OmniBook Ultra 14 combines a sleek design and OLED display with the kind of performance professionals appreciate.</div>
+  <div class="source-name">IEEE Spectrum</div>
+  <a href="https://content.knowledgehub.wiley.com/improving-the-capabilities-of-cognitive-radar-and-electronic-warfare-systems/" target="_blank" rel="noopener">Why AI-Driven Cognitive Systems Are Redefining Radar and Electronic Warfare</a>
+  <div class="source-summary">An overview of how mode-agile threats challenge static library radar/EW systems, and how AI/ML cognitive architectures enable adaptive, real-time countermeasures. What Attendees will Learn Why mode-agile threats render static library systems ineffective — Explore how wartime reserve modes and mode-agile emitters deploy unexpected frequencies, modulation techniques, and hopping schemes that cannot </div>
 </div>
 
   </div>
@@ -666,10 +1071,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">OpenAI’s Hugging Face breach has reignited the debate over alignment and control</span>
-    <span class="story-meta">Jul 27, 17:28 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/07/hugging-face-openai-logos-split-screen.jpg?resize=1200,799" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">OpenAI’s Hugging Face breach has reignited the debate over alignment and control</span>
+        <span class="story-meta">Jul 27, 17:28 UTC</span>
+      </div>
+      <div class="story-snippet">OpenAI&#x27;s Hugging Face breach has reignited debate over AI alignment and control, exposing competing views on whether increasingly capable AI should be better aligned, better contained, or both.</div>
+    </div>
   </summary>
-  <div class="story-snippet">OpenAI&#x27;s Hugging Face breach has reignited debate over AI alignment and control, exposing competing views on whether increasingly capable AI should be better aligned, better contained, or both.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -682,15 +1092,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I tested a new Debian Linux loaded with local AI - see if it&#x27;s right for you</span>
-    <span class="story-meta">Jul 27, 16:53 UTC</span>
+    <img class="story-thumb" src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/gettyimages-2286280160.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.83178126478%2C100%2C78.336437470441&amp;amp;w=1200" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Why China is giving away its best AI models</span>
+        <span class="story-meta">Jul 27, 16:51 UTC</span>
+      </div>
+      <div class="story-snippet">Silicon Valley has spent much of the past week on red alert, digesting the arrival of Moonshot AI&#x27;s Kimi K3, a Chinese AI model that can allegedly beat some of the best systems built by US companies at a fraction of the cost. Its performance alone would have been enough to…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Meet Shadowfetch: If AI is your jam and Linux is your OS, here&#x27;s the best way to give this new Debian-based distribution a try.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/shadowfetch-debian-linux-with-local-ai/" target="_blank" rel="noopener">I tested a new Debian Linux loaded with local AI - see if it&#x27;s right for you</a>
-  <div class="source-summary">Meet Shadowfetch: If AI is your jam and Linux is your OS, here&#x27;s the best way to give this new Debian-based distribution a try.</div>
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/971444/how-chinese-open-weight-ai-models-impact-us-companies" target="_blank" rel="noopener">Why China is giving away its best AI models</a>
+  <div class="source-summary">Silicon Valley has spent much of the past week on red alert, digesting the arrival of Moonshot AI&#x27;s Kimi K3, a Chinese AI model that can allegedly beat some of the best systems built by US companies at a fraction of the cost. Its performance alone would have been enough to intensify the rivalry between […]</div>
 </div>
 
   </div>
@@ -698,10 +1113,36 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Threads users can now chat with Meta AI in their DMs</span>
-    <span class="story-meta">Jul 27, 16:45 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/c319a896b9bf33b8b273e14a2ea3b622ea4375cb/39_0_3358_2688/master/3358.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=ea1df0e56ea7a16cdd6e4f02a6084a5a" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">No, Centrica, customers don’t prefer bots to humans | Letter</span>
+        <span class="story-meta">Jul 27, 16:47 UTC</span>
+      </div>
+      <div class="story-snippet">Charles MacKinnon disagrees with the British Gas owner’s justification for cutting 1,300 jobs According to Centrica’s boss, Chris O’Shea, most people using British Gas prefer to talk to a chatbot rather than a person ( Customers prefer AI chatbots, says British Gas owner as…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Meta on Monday said it is rolling out its Meta AI chatbot within Threads&#x27; DMs, giving users a way to chat with the AI assistant.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/business/2026/jul/27/no-centrica-customers-dont-prefer-bots-to-humans" target="_blank" rel="noopener">No, Centrica, customers don’t prefer bots to humans | Letter</a>
+  <div class="source-summary">Charles MacKinnon disagrees with the British Gas owner’s justification for cutting 1,300 jobs According to Centrica’s boss, Chris O’Shea, most people using British Gas prefer to talk to a chatbot rather than a person ( Customers prefer AI chatbots, says British Gas owner as 1,300 call centre and back office jobs axed, 23 July ). He says that 90% of his customers prefer to use digital channels than</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/02/threads-finger-GettyImages-2232887912.jpg?w=1024" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Threads users can now chat with Meta AI in their DMs</span>
+        <span class="story-meta">Jul 27, 16:45 UTC</span>
+      </div>
+      <div class="story-snippet">Meta on Monday said it is rolling out its Meta AI chatbot within Threads&#x27; DMs, giving users a way to chat with the AI assistant.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -714,15 +1155,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Costco will take your old tech and gift you a gift card - here&#x27;s what to know</span>
-    <span class="story-meta">Jul 27, 16:01 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/sam-altman-announces-singularity.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Sam Altman Announces That the Singularity Has Arrived</span>
+        <span class="story-meta">Jul 27, 16:01 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;I&#x27;ve been waiting for this my whole life.&quot; The post Sam Altman Announces That the Singularity Has Arrived appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">Got old gadgets lying around? Trade them in for gift cards at Costco - no membership required.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/costco-trade-in-offer-old-tech/" target="_blank" rel="noopener">Costco will take your old tech and gift you a gift card - here&#x27;s what to know</a>
-  <div class="source-summary">Got old gadgets lying around? Trade them in for gift cards at Costco - no membership required.</div>
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/sam-altman-announces-singularity" target="_blank" rel="noopener">Sam Altman Announces That the Singularity Has Arrived</a>
+  <div class="source-summary">&quot;I&#x27;ve been waiting for this my whole life.&quot; The post Sam Altman Announces That the Singularity Has Arrived appeared first on Futurism .</div>
 </div>
 
   </div>
@@ -730,10 +1176,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Google’s AI search is rapidly becoming the default, new data shows</span>
-    <span class="story-meta">Jul 27, 15:57 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2024/05/Sundar-AI-Overviews-IO-2024.png?resize=1200,698" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Google’s AI search is rapidly becoming the default, new data shows</span>
+        <span class="story-meta">Jul 27, 15:57 UTC</span>
+      </div>
+      <div class="story-snippet">Google’s AI Overviews now appear in 43% of searches, underscoring how quickly AI-generated answers are becoming the default way people discover information online.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Google’s AI Overviews now appear in 43% of searches, underscoring how quickly AI-generated answers are becoming the default way people discover information online.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -746,26 +1197,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Is open source the answer to rogue AI agents? Nvidia&#x27;s new alliance says yes</span>
-    <span class="story-meta">Jul 27, 15:52 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/07/techcrunch-disrupt-2026-smart-systems-stage.jpg?w=1200" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Power up your AI infrastructure! A first look at the Smart Systems Stage agenda at TechCrunch Disrupt 2026</span>
+        <span class="story-meta">Jul 27, 15:30 UTC</span>
+      </div>
+      <div class="story-snippet">At TechCrunch Disrupt 2026, the Smart Systems Stage will be where energy, infrastructure, and technology collide, covering everything from fusion breakthroughs to the grid strain AI is putting on the entire economy.</div>
+    </div>
   </summary>
-  <div class="story-snippet">As AI cybersecurity incidents ramp up, companies are racing to find a fix.</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/is-open-source-the-answer-to-rogue-ai-security-incidents-nvidia-thinks-so/" target="_blank" rel="noopener">Is open source the answer to rogue AI agents? Nvidia&#x27;s new alliance says yes</a>
-  <div class="source-summary">As AI cybersecurity incidents ramp up, companies are racing to find a fix.</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Power up your AI infrastructure! A first look at the Smart Systems Stage agenda at TechCrunch Disrupt 2026</span>
-    <span class="story-meta">Jul 27, 15:30 UTC</span>
-  </summary>
-  <div class="story-snippet">At TechCrunch Disrupt 2026, the Smart Systems Stage will be where energy, infrastructure, and technology collide, covering everything from fusion breakthroughs to the grid strain AI is putting on the entire economy.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -778,10 +1218,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">This $9 key physically locks your most addictive apps</span>
-    <span class="story-meta">Jul 27, 15:25 UTC</span>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/07/AutonomousKey1.jpeg?w=1200" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">This $9 key physically locks your most addictive apps</span>
+        <span class="story-meta">Jul 27, 15:25 UTC</span>
+      </div>
+      <div class="story-snippet">This $9 NFC key requires you to physically scan it to unlock distracting apps on your phone.</div>
+    </div>
   </summary>
-  <div class="story-snippet">This $9 NFC key requires you to physically scan it to unlock distracting apps on your phone.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -794,10 +1239,36 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Ilya Sutskever’s Safe Superintelligence partners with Nvidia to scale its AI research</span>
-    <span class="story-meta">Jul 27, 15:01 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/claude-chats-publicly-accessible.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">A Whole Bunch of People’s Claude Chats Are Publicly Accessible Online, and There’s Some Wildly Private Stuff in There</span>
+        <span class="story-meta">Jul 27, 15:10 UTC</span>
+      </div>
+      <div class="story-snippet">Anthropic said the system is working as intended. The post A Whole Bunch of People’s Claude Chats Are Publicly Accessible Online, and There’s Some Wildly Private Stuff in There appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">After two years in stealth, Safe Superintelligence has announced a long-term partnership with Nvidia as it prepares to scale to its next phase.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/claude-chats-publicly-accessible" target="_blank" rel="noopener">A Whole Bunch of People’s Claude Chats Are Publicly Accessible Online, and There’s Some Wildly Private Stuff in There</a>
+  <div class="source-summary">Anthropic said the system is working as intended. The post A Whole Bunch of People’s Claude Chats Are Publicly Accessible Online, and There’s Some Wildly Private Stuff in There appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2024/05/ilyausutskever-GettyImages.jpg?resize=1200,800" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Ilya Sutskever’s Safe Superintelligence partners with Nvidia to scale its AI research</span>
+        <span class="story-meta">Jul 27, 15:01 UTC</span>
+      </div>
+      <div class="story-snippet">After two years in stealth, Safe Superintelligence has announced a long-term partnership with Nvidia as it prepares to scale to its next phase.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -810,15 +1281,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I tried Framework&#x27;s premium &#x27;Linux-first&#x27; laptop: consider the bar raised</span>
-    <span class="story-meta">Jul 27, 15:00 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/ai-industry-ads-public-backlash.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">The AI Industry Has Acted So Badly That It’s Now Dealing With a Huge Wave of Hatred</span>
+        <span class="story-meta">Jul 27, 13:51 UTC</span>
+      </div>
+      <div class="story-snippet">It&#x27;s gonna take more than smarmy commercials to win back the public. The post The AI Industry Has Acted So Badly That It’s Now Dealing With a Huge Wave of Hatred appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">Framework compiled user feedback to create the new Laptop 13 Pro, a sleek device with a haptic touchpad and excellent battery life.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/framework-laptop-13-pro-review/" target="_blank" rel="noopener">I tried Framework&#x27;s premium &#x27;Linux-first&#x27; laptop: consider the bar raised</a>
-  <div class="source-summary">Framework compiled user feedback to create the new Laptop 13 Pro, a sleek device with a haptic touchpad and excellent battery life.</div>
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/ai-industry-ads-public-backlash" target="_blank" rel="noopener">The AI Industry Has Acted So Badly That It’s Now Dealing With a Huge Wave of Hatred</a>
+  <div class="source-summary">It&#x27;s gonna take more than smarmy commercials to win back the public. The post The AI Industry Has Acted So Badly That It’s Now Dealing With a Huge Wave of Hatred appeared first on Futurism .</div>
 </div>
 
   </div>
@@ -826,15 +1302,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Claude AI shared chats indexed by Google - see if your conversations were exposed</span>
-    <span class="story-meta">Jul 27, 14:58 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/orbital-data-centers-billionaires-ecological-catastrophe-petition.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">The Type of Orbital Data Centers That Billionaires Want to Launch Into Space Would Wreak Ecological Catastrophe, Scientists Warn</span>
+        <span class="story-meta">Jul 27, 13:06 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;The operation of more than a million data center satellites threatens potentially catastrophic forms and quantities of atmospheric pollution, risking damage to the climate, to the ozone layer, to human health, and to the chemistry of the stratosphere itself.&quot; The post The Type…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Google wasn&#x27;t supposed to see them, but then everyone on Reddit did. Here&#x27;s how to handle the situation.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/claude-ai-shared-chats-indexed-by-google/" target="_blank" rel="noopener">Claude AI shared chats indexed by Google - see if your conversations were exposed</a>
-  <div class="source-summary">Google wasn&#x27;t supposed to see them, but then everyone on Reddit did. Here&#x27;s how to handle the situation.</div>
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/space/orbital-data-centers-billionaires-ecological-catastrophe-petition" target="_blank" rel="noopener">The Type of Orbital Data Centers That Billionaires Want to Launch Into Space Would Wreak Ecological Catastrophe, Scientists Warn</a>
+  <div class="source-summary">&quot;The operation of more than a million data center satellites threatens potentially catastrophic forms and quantities of atmospheric pollution, risking damage to the climate, to the ozone layer, to human health, and to the chemistry of the stratosphere itself.&quot; The post The Type of Orbital Data Centers That Billionaires Want to Launch Into Space Would Wreak Ecological Catastrophe, Scientists Warn a</div>
 </div>
 
   </div>
@@ -842,42 +1323,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">The best laptop docking stations you can buy: Expert tested</span>
-    <span class="story-meta">Jul 27, 14:49 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Enigma raises $71M to make controlling a robot as easy as adjusting the volume</span>
+        <span class="story-meta">Jul 27, 13:00 UTC</span>
+      </div>
+      <div class="story-snippet">The massive seed round was led by Index Ventures and Ribbit Capital, with participation from Sarah Guo&#x27;s Conviction Partners.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Organize your workspace with our top picks for the best laptop docking stations available now.</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/best-laptop-docking-station/" target="_blank" rel="noopener">The best laptop docking stations you can buy: Expert tested</a>
-  <div class="source-summary">Organize your workspace with our top picks for the best laptop docking stations available now.</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Assume AI cybersecurity attacks are the future: 43% of companies have already experienced it</span>
-    <span class="story-meta">Jul 27, 14:00 UTC</span>
-  </summary>
-  <div class="story-snippet">New CDW research finds that AI is driving new phishing and malware-based threats. But are enough companies also using AI to fight them?</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/assume-ai-cybersecurity-attacks-are-the-future-43-percent-of-companies-have-already-experienced-it/" target="_blank" rel="noopener">Assume AI cybersecurity attacks are the future: 43% of companies have already experienced it</a>
-  <div class="source-summary">New CDW research finds that AI is driving new phishing and malware-based threats. But are enough companies also using AI to fight them?</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">Enigma raises $71M to make controlling a robot as easy as adjusting the volume</span>
-    <span class="story-meta">Jul 27, 13:00 UTC</span>
-  </summary>
-  <div class="story-snippet">The massive seed round was led by Index Ventures and Ribbit Capital, with participation from Sarah Guo&#x27;s Conviction Partners.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -890,15 +1344,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I found a dual-display USB-C dock with 8 ports - and no bulky AC brick</span>
-    <span class="story-meta">Jul 27, 12:17 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/f7019de7e7838e52840723fd951b449c92fc1d86/596_0_4800_3840/master/4800.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=4a4127ecfb471ad11eaa76f223616dd5" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Boss of startup hacked by rogue OpenAI agent urges ‘radical transparency’ in investigation</span>
+        <span class="story-meta">Jul 27, 12:15 UTC</span>
+      </div>
+      <div class="story-snippet">Artificial intelligence firm should provide $100m for cyber defences, says Hugging Face CEO The boss of the startup hacked by an OpenAI agent has called for the investigation into the incident to show “radical transparency”. Clément Delangue, the chief executive of Hugging Face,…</div>
+    </div>
   </summary>
-  <div class="story-snippet">EZQuest&#x27;s Pro Series 8-in-1 hub runs on Intel&#x27;s low-cut but high feature Hoover Ridge chipset, and two months in, it hasn&#x27;t let me down.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/ezquest-pro-series-8-in-1-hub-no-bulky-ac-brick/" target="_blank" rel="noopener">I found a dual-display USB-C dock with 8 ports - and no bulky AC brick</a>
-  <div class="source-summary">EZQuest&#x27;s Pro Series 8-in-1 hub runs on Intel&#x27;s low-cut but high feature Hoover Ridge chipset, and two months in, it hasn&#x27;t let me down.</div>
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/technology/2026/jul/27/startup-hacked-by-rogue-openai-agent-hugging-face-artificial-intelligence" target="_blank" rel="noopener">Boss of startup hacked by rogue OpenAI agent urges ‘radical transparency’ in investigation</a>
+  <div class="source-summary">Artificial intelligence firm should provide $100m for cyber defences, says Hugging Face CEO The boss of the startup hacked by an OpenAI agent has called for the investigation into the incident to show “radical transparency”. Clément Delangue, the chief executive of Hugging Face, said the “unprecedented” attack on his business required a similar response. Continue reading...</div>
 </div>
 
   </div>
@@ -906,15 +1365,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I fixed my home office&#x27;s spotty Wi-Fi with Samsung&#x27;s free diagnostic tool - in minutes</span>
-    <span class="story-meta">Jul 27, 12:15 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Nvidia, Microsoft launch open AI security alliance — without OpenAI, Google, or Anthropic</span>
+        <span class="story-meta">Jul 27, 12:06 UTC</span>
+      </div>
+      <div class="story-snippet">Nvidia on Monday said it is joining forces with Microsoft, SpaceX, IBM, and other tech companies to build and share open-source AI security tools. The new Open Secure AI Alliance said open tools are required to effectively defend against attacks from frontier models. The…</div>
+    </div>
   </summary>
-  <div class="story-snippet">There are some great non-Samsung alternatives, too.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/samsung-connectivity-labs-wifi-diagnostic-tool-fix-office-setup/" target="_blank" rel="noopener">I fixed my home office&#x27;s spotty Wi-Fi with Samsung&#x27;s free diagnostic tool - in minutes</a>
-  <div class="source-summary">There are some great non-Samsung alternatives, too.</div>
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/971281/nvidia-open-secure-ai-alliance-cybersecurity" target="_blank" rel="noopener">Nvidia, Microsoft launch open AI security alliance — without OpenAI, Google, or Anthropic</a>
+  <div class="source-summary">Nvidia on Monday said it is joining forces with Microsoft, SpaceX, IBM, and other tech companies to build and share open-source AI security tools. The new Open Secure AI Alliance said open tools are required to effectively defend against attacks from frontier models. The initiative is a direct response to mounting concerns over the safety […]</div>
 </div>
 
   </div>
@@ -922,26 +1386,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">How would AI data centers in space even work? A former NASA robotics chief explains</span>
-    <span class="story-meta">Jul 27, 12:05 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">The path to artificial superintelligence</span>
+        <span class="story-meta">Jul 27, 12:00 UTC</span>
+      </div>
+      <div class="story-snippet">Imagine a healthcare system made up of multiple AI agents: one that manages symptom assessment, another scheduling, a third insurance, and a fourth pharmacy. Each is an expert in its domain. But they all have their own distinct knowledge and objectives.</div>
+    </div>
   </summary>
-  <div class="story-snippet">&#x27;You collect electricity in space, and you eject heat in space. The only thing that comes to Earth is data.&#x27;</div>
-  <div class="sources">
-    <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/how-would-ai-data-centers-in-space-even-work-a-former-nasa-robotics-chief-explains/" target="_blank" rel="noopener">How would AI data centers in space even work? A former NASA robotics chief explains</a>
-  <div class="source-summary">&#x27;You collect electricity in space, and you eject heat in space. The only thing that comes to Earth is data.&#x27;</div>
-</div>
-
-  </div>
-</details>
-
-<details class="story">
-  <summary>
-    <span class="story-title">The path to artificial superintelligence</span>
-    <span class="story-meta">Jul 27, 12:00 UTC</span>
-  </summary>
-  <div class="story-snippet">Imagine a healthcare system made up of multiple AI agents: one that manages symptom assessment, another scheduling, a third insurance, and a fourth pharmacy. Each is an expert in its domain. But they all have their own d</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Artificial intelligence – MIT Technology Review</div>
@@ -954,10 +1407,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Closing the data loop in AI-driven drug discovery</span>
-    <span class="story-meta">Jul 27, 11:40 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Closing the data loop in AI-driven drug discovery</span>
+        <span class="story-meta">Jul 27, 11:40 UTC</span>
+      </div>
+      <div class="story-snippet">Drug discovery is a high-cost, high-risk endeavor that is under growing pressure from a market increasingly defined by first-mover advantage. Since the 1950s, the cost of developing new pharmaceuticals has roughly doubled every nine years—a phenomenon known as Eroom’s Law.…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Drug discovery is a high-cost, high-risk endeavor that is under growing pressure from a market increasingly defined by first-mover advantage. Since the 1950s, the cost of developing new pharmaceuticals has roughly double</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Artificial intelligence – MIT Technology Review</div>
@@ -970,10 +1428,57 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">This Is Donald Trump’s AI Brain Trust</span>
-    <span class="story-meta">Jul 27, 10:00 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Building the enterprise environment for agentic AI</span>
+        <span class="story-meta">Jul 27, 11:32 UTC</span>
+      </div>
+      <div class="story-snippet">For the enterprise, the promise of agentic AI is much more than just a better chatbot. It is software agents that execute business tasks end-to-end across people, business workflows, data, and systems. The platform best-suited to run agents is built with proper CPU capacity,…</div>
+    </div>
   </summary>
-  <div class="story-snippet">“It’s not an argument with two sides, it’s an argument with 10 sides,” one senior administration official tells WIRED about how US AI policy is being shaped.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Artificial intelligence – MIT Technology Review</div>
+  <a href="https://www.technologyreview.com/2026/07/27/1140668/building-the-enterprise-environment-for-agentic-ai/" target="_blank" rel="noopener">Building the enterprise environment for agentic AI</a>
+  <div class="source-summary">For the enterprise, the promise of agentic AI is much more than just a better chatbot. It is software agents that execute business tasks end-to-end across people, business workflows, data, and systems. The platform best-suited to run agents is built with proper CPU capacity, resilient data access, policy-aware tool use, observability, memory management, and the…</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/e5a6d57a39c822ca0d6ebfcef0de1e5954af5c9c/188_0_1624_1299/master/1624.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=fa62b89c3957d74f94b40682ecf0b3f7" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI can fuel biological weapons. We must harness its power for defense | Annie Jacobsen</span>
+        <span class="story-meta">Jul 27, 10:00 UTC</span>
+      </div>
+      <div class="story-snippet">The offensive potential is no longer theoretical. We need to develop systems to strengthen public health as quickly as AI is accelerating biological design As artificial intelligence rapidly transforms the biological sciences, it is pushing the future of biology in two opposing…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/commentisfree/2026/jul/27/ai-biological-weapons-defense" target="_blank" rel="noopener">AI can fuel biological weapons. We must harness its power for defense | Annie Jacobsen</a>
+  <div class="source-summary">The offensive potential is no longer theoretical. We need to develop systems to strengthen public health as quickly as AI is accelerating biological design As artificial intelligence rapidly transforms the biological sciences, it is pushing the future of biology in two opposing directions. AI can help bad actors generate recipes for biological weapons with just a few keystrokes and computational p</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a63ddfc7b2f84e64f1f3fcf/master/pass/Donald-Trump-AI-Brain-Trust-Politics.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">This Is Donald Trump’s AI Brain Trust</span>
+        <span class="story-meta">Jul 27, 10:00 UTC</span>
+      </div>
+      <div class="story-snippet">“It’s not an argument with two sides, it’s an argument with 10 sides,” one senior administration official tells WIRED about how US AI policy is being shaped.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -986,10 +1491,78 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">How AI is expanding what people do at work</span>
-    <span class="story-meta">Jul 27, 03:30 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics</span>
+        <span class="story-meta">Jul 27, 09:32 UTC</span>
+      </div>
+      
+    </div>
   </summary>
-  <div class="story-snippet">New OpenAI research shows how AI is expanding what workers do, with ChatGPT users taking on tasks across roles and reshaping job boundaries.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Hugging Face - Blog</div>
+  <a href="https://huggingface.co/blog/nvidia/cosmos-h-dreams" target="_blank" rel="noopener">NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics</a>
+  <div class="source-summary"></div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/c8cf9f9468761e331d624eeb89543705beb3b21d/0_232_1178_942/master/1178.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=dbb760395eeb25bba0393197f86dc1b3" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">What If We Got AI Right? by Eleanor Drage review – avoiding apocalypse</span>
+        <span class="story-meta">Jul 27, 08:00 UTC</span>
+      </div>
+      <div class="story-snippet">The academic’s ambitious guide to the ethics of tech falls short of its promise to provide meaningful answers The AI ethicist Eleanor Drage believes that to thrive alongside artificial intelligence, humans need to recognise AI’s “humanity”. She means that while we often speak of…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/books/2026/jul/27/what-if-we-got-ai-right-by-eleanor-drage-review-avoiding-apocalypse" target="_blank" rel="noopener">What If We Got AI Right? by Eleanor Drage review – avoiding apocalypse</a>
+  <div class="source-summary">The academic’s ambitious guide to the ethics of tech falls short of its promise to provide meaningful answers The AI ethicist Eleanor Drage believes that to thrive alongside artificial intelligence, humans need to recognise AI’s “humanity”. She means that while we often speak of AI as though it were some mystical, formless thing, it is the product of hours of human labour, in silicon and quartz mi</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/d59ca8b070ab53a9545020ec368b10d9d484f8d0/0_348_828_662/master/828.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=39c4b1a80bcd6c41406eee3d35c17421" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Misleading AI-generated doctors pose ‘huge danger to public safety’</span>
+        <span class="story-meta">Jul 27, 06:00 UTC</span>
+      </div>
+      <div class="story-snippet">Research shows AI accounts are gaining millions of views on TikTok by spreading dubious health advice Misleading health claims online pose a “huge danger to public safety”, experts have warned, after research has shown that AI-generated doctors are gaining millions of views on…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/technology/2026/jul/27/misleading-ai-generated-doctors-public-safety-danger-tiktok" target="_blank" rel="noopener">Misleading AI-generated doctors pose ‘huge danger to public safety’</a>
+  <div class="source-summary">Research shows AI accounts are gaining millions of views on TikTok by spreading dubious health advice Misleading health claims online pose a “huge danger to public safety”, experts have warned, after research has shown that AI-generated doctors are gaining millions of views on TikTok by spreading dubious health advice. The British Medical Association council deputy chair, Dr Emma Runswick, flagged</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">How AI is expanding what people do at work</span>
+        <span class="story-meta">Jul 27, 03:30 UTC</span>
+      </div>
+      <div class="story-snippet">New OpenAI research shows how AI is expanding what workers do, with ChatGPT users taking on tasks across roles and reshaping job boundaries.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">OpenAI News</div>
@@ -1002,10 +1575,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Are brain waves the next unlock for physical AI?</span>
-    <span class="story-meta">Jul 27, 00:19 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Are brain waves the next unlock for physical AI?</span>
+        <span class="story-meta">Jul 27, 00:19 UTC</span>
+      </div>
+      <div class="story-snippet">Forget YouTube videos — frontier physical AI models need multiple camera angles, dense annotation, and, soon, brain wave readings.</div>
+    </div>
   </summary>
-  <div class="story-snippet">Forget YouTube videos — frontier physical AI models need multiple camera angles, dense annotation, and, soon, brain wave readings.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1018,10 +1596,15 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Making sense of the panic over Chinese AI</span>
-    <span class="story-meta">Jul 26, 19:40 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Making sense of the panic over Chinese AI</span>
+        <span class="story-meta">Jul 26, 19:40 UTC</span>
+      </div>
+      <div class="story-snippet">On the latest episode of Equity, we discussed why Moonshot AI&#x27;s Kimi seemed to panic Silicon Valley and Wall Street.</div>
+    </div>
   </summary>
-  <div class="story-snippet">On the latest episode of Equity, we discussed why Moonshot AI&#x27;s Kimi seemed to panic Silicon Valley and Wall Street.</div>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1034,10 +1617,57 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Hugging Face CEO calls for ‘radical transparency’ after ‘unprecedented’ OpenAI hack</span>
-    <span class="story-meta">Jul 26, 16:33 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">An Inside Look at the Relay Market Powering Token Resellers and Fraud</span>
+        <span class="story-meta">Jul 26, 19:30 UTC</span>
+      </div>
+      <div class="story-snippet">An Inside Look at the Relay Market Powering Token Resellers and Fraud Fascinating investigation by Matt Lenhard into the market that has grown up around reselling LLM tokens at a discount by pooling API keys from various sources. This looks to be mostly a thing in China.…</div>
+    </div>
   </summary>
-  <div class="story-snippet">&quot;The first autonomous agent cyberattack is an unprecedented event. It deserves an unprecedented response!&quot;</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Simon Willison&#x27;s Weblog</div>
+  <a href="https://simonwillison.net/2026/Jul/26/relay-market/#atom-everything" target="_blank" rel="noopener">An Inside Look at the Relay Market Powering Token Resellers and Fraud</a>
+  <div class="source-summary">An Inside Look at the Relay Market Powering Token Resellers and Fraud Fascinating investigation by Matt Lenhard into the market that has grown up around reselling LLM tokens at a discount by pooling API keys from various sources. This looks to be mostly a thing in China. Resellers sell access to an LLM proxy that offers significant discounts on regular API pricing, which they achieve by abusing fr</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/meta-ai-doctors-quake-cures.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Meta Is Letting Fake AI-Generated Doctors Sell Quack Cures on Its Platforms</span>
+        <span class="story-meta">Jul 26, 17:01 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;They&#x27;re targeting us people that have health issues.&quot; The post Meta Is Letting Fake AI-Generated Doctors Sell Quack Cures on Its Platforms appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/meta-ai-doctors-quake-cures" target="_blank" rel="noopener">Meta Is Letting Fake AI-Generated Doctors Sell Quack Cures on Its Platforms</a>
+  <div class="source-summary">&quot;They&#x27;re targeting us people that have health issues.&quot; The post Meta Is Letting Fake AI-Generated Doctors Sell Quack Cures on Its Platforms appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Hugging Face CEO calls for ‘radical transparency’ after ‘unprecedented’ OpenAI hack</span>
+        <span class="story-meta">Jul 26, 16:33 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;The first autonomous agent cyberattack is an unprecedented event. It deserves an unprecedented response!&quot;</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1050,15 +1680,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Samsung Galaxy Z Fold 8 vs. Z Flip 8: How Samsung&#x27;s two new foldables compare</span>
-    <span class="story-meta">Jul 26, 11:45 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/meta-ban-creeps-ai-pervert-glasses.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Meta Desperately Trying to Ban Creeps Misusing Its AI “Pervert Glasses”</span>
+        <span class="story-meta">Jul 26, 16:01 UTC</span>
+      </div>
+      <div class="story-snippet">Too little, too late? The post Meta Desperately Trying to Ban Creeps Misusing Its AI “Pervert Glasses” appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">Samsung&#x27;s new foldables are impressive, but how different are they really, by the specs? Let&#x27;s compare.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/samsung-galaxy-z-fold-8-vs-z-flip-8/" target="_blank" rel="noopener">Samsung Galaxy Z Fold 8 vs. Z Flip 8: How Samsung&#x27;s two new foldables compare</a>
-  <div class="source-summary">Samsung&#x27;s new foldables are impressive, but how different are they really, by the specs? Let&#x27;s compare.</div>
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/meta-ban-creeps-ai-pervert-glasses" target="_blank" rel="noopener">Meta Desperately Trying to Ban Creeps Misusing Its AI “Pervert Glasses”</a>
+  <div class="source-summary">Too little, too late? The post Meta Desperately Trying to Ban Creeps Misusing Its AI “Pervert Glasses” appeared first on Futurism .</div>
 </div>
 
   </div>
@@ -1066,15 +1701,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Samsung Galaxy Z Fold 8 Ultra vs. Motorola Razr Ultra: How Samsung fares against its foldable rival</span>
-    <span class="story-meta">Jul 26, 08:00 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/8b48f8a3a0db8739ba700ba836f8e87c6e77f10e/1062_1609_3030_2423/master/3030.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=11ce463c1b1b8e43265b0eab80460332" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">When the AI bubble bursts, what will Australia do with the tools it built? One man thinks he has the answer</span>
+        <span class="story-meta">Jul 26, 15:00 UTC</span>
+      </div>
+      <div class="story-snippet">Journalist and author Cory Doctorow is coming to Australia to spread his message – humans will take their jobs back Follow our Australia news live blog for latest updates Get our breaking news email , free app or daily news podcast When the AI bubble bursts, executives who…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Samsung isn&#x27;t the only brand with flagship foldables. Here&#x27;s how it compares to Motorola&#x27;s Razr Ultra - one of my favorite phones of the year.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/galaxy-z-fold-8-ultra-vs-motorola-razr-ultra-comparison/" target="_blank" rel="noopener">Samsung Galaxy Z Fold 8 Ultra vs. Motorola Razr Ultra: How Samsung fares against its foldable rival</a>
-  <div class="source-summary">Samsung isn&#x27;t the only brand with flagship foldables. Here&#x27;s how it compares to Motorola&#x27;s Razr Ultra - one of my favorite phones of the year.</div>
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/australia-news/2026/jul/27/when-the-ai-bubble-bursts-what-will-australia-do-with-the-tools-it-built-one-man-thinks-he-has-the-answer" target="_blank" rel="noopener">When the AI bubble bursts, what will Australia do with the tools it built? One man thinks he has the answer</a>
+  <div class="source-summary">Journalist and author Cory Doctorow is coming to Australia to spread his message – humans will take their jobs back Follow our Australia news live blog for latest updates Get our breaking news email , free app or daily news podcast When the AI bubble bursts, executives who enthusiastically replaced their staff with AI tools will learn that it takes a “really long time” to replace those lost skills</div>
 </div>
 
   </div>
@@ -1082,10 +1722,141 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Monday.com is the latest tech company to blame AI for layoffs — here are 20 others</span>
-    <span class="story-meta">Jul 26, 01:30 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/52b38aaaf95a1ea7743cfbcf19958ee2991ebe6d/0_167_1557_1246/master/1557.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=d2682a088a63897f8cdf1e4b3182746d" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Why does everything feel so joyless? Welcome to the age of decadence without pleasure | Michèle Mendelssohn and Charlie Tyson</span>
+        <span class="story-meta">Jul 26, 13:00 UTC</span>
+      </div>
+      <div class="story-snippet">Decadence in our era comes in technologically mediated forms, emptied of desire and obsessed with self-optimisation Do you want to have a good time? You know, really enjoy yourself? Click here, and tell us your desires.</div>
+    </div>
   </summary>
-  <div class="story-snippet">A running look — in reverse chronological order — at the bigger tech companies that have announced significant layoffs this year with AI as a stated factor.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/us-news/ng-interactive/2026/jul/26/age-of-decadence-pleasure-ai" target="_blank" rel="noopener">Why does everything feel so joyless? Welcome to the age of decadence without pleasure | Michèle Mendelssohn and Charlie Tyson</a>
+  <div class="source-summary">Decadence in our era comes in technologically mediated forms, emptied of desire and obsessed with self-optimisation Do you want to have a good time? You know, really enjoy yourself? Click here, and tell us your desires. Maybe it’s a new outfit, or some exotic cuisine delivered anonymously and steaming hot to your door. Maybe it’s porn or gambling. Perhaps you prefer the infinite scroll, the endles</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://spectrum.ieee.org/media-library/an-asian-man-positions-the-lens-of-an-optical-receiver-a-meter-away-from-a-beam-of-led-light-in-a-lab.jpg?id=67530602&amp;width=980" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Optical Tech Would Update a Robot’s AI on the Fly</span>
+        <span class="story-meta">Jul 26, 13:00 UTC</span>
+      </div>
+      <div class="story-snippet">Atop a lab bench, Cornell Tech postdoctoral researcher Yifan He positions the lens of an optical receiver almost a meter away from an LED emitting a beam of red light. The computer monitor attached to the receiver takes a beat to refresh, then displays an array of squares that…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">IEEE Spectrum</div>
+  <a href="https://spectrum.ieee.org/ai-in-robotics" target="_blank" rel="noopener">Optical Tech Would Update a Robot’s AI on the Fly</a>
+  <div class="source-summary">Atop a lab bench, Cornell Tech postdoctoral researcher Yifan He positions the lens of an optical receiver almost a meter away from an LED emitting a beam of red light. The computer monitor attached to the receiver takes a beat to refresh, then displays an array of squares that resemble a QR code. When you hold your phone camera up to a QR code, light strikes the image sensor as only a first step t</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/sex-doll-company-deal-robot-school-classrooms.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">School District Pauses Plans to Deploy Humanoid Robots in Class After Outcry</span>
+        <span class="story-meta">Jul 26, 12:01 UTC</span>
+      </div>
+      <div class="story-snippet">It&#x27;s on pause. The post School District Pauses Plans to Deploy Humanoid Robots in Class After Outcry appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/robots-and-machines/sex-doll-company-deal-robot-school-classrooms" target="_blank" rel="noopener">School District Pauses Plans to Deploy Humanoid Robots in Class After Outcry</a>
+  <div class="source-summary">It&#x27;s on pause. The post School District Pauses Plans to Deploy Humanoid Robots in Class After Outcry appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/9a98471b495c85fe1620d9a0ac85b9c877d4562d/287_0_4321_3456/master/4321.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=ba3733e547ffa35febe5db2362fabb0b" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Corporate America may be using AI to cut jobs, but small businesses are using it to keep them | Gene Marks</span>
+        <span class="story-meta">Jul 26, 12:00 UTC</span>
+      </div>
+      <div class="story-snippet">Reports of wide-scale replacement of workers by AI are overblown. Small businesses use it to help workers I recently met the owner of a company that sells windows and doors. He told me he invested about $10,000 in an AI application that is used by his salespeople in his showroom.</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/business/2026/jul/26/small-businesses-ai" target="_blank" rel="noopener">Corporate America may be using AI to cut jobs, but small businesses are using it to keep them | Gene Marks</a>
+  <div class="source-summary">Reports of wide-scale replacement of workers by AI are overblown. Small businesses use it to help workers I recently met the owner of a company that sells windows and doors. He told me he invested about $10,000 in an AI application that is used by his salespeople in his showroom. The application listens to the conversations between the salesperson and the prospective customer and then automaticall</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/eminent-domain-ai-data-centers.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Eminent Domain Could Be Used to Seize Your Land for AI Data Centers</span>
+        <span class="story-meta">Jul 26, 11:02 UTC</span>
+      </div>
+      <div class="story-snippet">Anything&#x27;s possible. The post Eminent Domain Could Be Used to Seize Your Land for AI Data Centers appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/eminent-domain-ai-data-centers" target="_blank" rel="noopener">Eminent Domain Could Be Used to Seize Your Land for AI Data Centers</a>
+  <div class="source-summary">Anything&#x27;s possible. The post Eminent Domain Could Be Used to Seize Your Land for AI Data Centers appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://bair.berkeley.edu/static/blog/abbel/ABBEL main figure.png" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Teaching LLMs to Update Beliefs for Efficient Long-Horizon Interaction</span>
+        <span class="story-meta">Jul 26, 09:00 UTC</span>
+      </div>
+      <div class="story-snippet">--&gt; --&gt; Overview of ABBEL compared to traditional recursive summarization. Beliefs replace the full interaction history as the agent’s working context, and belief grading improves performance by supervising the contents of each belief state.. As task horizons grow, LLM contexts…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">The Berkeley Artificial Intelligence Research Blog</div>
+  <a href="http://bair.berkeley.edu/blog/2026/07/26/abbel/" target="_blank" rel="noopener">Teaching LLMs to Update Beliefs for Efficient Long-Horizon Interaction</a>
+  <div class="source-summary">--&gt; --&gt; Overview of ABBEL compared to traditional recursive summarization. Beliefs replace the full interaction history as the agent’s working context, and belief grading improves performance by supervising the contents of each belief state.. As task horizons grow, LLM contexts can’t scale forever. Self-summarization enables concise, interpretable contexts, but at a significant performance cost, e</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Monday.com is the latest tech company to blame AI for layoffs — here are 20 others</span>
+        <span class="story-meta">Jul 26, 01:30 UTC</span>
+      </div>
+      <div class="story-snippet">A running look — in reverse chronological order — at the bigger tech companies that have announced significant layoffs this year with AI as a stated factor.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1098,10 +1869,78 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Librarians are hosting viral ‘Avoiding AI’ workshops for people who are fed up with Big Tech</span>
-    <span class="story-meta">Jul 25, 16:00 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Ruff v0.16.0</span>
+        <span class="story-meta">Jul 25, 22:44 UTC</span>
+      </div>
+      <div class="story-snippet">Ruff v0.16.0 Astral shipped a significant new version of their Ruff Python linting tool a few days ago on July 23rd. I noticed today because my various CI jobs all started failing thanks to new default Ruff checks and my unpinned &quot;ruff&quot; dev dependency. From Brent Westbrook&#x27;s…</div>
+    </div>
   </summary>
-  <div class="story-snippet">At libraries around the country, &quot;Avoiding AI&quot; workshops have elicited unprecedented demand.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Simon Willison&#x27;s Weblog</div>
+  <a href="https://simonwillison.net/2026/Jul/25/ruff/#atom-everything" target="_blank" rel="noopener">Ruff v0.16.0</a>
+  <div class="source-summary">Ruff v0.16.0 Astral shipped a significant new version of their Ruff Python linting tool a few days ago on July 23rd. I noticed today because my various CI jobs all started failing thanks to new default Ruff checks and my unpinned &quot;ruff&quot; dev dependency. From Brent Westbrook&#x27;s announcement post: Ruff now enables 413 rules by default, up from 59 in previous versions. Since Ruff&#x27;s default rule set was</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/d843d84984b24c0e5325c0ec289ba1112d2b3126/585_0_2915_2333/master/2915.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=3e900641361d02cb903b0e4ab0308023" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Mega datacentre planned for outer Melbourne will be six times bigger than a large shopping centre</span>
+        <span class="story-meta">Jul 25, 20:00 UTC</span>
+      </div>
+      <div class="story-snippet">More than 3,600 people sign petition for careful assessment of proposed AI hub, now a flashpoint for national debate on datacentre boom Follow our Australia news live blog for latest updates Get our breaking news email , free app or daily news podcast For some residents it…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/australia-news/2026/jul/26/mega-datacentre-planned-for-outer-melbourne-will-be-almost-six-times-the-size-of-chadstone-shopping-centre" target="_blank" rel="noopener">Mega datacentre planned for outer Melbourne will be six times bigger than a large shopping centre</a>
+  <div class="source-summary">More than 3,600 people sign petition for careful assessment of proposed AI hub, now a flashpoint for national debate on datacentre boom Follow our Australia news live blog for latest updates Get our breaking news email , free app or daily news podcast For some residents it started with a letter in the mailbox. It was a “friendly introduction from the team behind the Victorian AI hub”. “I am knocki</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/ai-companies-destroying-rare-books.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI Companies Are Buying Antique Books, Ingesting Their Contents to Train Models, and Then Destroying Them at Incredible Scale</span>
+        <span class="story-meta">Jul 25, 16:02 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;The world&#x27;s best AI training data is setting on a shelf.&quot; The post AI Companies Are Buying Antique Books, Ingesting Their Contents to Train Models, and Then Destroying Them at Incredible Scale appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/ai-companies-destroying-rare-books" target="_blank" rel="noopener">AI Companies Are Buying Antique Books, Ingesting Their Contents to Train Models, and Then Destroying Them at Incredible Scale</a>
+  <div class="source-summary">&quot;The world&#x27;s best AI training data is setting on a shelf.&quot; The post AI Companies Are Buying Antique Books, Ingesting Their Contents to Train Models, and Then Destroying Them at Incredible Scale appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Librarians are hosting viral ‘Avoiding AI’ workshops for people who are fed up with Big Tech</span>
+        <span class="story-meta">Jul 25, 16:00 UTC</span>
+      </div>
+      <div class="story-snippet">At libraries around the country, &quot;Avoiding AI&quot; workshops have elicited unprecedented demand.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1114,10 +1953,57 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">One fallen power line exposed a growing AI data center problem — here’s how to fix it</span>
-    <span class="story-meta">Jul 25, 13:05 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/voters-elections-conservative-generative-ai-slop-ads-deepfakes.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Voters Are Being Inundated by a Barrage of AI-Generated Election Ads</span>
+        <span class="story-meta">Jul 25, 15:01 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;It&#x27;s frankly an insult to older voters who don&#x27;t know that AI exists.&quot; The post Voters Are Being Inundated by a Barrage of AI-Generated Election Ads appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">A close call in Northern Virginia revealed just how poorly data centers respond to grid disruptions. Here&#x27;s how to fix the problem.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/voters-elections-conservative-generative-ai-slop-ads-deepfakes" target="_blank" rel="noopener">Voters Are Being Inundated by a Barrage of AI-Generated Election Ads</a>
+  <div class="source-summary">&quot;It&#x27;s frankly an insult to older voters who don&#x27;t know that AI exists.&quot; The post Voters Are Being Inundated by a Barrage of AI-Generated Election Ads appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/friends-colleagues-recording-conversation.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">People Are Starting to Record Every Conversation They Have Without Disclosing It, and It’s Gross</span>
+        <span class="story-meta">Jul 25, 14:02 UTC</span>
+      </div>
+      <div class="story-snippet">Horrid. The post People Are Starting to Record Every Conversation They Have Without Disclosing It, and It’s Gross appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/friends-colleagues-recording-conversation" target="_blank" rel="noopener">People Are Starting to Record Every Conversation They Have Without Disclosing It, and It’s Gross</a>
+  <div class="source-summary">Horrid. The post People Are Starting to Record Every Conversation They Have Without Disclosing It, and It’s Gross appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">One fallen power line exposed a growing AI data center problem — here’s how to fix it</span>
+        <span class="story-meta">Jul 25, 13:05 UTC</span>
+      </div>
+      <div class="story-snippet">A close call in Northern Virginia revealed just how poorly data centers respond to grid disruptions. Here&#x27;s how to fix the problem.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1130,15 +2016,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Samsung&#x27;s new Ultra foldable is impressive, but I&#x27;d pay close attention to this model</span>
-    <span class="story-meta">Jul 25, 12:15 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/meta-sad-ai-app-stories-children.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Meta Working on Crushingly Sad AI App That Tells Bedtime Stories to Children, for “Tired” Parents</span>
+        <span class="story-meta">Jul 25, 13:02 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;Tired after a long day but want to give your kids a special bedtime story?&quot; The post Meta Working on Crushingly Sad AI App That Tells Bedtime Stories to Children, for “Tired” Parents appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">The Galaxy Z Fold 8 Ultra is sure to impress power users, but Samsung took a risk with the Galaxy Z Fold 8, and it could pay off.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">Latest news</div>
-  <a href="https://www.zdnet.com/article/samsung-galaxy-z-fold-8-ultra-hands-on/" target="_blank" rel="noopener">Samsung&#x27;s new Ultra foldable is impressive, but I&#x27;d pay close attention to this model</a>
-  <div class="source-summary">The Galaxy Z Fold 8 Ultra is sure to impress power users, but Samsung took a risk with the Galaxy Z Fold 8, and it could pay off.</div>
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/meta-sad-ai-app-stories-children" target="_blank" rel="noopener">Meta Working on Crushingly Sad AI App That Tells Bedtime Stories to Children, for “Tired” Parents</a>
+  <div class="source-summary">&quot;Tired after a long day but want to give your kids a special bedtime story?&quot; The post Meta Working on Crushingly Sad AI App That Tells Bedtime Stories to Children, for “Tired” Parents appeared first on Futurism .</div>
 </div>
 
   </div>
@@ -1146,10 +2037,57 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">The OpenAI Models That Hacked Hugging Face Were ‘Active on the Internet’ for Days</span>
-    <span class="story-meta">Jul 25, 10:30 UTC</span>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/e9dc22d7de9bd5d0f413d80dd7b363bb0c6517cc/688_0_6880_5504/master/6880.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=99d354ad24863c70ca28ff1c7aa27c13" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">The AI jobs apocalypse probably isn’t coming anytime soon</span>
+        <span class="story-meta">Jul 25, 13:00 UTC</span>
+      </div>
+      <div class="story-snippet">Artificial intelligence may not deliver on its promise of vast economic opportunity at a price that humanity is willing to pay In March, Anthropic, the cutting-edge artificial intelligence business that gave us the chatbot Claude, published an analysis on the impact of AI on…</div>
+    </div>
   </summary>
-  <div class="story-snippet">Plus: Russian hackers are trying to steal US nuclear scientists’ emails, the State Department bans known scammers from entering the United States, and more.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/technology/2026/jul/25/ai-jobs-apocalypse-human-labor" target="_blank" rel="noopener">The AI jobs apocalypse probably isn’t coming anytime soon</a>
+  <div class="source-summary">Artificial intelligence may not deliver on its promise of vast economic opportunity at a price that humanity is willing to pay In March, Anthropic, the cutting-edge artificial intelligence business that gave us the chatbot Claude, published an analysis on the impact of AI on employment, to help us assess the claim that intelligent robots were about to redefine human existence, ending demand for hu</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/website-overpaid-ai-replace-ceos-executives-labor.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">New Parody Site Threatens to Replace CEOs With AI for Tiny Fraction of Their Bloated Salaries</span>
+        <span class="story-meta">Jul 25, 11:02 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;Introducing the world&#x27;s first Chief Executive Replacement Engine.&quot; The post New Parody Site Threatens to Replace CEOs With AI for Tiny Fraction of Their Bloated Salaries appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/website-overpaid-ai-replace-ceos-executives-labor" target="_blank" rel="noopener">New Parody Site Threatens to Replace CEOs With AI for Tiny Fraction of Their Bloated Salaries</a>
+  <div class="source-summary">&quot;Introducing the world&#x27;s first Chief Executive Replacement Engine.&quot; The post New Parody Site Threatens to Replace CEOs With AI for Tiny Fraction of Their Bloated Salaries appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a639d3adc5893971a3d0afd/master/pass/GettyImages-2278950606.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">The OpenAI Models That Hacked Hugging Face Were ‘Active on the Internet’ for Days</span>
+        <span class="story-meta">Jul 25, 10:30 UTC</span>
+      </div>
+      <div class="story-snippet">Plus: Russian hackers are trying to steal US nuclear scientists’ emails, the State Department bans known scammers from entering the United States, and more.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -1162,10 +2100,78 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">I tried out OpenAI’s new AI keypad — which will be fun for some coders and slightly mystifying to everyone else</span>
-    <span class="story-meta">Jul 25, 00:23 UTC</span>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/professor-hides-white-font-ai-cheating.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Professor Hides White Font in Midterm, Catches Students Using AI in the Stupidest Way Possible</span>
+        <span class="story-meta">Jul 25, 10:01 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;Thirty-two of my 35 students between two classes failed a portion of their midterm because they all used AI to generate their entire response.&quot; The post Professor Hides White Font in Midterm, Catches Students Using AI in the Stupidest Way Possible appeared first on Futurism .</div>
+    </div>
   </summary>
-  <div class="story-snippet">OpenAI&#x27;s fancy new AI keypad will be a lot of fun for some, while many others are probably not going to touch it.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/future-society/professor-hides-white-font-ai-cheating" target="_blank" rel="noopener">Professor Hides White Font in Midterm, Catches Students Using AI in the Stupidest Way Possible</a>
+  <div class="source-summary">&quot;Thirty-two of my 35 students between two classes failed a portion of their midterm because they all used AI to generate their entire response.&quot; The post Professor Hides White Font in Midterm, Catches Students Using AI in the Stupidest Way Possible appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/8eb4ce904cc3b480269aa6bbf8a1c555dcac2468/0_0_2500_2000/master/2500.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=6a532c2fa2bacd57528910ecd89f10dc" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">‘I thought, I’ve tried everything else, why not give AI a shot?’: the long-lost family reunited by ChatGPT</span>
+        <span class="story-meta">Jul 25, 05:00 UTC</span>
+      </div>
+      <div class="story-snippet">Avtar spent decades wondering what happened to the mother he never got to know. Thousands of miles away, Nicci was haunted by the story of a half-brother given away before she was born. How did a chatbot bring them together?</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/lifeandstyle/ng-interactive/2026/jul/25/long-lost-family-reunited-chatgpt-artificial-intelligence-ai" target="_blank" rel="noopener">‘I thought, I’ve tried everything else, why not give AI a shot?’: the long-lost family reunited by ChatGPT</a>
+  <div class="source-summary">Avtar spent decades wondering what happened to the mother he never got to know. Thousands of miles away, Nicci was haunted by the story of a half-brother given away before she was born. How did a chatbot bring them together? As a small boy growing up in Amritsar, India, in the 1960s, Avtar Singh used to hear whispers. Your mum isn’t really your mum , the rumours would say. Your mum lives abroad. A</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Quoting Boris Cherny</span>
+        <span class="story-meta">Jul 25, 00:42 UTC</span>
+      </div>
+      <div class="story-snippet">More than any of these eval scores, what is most exciting to me is something else: Opus 5 is our least prompt injectable model yet. It is a bit buried in the system card, but across PI evals and red teaming, Opus 5 is very hard to prompt inject successfully. — Boris Cherny ,…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Simon Willison&#x27;s Weblog</div>
+  <a href="https://simonwillison.net/2026/Jul/25/boris-cherny/#atom-everything" target="_blank" rel="noopener">Quoting Boris Cherny</a>
+  <div class="source-summary">More than any of these eval scores, what is most exciting to me is something else: Opus 5 is our least prompt injectable model yet. It is a bit buried in the system card, but across PI evals and red teaming, Opus 5 is very hard to prompt inject successfully. — Boris Cherny , here&#x27;s that System Card section , page 73 Tags: prompt-injection , anthropic , claude , generative-ai , ai , llms , boris-ch</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">I tried out OpenAI’s new AI keypad — which will be fun for some coders and slightly mystifying to everyone else</span>
+        <span class="story-meta">Jul 25, 00:23 UTC</span>
+      </div>
+      <div class="story-snippet">OpenAI&#x27;s fancy new AI keypad will be a lot of fun for some, while many others are probably not going to touch it.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
@@ -1178,15 +2184,20 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Prentis, new AI lab co-founded by Reid Hoffman, Mark Pincus in talks to raise $100M</span>
-    <span class="story-meta">Jul 24, 22:25 UTC</span>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Introducing Claude Opus 5</span>
+        <span class="story-meta">Jul 24, 23:48 UTC</span>
+      </div>
+      <div class="story-snippet">Introducing Claude Opus 5 I&#x27;ve been offline kayaking with sea otters for much of today so I haven&#x27;t had a chance to put Anthropic&#x27;s new model Claude Opus 5 through its paces yet. The buzz is positive, and Anthropic&#x27;s description of it as a &quot;thoughtful and proactive model that…</div>
+    </div>
   </summary>
-  <div class="story-snippet">The neolab is betting that automating routine computer tasks will soon outpace coding as AI&#x27;s biggest use case.</div>
   <div class="sources">
     <div class="source-item">
-  <div class="source-name">AI News &amp; Artificial Intelligence | TechCrunch</div>
-  <a href="https://techcrunch.com/2026/07/24/prentis-new-ai-lab-co-founded-by-reid-hoffman-mark-pincus-in-talks-to-raise-100m/" target="_blank" rel="noopener">Prentis, new AI lab co-founded by Reid Hoffman, Mark Pincus in talks to raise $100M</a>
-  <div class="source-summary">The neolab is betting that automating routine computer tasks will soon outpace coding as AI&#x27;s biggest use case.</div>
+  <div class="source-name">Simon Willison&#x27;s Weblog</div>
+  <a href="https://simonwillison.net/2026/Jul/24/introducing-claude-opus-5/#atom-everything" target="_blank" rel="noopener">Introducing Claude Opus 5</a>
+  <div class="source-summary">Introducing Claude Opus 5 I&#x27;ve been offline kayaking with sea otters for much of today so I haven&#x27;t had a chance to put Anthropic&#x27;s new model Claude Opus 5 through its paces yet. The buzz is positive, and Anthropic&#x27;s description of it as a &quot;thoughtful and proactive model that comes close to the frontier intelligence of Claude Fable 5 at half the price&quot; sounds promising. It&#x27;s currently leading the </div>
 </div>
 
   </div>
@@ -1194,10 +2205,99 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">China-US AI Race Escalates, OpenAI Models Break Free, and Why You Should Check Your Car Alarm</span>
-    <span class="story-meta">Jul 24, 17:53 UTC</span>
+    <img class="story-thumb" src="https://cdn.arstechnica.net/wp-content/uploads/2026/07/GettyImages-1004669768-1152x648-1784927041.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Canadian legislator reads out apparent LLM response in floor speech</span>
+        <span class="story-meta">Jul 24, 21:25 UTC</span>
+      </div>
+      <div class="story-snippet">&quot;Here’s a more natural, flowing version of that section...&quot;</div>
+    </div>
   </summary>
-  <div class="story-snippet">On this episode of Uncanny Valley, we dive into accusations that China’s Moonshot AI stole from Anthropic, and how the US Army needs to cut back on AI use.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI - Ars Technica</div>
+  <a href="https://arstechnica.com/ai/2026/07/canadian-legislator-reads-out-apparent-llm-response-in-floor-speech/" target="_blank" rel="noopener">Canadian legislator reads out apparent LLM response in floor speech</a>
+  <div class="source-summary">&quot;Here’s a more natural, flowing version of that section...&quot;</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/computer-science-decline-ai.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Computer Science Enrollment Now Declining Under Dark Cloud of AI</span>
+        <span class="story-meta">Jul 24, 20:33 UTC</span>
+      </div>
+      <div class="story-snippet">Major trouble. The post Computer Science Enrollment Now Declining Under Dark Cloud of AI appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/computer-science-decline-ai" target="_blank" rel="noopener">Computer Science Enrollment Now Declining Under Dark Cloud of AI</a>
+  <div class="source-summary">Major trouble. The post Computer Science Enrollment Now Declining Under Dark Cloud of AI appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Midjourney bought the astrology app Co-Star</span>
+        <span class="story-meta">Jul 24, 19:06 UTC</span>
+      </div>
+      <div class="story-snippet">Midjourney, which has gone from generating AI cat images to full-body ultrasound scans, is getting into a new field: astrology. The AI startup announced on Thursday that it has acquired the personalized astrology app Co-Star, as reported earlier by Bloomberg. Co-Star is a free…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/970894/midjourney-co-star-acquisition" target="_blank" rel="noopener">Midjourney bought the astrology app Co-Star</a>
+  <div class="source-summary">Midjourney, which has gone from generating AI cat images to full-body ultrasound scans, is getting into a new field: astrology. The AI startup announced on Thursday that it has acquired the personalized astrology app Co-Star, as reported earlier by Bloomberg. Co-Star is a free app that offers daily horoscopes and allows you to check your […]</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/politician-accidentally-reads-ai-slop-speech.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Braindead Politician Accidentally Reads AI Slop That Someone Left in His Speech: “Here’s a More Natural, Flowing Version of That Section That Reads Like a Legislative Speech”</span>
+        <span class="story-meta">Jul 24, 18:59 UTC</span>
+      </div>
+      <div class="story-snippet">He really read it out loud. The post Braindead Politician Accidentally Reads AI Slop That Someone Left in His Speech: “Here’s a More Natural, Flowing Version of That Section That Reads Like a Legislative Speech” appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/artificial-intelligence/politician-accidentally-reads-ai-slop-speech" target="_blank" rel="noopener">Braindead Politician Accidentally Reads AI Slop That Someone Left in His Speech: “Here’s a More Natural, Flowing Version of That Section That Reads Like a Legislative Speech”</a>
+  <div class="source-summary">He really read it out loud. The post Braindead Politician Accidentally Reads AI Slop That Someone Left in His Speech: “Here’s a More Natural, Flowing Version of That Section That Reads Like a Legislative Speech” appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a615a679a93c24d43a612f6/master/pass/Uncanny-Valley-Moonshot-AI-Stealing-Anthropic-Models-Business.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">China-US AI Race Escalates, OpenAI Models Break Free, and Why You Should Check Your Car Alarm</span>
+        <span class="story-meta">Jul 24, 17:53 UTC</span>
+      </div>
+      <div class="story-snippet">On this episode of Uncanny Valley, we dive into accusations that China’s Moonshot AI stole from Anthropic, and how the US Army needs to cut back on AI use.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -1210,10 +2310,141 @@
 
 <details class="story">
   <summary>
-    <span class="story-title">Silicon Valley Is Completely Divided Over Chinese AI</span>
-    <span class="story-meta">Jul 24, 15:00 UTC</span>
+    <img class="story-thumb" src="https://cdn.arstechnica.net/wp-content/uploads/2026/07/GettyImages-2239702658-1152x648.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Team uses AlphaFold AI to redesign gene-editing proteins to make them safer</span>
+        <span class="story-meta">Jul 24, 17:31 UTC</span>
+      </div>
+      <div class="story-snippet">Google&#x27;s AlphaFold can help ID what parts of a gene editing protein enable mistakes.</div>
+    </div>
   </summary>
-  <div class="story-snippet">The AI “startups” worth billions of dollars are raising alarm bells about Chinese AI. The smaller players have a totally different take.</div>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI - Ars Technica</div>
+  <a href="https://arstechnica.com/science/2026/07/team-uses-alphafold-ai-to-redesign-gene-editing-proteins-to-make-them-safer/" target="_blank" rel="noopener">Team uses AlphaFold AI to redesign gene-editing proteins to make them safer</a>
+  <div class="source-summary">Google&#x27;s AlphaFold can help ID what parts of a gene editing protein enable mistakes.</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">You can’t ignore Google Zero anymore</span>
+        <span class="story-meta">Jul 24, 17:29 UTC</span>
+      </div>
+      <div class="story-snippet">The web and Google once had a deal: Google collects data and indexes webpages and in exchange sends oceans of traffic to websites. The deal wasn&#x27;t perfect and certainly made Google more money than it made the websites, but it worked for a long time. Now, however, the deal seems…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/podcast/970735/google-zero-reddit-ai-publishers-vergecast" target="_blank" rel="noopener">You can’t ignore Google Zero anymore</a>
+  <div class="source-summary">The web and Google once had a deal: Google collects data and indexes webpages and in exchange sends oceans of traffic to websites. The deal wasn&#x27;t perfect and certainly made Google more money than it made the websites, but it worked for a long time. Now, however, the deal seems to be dead. And the […]</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/07/investors-shorting-economy.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Investors Laying Groundwork to Profit Massively When Economy Collapses</span>
+        <span class="story-meta">Jul 24, 17:07 UTC</span>
+      </div>
+      <div class="story-snippet">Trouble&#x27;s brewing. The post Investors Laying Groundwork to Profit Massively When Economy Collapses appeared first on Futurism .</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">Futurism</div>
+  <a href="https://futurism.com/future-society/investors-shorting-economy" target="_blank" rel="noopener">Investors Laying Groundwork to Profit Massively When Economy Collapses</a>
+  <div class="source-summary">Trouble&#x27;s brewing. The post Investors Laying Groundwork to Profit Massively When Economy Collapses appeared first on Futurism .</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Anthropic releases Opus 5 with ‘close’ to Fable 5’s capabilities</span>
+        <span class="story-meta">Jul 24, 17:00 UTC</span>
+      </div>
+      <div class="story-snippet">Weeks after Anthropic&#x27;s latest toe-to-toe with the US government, and days after an OpenAI security incident that dominated tech industry discussions, Anthropic on Thursday released its newest model, Claude Opus 5. The company said in a release that Opus 5 &quot;comes close to the…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/970105/claude-opus-5-announced-anthropic-ai-model-release" target="_blank" rel="noopener">Anthropic releases Opus 5 with ‘close’ to Fable 5’s capabilities</a>
+  <div class="source-summary">Weeks after Anthropic&#x27;s latest toe-to-toe with the US government, and days after an OpenAI security incident that dominated tech industry discussions, Anthropic on Thursday released its newest model, Claude Opus 5. The company said in a release that Opus 5 &quot;comes close to the capabilities of Claude Fable 5 in many domains&quot; and is much […]</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Meta is making its AI chatbot more like an assistant</span>
+        <span class="story-meta">Jul 24, 17:00 UTC</span>
+      </div>
+      <div class="story-snippet">Meta is upgrading its AI chatbot with new productivity features in a bid to compete with rivals like Gemini, ChatGPT, and Claude. The update will allow Meta AI to tap into your calendar to help you plan events and generate daily briefings, as well as perform in-depth research…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/tech/970570/meta-ai-chatbot-productivity-update" target="_blank" rel="noopener">Meta is making its AI chatbot more like an assistant</a>
+  <div class="source-summary">Meta is upgrading its AI chatbot with new productivity features in a bid to compete with rivals like Gemini, ChatGPT, and Claude. The update will allow Meta AI to tap into your calendar to help you plan events and generate daily briefings, as well as perform in-depth research that you can steer as it progresses. […]</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://i.guim.co.uk/img/media/f289b8c99c15e02794e49ae8ab74d2428db6f9fe/1_0_1180_944/master/1180.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=74815b8e0088dbe65b1c5b6fb693a9da" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Is AI already beyond our control? What will we tell our kids? | Fiona Katauskas</span>
+        <span class="story-meta">Jul 24, 15:00 UTC</span>
+      </div>
+      <div class="story-snippet">It’s no bedtime story See more of Fiona Katauskas’s cartoons here Continue reading...</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI (artificial intelligence) | The Guardian</div>
+  <a href="https://www.theguardian.com/commentisfree/picture/2026/jul/25/is-ai-already-beyond-our-control-what-will-we-tell-our-kids" target="_blank" rel="noopener">Is AI already beyond our control? What will we tell our kids? | Fiona Katauskas</a>
+  <div class="source-summary">It’s no bedtime story See more of Fiona Katauskas’s cartoons here Continue reading...</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://media.wired.com/photos/6a62963a17ddff986dd664a4/master/pass/Backchannel-Silicon-Valley-Divide-Over-Chinese-AI-Business.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">Silicon Valley Is Completely Divided Over Chinese AI</span>
+        <span class="story-meta">Jul 24, 15:00 UTC</span>
+      </div>
+      <div class="story-snippet">The AI “startups” worth billions of dollars are raising alarm bells about Chinese AI. The smaller players have a totally different take.</div>
+    </div>
+  </summary>
   <div class="sources">
     <div class="source-item">
   <div class="source-name">Feed: Artificial Intelligence Latest</div>
@@ -1224,7 +2455,49 @@
   </div>
 </details>
 
-<div class="updated">Last updated 2026-07-28 13:00 UTC</div>
+<details class="story">
+  <summary>
+    
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">The tech-broification of American science has officially begun</span>
+        <span class="story-meta">Jul 24, 14:43 UTC</span>
+      </div>
+      <div class="story-snippet">The Trump administration unveiled the first &quot;Genesis Mission&quot; grants on Thursday, directing $5 billion toward hundreds of AI-driven science projects in an effort the White House has described as &quot;comparable in urgency and ambition to the Manhattan Project.&quot; At roughly the same…</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI | The Verge</div>
+  <a href="https://www.theverge.com/science/970534/genesis-mission-ai-science-funding-trump-grants" target="_blank" rel="noopener">The tech-broification of American science has officially begun</a>
+  <div class="source-summary">The Trump administration unveiled the first &quot;Genesis Mission&quot; grants on Thursday, directing $5 billion toward hundreds of AI-driven science projects in an effort the White House has described as &quot;comparable in urgency and ambition to the Manhattan Project.&quot; At roughly the same time, Trump&#x27;s science adviser Michael Kratsios was on Capitol Hill selling lawmakers on […]</div>
+</div>
+
+  </div>
+</details>
+
+<details class="story">
+  <summary>
+    <img class="story-thumb" src="https://cdn.arstechnica.net/wp-content/uploads/2024/04/GettyImages-2113285214-1152x648.jpg" alt="" loading="lazy" onerror="this.remove()">
+    <div class="story-body">
+      <div class="story-head">
+        <span class="story-title">AI firms want more data centers; Trump&#x27;s EPA may give neighbors less say</span>
+        <span class="story-meta">Jul 24, 13:49 UTC</span>
+      </div>
+      <div class="story-snippet">Rule would allow states to decide how much—if any—public input there can be.</div>
+    </div>
+  </summary>
+  <div class="sources">
+    <div class="source-item">
+  <div class="source-name">AI - Ars Technica</div>
+  <a href="https://arstechnica.com/tech-policy/2026/07/ai-firms-want-more-data-centers-trumps-epa-may-give-neighbors-less-say/" target="_blank" rel="noopener">AI firms want more data centers; Trump&#x27;s EPA may give neighbors less say</a>
+  <div class="source-summary">Rule would allow states to decide how much—if any—public input there can be.</div>
+</div>
+
+  </div>
+</details>
+
+<div class="updated">Last updated 2026-07-28 13:30 UTC</div>
 </main>
 </body>
 </html>
