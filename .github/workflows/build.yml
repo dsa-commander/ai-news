@@ -23,6 +23,18 @@ jobs:
       - name: Install dependencies
         run: pip install feedparser
 
+      - name: TEMP check quota across models
+        run: |
+          for m in gemini-2.0-flash-lite gemini-2.0-flash gemini-flash-lite-latest gemini-flash-latest gemma-4-26b-a4b-it; do
+            echo "=== $m ==="
+            curl -s -X POST \
+              "https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent" \
+              -H "Content-Type: application/json" \
+              -H "x-goog-api-key: ${{ secrets.GEMINI_API_KEY }}" \
+              -d '{"contents":[{"parts":[{"text":"Say hi in 3 words."}]}]}' \
+              | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('error',{}).get('message', 'OK: ' + str(d.get('candidates',[{}])[0].get('content',{}).get('parts',[{}])[0].get('text','?'))))"
+          done
+
       - name: Run aggregator
         run: python3 aggregate.py --feeds feeds.txt --out docs/index.html --days 4
         env:
