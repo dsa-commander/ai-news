@@ -27,6 +27,14 @@ jobs:
       - name: Install dependencies
         run: pip install feedparser
 
+      - name: TEMP check current quota status
+        run: |
+          curl -s -i -X POST \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent" \
+            -H "Content-Type: application/json" \
+            -H "x-goog-api-key: ${{ secrets.GEMINI_API_KEY }}" \
+            -d '{"contents":[{"parts":[{"text":"Say hi in 3 words."}]}]}'
+
       - name: Run aggregator
         run: python3 aggregate.py --feeds feeds.txt --out docs/index.html --days 4
         env:
