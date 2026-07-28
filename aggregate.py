@@ -55,6 +55,20 @@ HN_POINTS_RE = re.compile(r"points:\s*(\d+)", re.IGNORECASE)
 HN_COMMENTS_RE = re.compile(r"#\s*comments:\s*(\d+)", re.IGNORECASE)
 HOT_BADGE_THRESHOLD = 15  # min HN points before we bother showing a "hot" badge
 
+# Hacker News's search matches full story text/URL, not just the title, so
+# "AI" OR "LLM" OR "machine learning" pulls in plenty of stories that only
+# mention AI in passing (or not at all in anything we can see). The
+# AI-dedicated blogs/sections in feeds.txt don't need this — every article
+# in those feeds is already curated to be AI content by the source itself.
+AI_KEYWORDS_RE = re.compile(
+    r"\b(ai|llm|llms|gpt|chatgpt|openai|anthropic|claude|gemini|deepmind|"
+    r"machine[- ]learning|deep[- ]learning|neural network|artificial intelligence|"
+    r"copilot|midjourney|stable diffusion|hugging[- ]?face|mistral ai|llama|"
+    r"perplexity|sora|generative ai|agentic|chatbot|large language model|"
+    r"nvidia|xai|grok)\b",
+    re.IGNORECASE,
+)
+
 # Generic "no photo" icon shown when a story has no usable image.
 _PLACEHOLDER_SVG = (
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 84'>"
@@ -194,6 +208,8 @@ def fetch_articles(feed_urls, since):
             if published < since:
                 continue
             title = entry.get("title", "(untitled)").strip()
+            if "hnrss.org" in url and not AI_KEYWORDS_RE.search(title):
+                continue  # HN's search matches full story text, not just the title
             raw_html = entry.get("summary", "") or entry.get("description", "")
             content_list = entry.get("content") or []
             raw_content = content_list[0].get("value", "") if content_list else ""

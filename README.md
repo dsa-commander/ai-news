@@ -69,6 +69,13 @@ That's it — from then on it updates itself every 2 hours for $0.
   user agent — that's why `aggregate.py` fetches with a browser-like one).
   Re-check periodically by running the script locally and watching stderr
   for `[warn] failed to fetch/parse ...`.
+- **Off-topic articles from the HN feeds**: Hacker News's search matches a
+  story's full text/URL, not just its title, so `q=AI+OR+LLM+...` pulls in
+  some stories that only mention AI in passing (or a search false-positive).
+  `AI_KEYWORDS_RE` in `aggregate.py` requires the *title* to contain an
+  AI-related term before an `hnrss.org` entry is kept — edit that regex to
+  tune what counts. It's only applied to the HN feeds; every other feed is
+  an AI-dedicated blog/section already, so nothing there gets filtered.
 - **How aggressively stories get grouped**: `--threshold` in `aggregate.py`
   (0–1, default 0.45). Lower = groups more loosely (fewer, broader stories);
   higher = only merges near-identical headlines.
