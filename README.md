@@ -10,7 +10,7 @@ into every source. No login, no server, no monthly cost.
 - `feeds.txt` — the list of RSS feeds to pull from (one URL per line).
   Curated and verified working as of 2026-07-28: a mix of AI-lab blogs,
   AI-specific sections of tech publications, independent commentary, and
-  a Hacker News search feed.
+  two Hacker News search feeds (newest + best — see "Hot ranking" below).
 - `aggregate.py` — fetches every feed, groups same-story articles by comparing
   titles (word overlap + text similarity) within a rolling time window, and
   writes a static `docs/index.html`. For each story it also picks a thumbnail
@@ -19,9 +19,29 @@ into every source. No login, no server, no monthly cost.
   3-line summary — a real Gemini-written one if `GEMINI_API_KEY` is set
   (see below), otherwise a text-extracted excerpt from the feed's own
   description.
-- `.github/workflows/build.yml` — a GitHub Action that runs the script every
-  2 hours and publishes the result via **GitHub Pages** — completely free
-  for a public repo.
+- `.github/workflows/build.yml` — a GitHub Action that runs the script
+  hourly, 9am-8pm Berlin time, and publishes the result via **GitHub
+  Pages** — completely free for a public repo.
+
+## Hot ranking
+
+Within each day, stories are ordered by a "hotness" score instead of pure
+recency, using two free signals (no Google Trends / social-share API — those
+either don't have a free tier or don't exist anymore for this use case):
+
+- **Source count** — how many of your feeds picked up the same story. The
+  strongest, most reliable signal we have for free.
+- **Hacker News points/comments** — `hnrss.org/best` (added alongside the
+  existing `/newest` query) returns already-popular HN discussions, so we
+  get real point/comment counts instead of the near-zero counts a
+  "newest"-only feed would have. Duplicate links between the two HN feeds
+  are merged (`dedupe_by_link`) so the same post doesn't get double-counted
+  as "2 sources".
+
+Score = `source_count * 10 + log(1 + points) * 2 + log(1 + comments)` — the
+log keeps a single viral HN post from completely dominating over stories
+genuinely covered by several outlets. Stories with ≥15 HN points get a 🔥
+badge. See `hotness_score()` in `aggregate.py`.
 
 ## Setup (10 minutes, no server needed)
 

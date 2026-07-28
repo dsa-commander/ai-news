@@ -18,6 +18,7 @@ import concurrent.futures
 import datetime as dt
 import html
 import json
+import math
 import os
 import re
 import sys
@@ -50,6 +51,9 @@ OG_DESCRIPTION_RE = re.compile(
 )
 MAX_OG_FETCHES = 40  # bound extra per-article HTTP calls to keep runs fast
 HN_BOILERPLATE_RE = re.compile(r"article url:.*points:\s*\d+.*#\s*comments:\s*\d+", re.IGNORECASE | re.DOTALL)
+HN_POINTS_RE = re.compile(r"points:\s*(\d+)", re.IGNORECASE)
+HN_COMMENTS_RE = re.compile(r"#\s*comments:\s*(\d+)", re.IGNORECASE)
+HOT_BADGE_THRESHOLD = 15  # min HN points before we bother showing a "hot" badge
 
 # Generic "no photo" icon shown when a story has no usable image.
 _PLACEHOLDER_SVG = (
@@ -194,8 +198,15 @@ def fetch_articles(feed_urls, since):
             content_list = entry.get("content") or []
             raw_content = content_list[0].get("value", "") if content_list else ""
             summary = clean_html(raw_html)
+            points, comments = 0, 0
             if HN_BOILERPLATE_RE.search(summary):
-                summary = ""  # hnrss descriptions are just "Article URL / Points / Comments", not real content
+                # hnrss descriptions are just "Article URL / Points / Comments",
+                # not real content — but the points/comments are a genuine,
+                # free "hotness" signal, so pull those out before discarding it.
+                pm, cm = HN_POINTS_RE.search(summary), HN_COMMENTS_RE.search(summary)
+                points = int(pm.group(1)) if pm else 0
+                comments = int(cm.group(1)) if cm else 0
+                summary = ""
             elif looks_like_caption(summary):
                 summary = ""  # e.g. Google's blog RSS puts the hero image's alt text here
             link = entry.get("link", "")
@@ -207,8 +218,34 @@ def fetch_articles(feed_urls, since):
                 "source": source_name,
                 "published": published,
                 "image": image,
+                "points": points,
+                "comments": comments,
             })
     return articles
+
+
+def dedupe_by_link(articles):
+    """Collapse literal duplicate articles (e.g. the same Hacker News post
+    showing up in both the /newest and /best feeds) into one, merging their
+    points/comments/image/summary instead of double-counting the same
+    source as two "sources" for a story."""
+    by_link = {}
+    order = []
+    for a in articles:
+        key = a["link"]
+        existing = by_link.get(key) if key else None
+        if existing:
+            existing["points"] = max(existing["points"], a["points"])
+            existing["comments"] = max(existing["comments"], a["comments"])
+            if not existing.get("image") and a.get("image"):
+                existing["image"] = a["image"]
+            if not existing.get("summary") and a.get("summary"):
+                existing["summary"] = a["summary"]
+            continue
+        if key:
+            by_link[key] = a
+        order.append(a)
+    return order
 
 
 def augment_leads(clusters):
@@ -419,7 +456,7 @@ PAGE_TEMPLATE = """<!doctype html>
 <body>
 <header>
   <h1>🧠 AI News</h1>
-  <p>Same-story articles are grouped together — tap to see every source. Single-source stories link straight to the article.</p>
+  <p>Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
 </header>
 <main>
 {stories}
@@ -464,7 +501,7 @@ SINGLE_STORY_TEMPLATE = """<a class="story story-link" href="{link}" target="_bl
   {thumb}
   <div class="story-body">
     <div class="story-head">
-      <span class="story-title">{title}</span>
+      <span class="story-title">{title}{badge}</span>
       <span class="story-meta">{when}</span>
     </div>
     {snippet}
@@ -485,6 +522,19 @@ SOURCE_ITEM_TEMPLATE = """<div class="source-item">
 """
 
 
+def hotness_score(group):
+    """Free, no-API "trending" signal: how many independent sources picked up
+    the story (the strongest, most reliable signal we have), plus a
+    log-dampened boost from Hacker News points/comments when the story
+    showed up there — so one viral HN post can rise above ordinary
+    single-source stories without letting raw point counts dominate over
+    genuine multi-outlet coverage."""
+    source_count = len(group)
+    points = max((a.get("points", 0) for a in group), default=0)
+    comments = max((a.get("comments", 0) for a in group), default=0)
+    return source_count * 10 + math.log1p(points) * 2 + math.log1p(comments)
+
+
 def render_story(group):
     lead = group[0]
     when = lead["published"].strftime("%H:%M UTC")
@@ -493,6 +543,14 @@ def render_story(group):
     snippet_text = three_line_summary(lead["summary"])
     snippet = f'<div class="story-snippet">{html.escape(snippet_text)}</div>' if snippet_text else ""
 
+    badge_parts = []
+    if len(group) > 1:
+        badge_parts.append(f"{len(group)} sources")
+    points = max((a.get("points", 0) for a in group), default=0)
+    if points >= HOT_BADGE_THRESHOLD:
+        badge_parts.append(f"🔥 {points} pts")
+    badge = f'<span class="badge">{" · ".join(badge_parts)}</span>' if badge_parts else ""
+
     if len(group) == 1:
         # Only one source for this story — link straight to the article
         # instead of expanding into a redundant one-item source list.
@@ -500,11 +558,11 @@ def render_story(group):
             link=html.escape(lead["link"]),
             thumb=thumb,
             title=html.escape(lead["title"]),
+            badge=badge,
             when=when,
             snippet=snippet,
         )
 
-    badge = f'<span class="badge">{len(group)} sources</span>'
     source_items = "".join(
         SOURCE_ITEM_TEMPLATE.format(
             source=html.escape(a["source"]),
@@ -538,6 +596,10 @@ def render(clusters, out_path):
     today = dt.datetime.now(dt.timezone.utc).date()
     section_html = []
     for day, day_clusters in group_by_day(clusters):
+        # Hottest stories first within the day; recency as a tiebreaker.
+        day_clusters = sorted(
+            day_clusters, key=lambda g: (hotness_score(g), g[0]["published"]), reverse=True
+        )
         stories = "".join(render_story(g) for g in day_clusters)
         if day == today:
             label = f"Today — {day.strftime('%b %d, %Y')}"
@@ -573,6 +635,8 @@ def main():
     print(f"Fetching {len(feed_urls)} feeds...")
     articles = fetch_articles(feed_urls, since)
     print(f"Got {len(articles)} articles from the last {args.days} days.")
+    articles = dedupe_by_link(articles)
+    print(f"{len(articles)} after deduping literal duplicate links.")
 
     clusters = cluster_articles(articles, threshold=args.threshold)
     print(f"Grouped into {len(clusters)} stories.")
