@@ -21,7 +21,6 @@ import json
 import os
 import re
 import sys
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -73,11 +72,13 @@ WORD_RE = re.compile(r"[a-z0-9']+")
 
 
 def clean_html(raw):
-    """Strip tags from a feed summary and collapse whitespace."""
+    """Strip tags from a feed summary and collapse whitespace. Unescapes
+    entities first — some feeds double-encode (e.g. "&amp;lt;small&amp;gt;"),
+    which would otherwise decode into literal tags *after* stripping."""
     if not raw:
         return ""
-    text = re.sub(r"<[^>]+>", " ", raw)
-    text = html.unescape(text)
+    text = html.unescape(raw)
+    text = re.sub(r"<[^>]+>", " ", text)
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -141,7 +142,7 @@ def fetch_og_meta(article_url):
         meta["image"] = html.unescape(m.group(1))
     m = OG_DESCRIPTION_RE.search(chunk)
     if m:
-        meta["summary"] = html.unescape(m.group(1))
+        meta["summary"] = clean_html(m.group(1))
     return meta
 
 
@@ -233,12 +234,18 @@ def augment_leads(clusters):
                 lead["summary"] = meta["summary"][:400]
 
 
+class GeminiQuotaExhausted(Exception):
+    """Raised on a 429 so the caller can stop the whole batch instead of
+    burning through every remaining call for the same failure (Gemini's free
+    tier quota for a model is commonly a fixed per-day cap, not a per-minute
+    one — retrying doesn't help within a single run)."""
+
+
 def gemini_summarize(title, source, excerpt, link):
     """Ask Gemini for a tight 2-3 sentence news-card summary. Returns None on
-    any failure (missing key, network error, quota, blocked response) so
-    callers fall back to the text-extracted summary instead of breaking."""
-    if not GEMINI_API_KEY:
-        return None
+    a recoverable, single-request failure (network error, blocked response)
+    so the caller falls back to the text-extracted summary. Raises
+    GeminiQuotaExhausted on a 429."""
     prompt = (
         "Write a concise, factual 2-3 sentence summary (about 40-50 words "
         "total) of this news story, suitable for a headline card. Plain "
@@ -253,50 +260,48 @@ def gemini_summarize(title, source, excerpt, link):
         "generationConfig": {"temperature": 0.3, "maxOutputTokens": 200},
     }).encode("utf-8")
     headers = {"Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY}
-
-    for attempt in range(3):
-        try:
-            req = urllib.request.Request(GEMINI_URL, data=body, headers=headers)
-            with urllib.request.urlopen(req, timeout=GEMINI_TIMEOUT) as resp:
-                payload = json.loads(resp.read())
-            text_out = payload["candidates"][0]["content"]["parts"][0]["text"]
-            return clean_html(text_out) or None
-        except urllib.error.HTTPError as e:
-            if e.code == 429 and attempt < 2:
-                time.sleep(2 ** attempt * 3)
-                continue
-            print(f"[warn] Gemini summarize failed ({e.code}) for {link}: {e}", file=sys.stderr)
-            return None
-        except Exception as e:
-            print(f"[warn] Gemini summarize failed for {link}: {e}", file=sys.stderr)
-            return None
-    return None
+    try:
+        req = urllib.request.Request(GEMINI_URL, data=body, headers=headers)
+        with urllib.request.urlopen(req, timeout=GEMINI_TIMEOUT) as resp:
+            payload = json.loads(resp.read())
+        text_out = payload["candidates"][0]["content"]["parts"][0]["text"]
+        return clean_html(text_out) or None
+    except urllib.error.HTTPError as e:
+        if e.code == 429:
+            raise GeminiQuotaExhausted(str(e)) from e
+        print(f"[warn] Gemini summarize failed ({e.code}) for {link}: {e}", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"[warn] Gemini summarize failed for {link}: {e}", file=sys.stderr)
+        return None
 
 
 def gemini_summarize_leads(clusters):
     """Replace each story's summary with a real LLM-written one via Gemini,
-    when GEMINI_API_KEY is configured. No key set (e.g. running locally
-    without exporting it) silently keeps the existing text-extracted
-    summaries — this step is purely additive."""
+    when GEMINI_API_KEY is configured. Stops the whole batch as soon as the
+    API reports quota exhaustion (the free tier can be as low as ~20
+    requests/day for a given model) instead of wasting calls on guaranteed
+    failures. No key set (e.g. running locally without exporting it)
+    silently keeps the existing text-extracted summaries."""
     if not GEMINI_API_KEY:
         return
     leads = [g[0] for g in clusters][:MAX_GEMINI_CALLS]
     if not leads:
         return
-    print(f"Summarizing {len(leads)} stories with Gemini ({GEMINI_MODEL})...")
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
-        future_to_lead = {
-            ex.submit(gemini_summarize, lead["title"], lead["source"], lead["summary"], lead["link"]): lead
-            for lead in leads
-        }
-        for future in concurrent.futures.as_completed(future_to_lead):
-            lead = future_to_lead[future]
-            try:
-                result = future.result()
-            except Exception:
-                result = None
-            if result:
-                lead["summary"] = result
+    print(f"Summarizing up to {len(leads)} stories with Gemini ({GEMINI_MODEL})...")
+    done = 0
+    for lead in leads:
+        try:
+            result = gemini_summarize(lead["title"], lead["source"], lead["summary"], lead["link"])
+        except GeminiQuotaExhausted as e:
+            print(f"[warn] Gemini quota exhausted after {done} summaries, using text-extracted "
+                  f"summaries for the rest: {e}", file=sys.stderr)
+            break
+        if result:
+            lead["summary"] = result
+            done += 1
+    if done:
+        print(f"Gemini summarized {done}/{len(leads)} stories.")
 
 
 def cluster_articles(articles, threshold=0.45, window_hours=72):

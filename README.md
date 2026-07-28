@@ -66,11 +66,21 @@ Set a `GEMINI_API_KEY` repo secret (**Settings → Secrets and variables →
 Actions**; get a free key at [Google AI Studio](https://aistudio.google.com/apikey))
 and `aggregate.py` will ask Gemini (`gemini-2.5-flash-lite` by default —
 override with a `GEMINI_MODEL` env var) to write a real 2-3 sentence summary
-for each story instead of using the text-extracted excerpt. It's called once
-per story (bounded to `MAX_GEMINI_CALLS = 60` per run) and falls back
+for each story instead of using the text-extracted excerpt. It falls back
 silently to the text-extracted summary on any failure — no key, quota limit,
 network error, or blocked response — so the page always builds successfully
-either way. The free tier comfortably covers a run every 2 hours.
+either way.
+
+**Free-tier quota is small and per-model/per-day**, not per-minute — a brand
+new API key's project can be as low as ~20 requests/day for a given model
+(shown in the error when you hit it: `GenerateRequestsPerDayPerProjectPerModel-FreeTier`).
+`aggregate.py` stops the whole Gemini batch the moment it sees a 429 rather
+than wasting calls retrying, so hitting this just means the rest of that
+run's stories (and any later runs the same day) quietly use the
+text-extracted summary until the quota resets — the page still builds fine.
+If you want every story to get a real LLM summary on every 2-hour run,
+enable billing on the key's Google Cloud project (`gemini-2.5-flash-lite` is
+inexpensive per request) to move off the free-tier cap.
 
 Running locally without exporting `GEMINI_API_KEY` skips this step entirely
 and behaves exactly as before.
