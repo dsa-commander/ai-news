@@ -11,6 +11,11 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: build-ai-news-page
+  cancel-in-progress: false   # queue overlapping runs instead of racing their
+                               # final "git push" against each other
+
 permissions:
   contents: write
 
