@@ -509,7 +509,7 @@ PAGE_TEMPLATE = """<!doctype html>
     border-radius: 10px; margin-bottom: 12px; overflow: hidden;
   }}
   .story.story-hot {{
-    border: 2px solid #39ff14;
+    border: 2px solid #ffffff;
   }}
   .story summary, a.story-link {{
     cursor: pointer; list-style: none; padding: 14px 16px;

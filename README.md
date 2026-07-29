@@ -51,7 +51,7 @@ either don't have a free tier or don't exist anymore for this use case):
 Score = `source_count * 10 + log(1 + points) * 2 + log(1 + comments)` — the
 log keeps a single viral HN post from completely dominating over stories
 genuinely covered by several outlets. Stories with ≥15 HN points get a 🔥
-badge. Any story with a badge (multi-source or hot) also gets a neon-green
+badge. Any story with a badge (multi-source or hot) also gets a white
 border, since that's exactly the set of stories the hotness sort can pull
 ahead of newer ones — a plain single-source, no-buzz story never jumps the
 chronological queue, so it never needs the highlight. See `hotness_score()`
