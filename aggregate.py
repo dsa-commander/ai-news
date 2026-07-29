@@ -508,6 +508,9 @@ PAGE_TEMPLATE = """<!doctype html>
     background: var(--card); border: 1px solid var(--border);
     border-radius: 10px; margin-bottom: 12px; overflow: hidden;
   }}
+  .story.story-hot {{
+    border: 2px solid #39ff14;
+  }}
   .story summary, a.story-link {{
     cursor: pointer; list-style: none; padding: 14px 16px;
     display: flex; gap: 12px; align-items: flex-start;
@@ -582,7 +585,7 @@ DAY_COLLAPSED_TEMPLATE = """<details class="day-section day-collapsed">
 </details>
 """
 
-STORY_TEMPLATE = """<details class="story">
+STORY_TEMPLATE = """<details class="story{hot_class}">
   <summary>
     {thumb}
     <div class="story-body">
@@ -599,7 +602,7 @@ STORY_TEMPLATE = """<details class="story">
 </details>
 """
 
-SINGLE_STORY_TEMPLATE = """<a class="story story-link" href="{link}" target="_blank" rel="noopener">
+SINGLE_STORY_TEMPLATE = """<a class="story story-link{hot_class}" href="{link}" target="_blank" rel="noopener">
   {thumb}
   <div class="story-body">
     <div class="story-head">
@@ -652,6 +655,10 @@ def render_story(group):
     if points >= HOT_BADGE_THRESHOLD:
         badge_parts.append(f"🔥 {points} pts")
     badge = f'<span class="badge">{" · ".join(badge_parts)}</span>' if badge_parts else ""
+    # Same signal that earns a badge (multi-source coverage or real HN buzz)
+    # is exactly what can pull a story ahead of newer ones in the hotness
+    # sort — highlight those so the reordering is visually obvious.
+    hot_class = " story-hot" if badge_parts else ""
 
     if len(group) == 1:
         # Only one source for this story — link straight to the article
@@ -661,6 +668,7 @@ def render_story(group):
             thumb=thumb,
             title=html.escape(lead["title"]),
             badge=badge,
+            hot_class=hot_class,
             when=when,
             snippet=snippet,
         )
@@ -678,6 +686,7 @@ def render_story(group):
         thumb=thumb,
         title=html.escape(lead["title"]),
         badge=badge,
+        hot_class=hot_class,
         when=when,
         snippet=snippet,
         source_items=source_items,
