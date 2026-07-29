@@ -30,7 +30,7 @@ into every source. No login, no server, no monthly cost.
   (see below), otherwise a text-extracted excerpt from the feed's own
   description.
 - `.github/workflows/build.yml` — a GitHub Action that runs the script
-  hourly, 9am-8pm Berlin time, and publishes the result via **GitHub
+  hourly, 7am-11pm Berlin time, and publishes the result via **GitHub
   Pages** — completely free for a public repo.
 
 ## Hot ranking

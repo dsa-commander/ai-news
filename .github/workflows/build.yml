@@ -2,11 +2,11 @@ name: Build AI news page
 
 on:
   schedule:
-    # Hourly, 9am-8pm Berlin time. Fixed UTC 7:00-18:00 = 9am-8pm CEST
+    # Hourly, 7am-11pm Berlin time. Fixed UTC 5:00-21:00 = 7am-11pm CEST
     # (UTC+2, summer). GitHub Actions cron doesn't follow DST, so once
     # Germany switches to CET (UTC+1, late Oct-late Mar) this drifts to
-    # 8am-9pm local until CEST resumes in spring.
-    - cron: "0 7-18 * * *"
+    # 6am-midnight local until CEST resumes in spring.
+    - cron: "0 5-21 * * *"
   workflow_dispatch: {}       # lets you click "Run workflow" manually
   push:
     branches: [main]
