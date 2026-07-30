@@ -6,7 +6,14 @@ on:
     # (UTC+2, summer). GitHub Actions cron doesn't follow DST, so once
     # Germany switches to CET (UTC+1, late Oct-late Mar) this drifts to
     # 6am-midnight local until CEST resumes in spring.
-    - cron: "0 5-21 * * *"
+    #
+    # Minute is 13, not 0: GitHub explicitly warns that "start of every
+    # hour" schedules see the most congestion/delay/dropped runs across
+    # the whole platform (every other repo's hourly cron fires then too).
+    # Off-the-hour reduces how often a run gets delayed or silently
+    # skipped — confirmed this actually happened (two morning runs missing
+    # entirely) while this was still "0 5-21 * * *".
+    - cron: "13 5-21 * * *"
   workflow_dispatch: {}       # lets you click "Run workflow" manually
   push:
     branches: [main]

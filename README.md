@@ -30,8 +30,13 @@ into every source. No login, no server, no monthly cost.
   (see below), otherwise a text-extracted excerpt from the feed's own
   description.
 - `.github/workflows/build.yml` — a GitHub Action that runs the script
-  hourly, 7am-11pm Berlin time, and publishes the result via **GitHub
-  Pages** — completely free for a public repo.
+  hourly (at :13, not :00 — see comment in the file), 7am-11pm Berlin time,
+  and publishes the result via **GitHub Pages** — completely free for a
+  public repo. Scheduled runs aren't a hard guarantee, though: GitHub can
+  delay or occasionally drop one under platform load (confirmed happening
+  once on this repo), so an hour looking stale before the next run catches
+  up is expected behavior, not necessarily broken. `workflow_dispatch` in
+  the **Actions** tab lets you trigger a run manually any time.
 
 ## Hot ranking
 
