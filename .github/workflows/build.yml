@@ -14,6 +14,10 @@ on:
     # skipped — confirmed this actually happened (two morning runs missing
     # entirely) while this was still "0 5-21 * * *".
     - cron: "13 5-21 * * *"
+    # Early run at 3am Berlin (1:00 UTC CEST) so there's fresh news waiting
+    # before the day's regular 7am-11pm window starts — buffer against
+    # GitHub's scheduling delays, which have been tens of minutes, not hours.
+    - cron: "13 1 * * *"
   workflow_dispatch: {}       # lets you click "Run workflow" manually
   push:
     branches: [main]
