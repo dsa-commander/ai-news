@@ -131,7 +131,12 @@ limit, since it resets every minute rather than for the rest of the day.
 the whole Gemini batch immediately (waiting won't help within one run), but
 a per-minute cap waits out the suggested delay and retries — up to
 `GEMINI_MAX_RATE_LIMIT_WAITS = 6` times — so most of the batch still gets a
-real summary, just spread over a few minutes. Either way, whatever's left
+real summary, just spread over a few minutes. Separately, if Gemini itself
+is just slow/unresponsive (not rate-limiting, actual request timeouts) —
+confirmed happening for a stretch on 2026-07-30 — `GEMINI_MAX_CONSECUTIVE_FAILURES = 5`
+stops the batch after that many timeouts in a row rather than burning the
+full `GEMINI_TIMEOUT = 20`s on every one of up to `MAX_GEMINI_CALLS = 60`
+attempts (worst case ~20 minutes vs. ~2). Either way, whatever's left
 over falls back to the text-extracted summary and the page still builds
 fine. If you hit quota on your key too, check
 `https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_KEY` for

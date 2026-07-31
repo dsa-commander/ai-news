@@ -52,6 +52,22 @@ jobs:
         run: |
           git config user.name "ai-news-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/index.html
-          git diff --quiet --cached || git commit -m "Update AI news page"
-          git push
+          # The concurrency group above only serializes this workflow's own
+          # runs against each other — it doesn't protect against a manual
+          # `git push` landing on main while a run is still mid-flight (long
+          # runs are common when Gemini is slow). docs/index.html is a
+          # freshly generated file already sitting on disk, not something
+          # we need to preserve history for, so on a push rejection just
+          # reset onto the latest main and recommit it there instead of
+          # rebasing (which could hit a real conflict if the competing
+          # push touched the same file).
+          for i in 1 2 3 4 5; do
+            git add docs/index.html
+            git diff --quiet --cached || git commit -m "Update AI news page"
+            git push && exit 0
+            echo "push rejected (attempt $i/5) — resetting onto latest main and recommitting..."
+            git fetch origin main
+            git reset origin/main
+          done
+          echo "::error::Could not push after 5 attempts"
+          exit 1

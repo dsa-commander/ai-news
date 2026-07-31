@@ -42,6 +42,9 @@ GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_M
 GEMINI_TIMEOUT = 20
 MAX_GEMINI_CALLS = 60  # bound API usage per run (free-tier friendly)
 GEMINI_MAX_RATE_LIMIT_WAITS = 6  # cap total per-minute-cap waits per run
+GEMINI_MAX_CONSECUTIVE_FAILURES = 5  # bail on the whole batch if Gemini seems
+# broadly slow/unresponsive right now, rather than burning ~20s per story
+# (GEMINI_TIMEOUT) on every one of up to MAX_GEMINI_CALLS attempts
 IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\']', re.IGNORECASE)
 OG_IMAGE_RE = re.compile(
     r'<meta[^>]+(?:property|name)=["\'](?:og:image|twitter:image)["\'][^>]+content=["\']([^"\']+)["\']',
@@ -414,6 +417,7 @@ def gemini_summarize_leads(clusters):
     print(f"Summarizing up to {len(leads)} stories with Gemini ({GEMINI_MODEL})...")
     done = 0
     waits_used = 0
+    consecutive_failures = 0
     i = 0
     while i < len(leads):
         lead = leads[i]
@@ -438,6 +442,14 @@ def gemini_summarize_leads(clusters):
         if result:
             lead["summary"] = result
             done += 1
+            consecutive_failures = 0
+        else:
+            consecutive_failures += 1
+            if consecutive_failures >= GEMINI_MAX_CONSECUTIVE_FAILURES:
+                print(f"[warn] Gemini failed {consecutive_failures} times in a row (likely slow "
+                      f"or unresponsive right now), using text-extracted summaries for the rest.",
+                      file=sys.stderr)
+                break
         i += 1
     if done:
         print(f"Gemini summarized {done}/{len(leads)} stories.")
