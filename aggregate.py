@@ -577,8 +577,20 @@ PAGE_TEMPLATE = """<!doctype html>
 </header>
 <main>
 {stories}
-<div class="updated">Last updated {updated}</div>
+<div class="updated">Last updated <time id="updated-time" datetime="{updated_iso}">{updated_utc}</time></div>
 </main>
+<script>
+(function () {{
+  var el = document.getElementById('updated-time');
+  if (!el) return;
+  var d = new Date(el.getAttribute('datetime'));
+  if (isNaN(d.getTime())) return;
+  el.textContent = d.toLocaleString(undefined, {{
+    year: 'numeric', month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  }});
+}})();
+</script>
 </body>
 </html>
 """
@@ -735,9 +747,11 @@ def render(clusters, out_path):
             section_html.append(DAY_COLLAPSED_TEMPLATE.format(
                 label=label, count=len(day_clusters), stories=stories,
             ))
+    now = dt.datetime.now(dt.timezone.utc)
     page = PAGE_TEMPLATE.format(
         stories="\n".join(section_html) if section_html else "<p>No articles found in this window.</p>",
-        updated=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        updated_iso=now.isoformat(),
+        updated_utc=now.strftime("%Y-%m-%d %H:%M UTC"),
     )
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(page)
