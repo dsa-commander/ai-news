@@ -3,7 +3,8 @@
 A free, self-updating AI news page: pulls from a list of RSS feeds, groups
 articles that are covering the *same* story, and shows a headline list —
 each with a thumbnail image and a 3-line summary — you can tap to expand
-into every source. No login, no server, no monthly cost.
+into every source, or bookmark to read later. No login, no server, no
+monthly cost.
 
 ## How it works
 
@@ -39,6 +40,20 @@ into every source. No login, no server, no monthly cost.
   once on this repo), so an hour looking stale before the next run catches
   up is expected behavior, not necessarily broken. `workflow_dispatch` in
   the **Actions** tab lets you trigger a run manually any time.
+
+## Save for later
+
+Tap the bookmark icon on any story to save it, and the 🔖 button in the
+header to view/manage your saved list (remove once read). This is a static
+site with no accounts or server, so saved articles live entirely in your
+**own browser's `localStorage`** — nothing is synced across devices, and
+clearing your browser data clears your saved list too. The saved list is
+independent of the current page's content: it stores each article's title/
+image/source/link at save time, so it still shows correctly even after that
+story has aged out of the site's normal 4-day window. See the second
+`<script>` block in `PAGE_TEMPLATE` (`aggregate.py`) for the implementation
+— vanilla JS, no dependencies, DOM-built (not `innerHTML` string
+concatenation) since article titles come from external, untrusted feeds.
 
 ## Hot ranking
 

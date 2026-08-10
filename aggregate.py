@@ -568,17 +568,71 @@ PAGE_TEMPLATE = """<!doctype html>
   details.day-collapsed[open] > summary.day-heading {{ border-radius: 10px 10px 0 0; margin-bottom: 10px; }}
   .day-stories {{ padding-top: 2px; }}
   .updated {{ color: var(--muted); font-size: 0.78rem; text-align: center; padding: 20px 0; }}
+  .story-side {{ display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }}
+  .save-btn {{
+    background: none; border: none; cursor: pointer; padding: 2px;
+    color: var(--muted); display: flex; line-height: 0;
+  }}
+  .save-btn:hover {{ color: var(--accent); }}
+  .save-btn.is-saved {{ color: var(--accent); }}
+  header {{ display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }}
+  header .header-text {{ flex: 1 1 auto; min-width: 0; }}
+  .saved-toggle-btn {{
+    background: var(--card); border: 1px solid var(--border); color: var(--text);
+    border-radius: 999px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; flex: 0 0 auto; white-space: nowrap;
+  }}
+  .saved-toggle-btn:hover {{ border-color: var(--accent); }}
+  .saved-overlay {{
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 16px; z-index: 50; overflow-y: auto;
+  }}
+  .saved-overlay[hidden] {{ display: none; }}
+  .saved-panel {{
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    max-width: 640px; width: 100%; padding: 20px;
+  }}
+  .saved-panel-head {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }}
+  .saved-panel-head h2 {{ font-size: 1.1rem; margin: 0; }}
+  .saved-close-btn {{ background: none; border: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; padding: 4px; }}
+  .saved-close-btn:hover {{ color: var(--text); }}
+  .saved-empty {{ color: var(--muted); font-size: 0.9rem; padding: 20px 0; text-align: center; }}
+  .saved-item {{ display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }}
+  .saved-item:last-child {{ border-bottom: none; }}
+  .saved-thumb {{ width: 56px; height: 56px; border-radius: 8px; object-fit: cover; background: var(--border); flex: 0 0 auto; }}
+  .saved-body {{ flex: 1 1 auto; min-width: 0; }}
+  .saved-title {{ color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.92rem; display: block; }}
+  .saved-title:hover {{ text-decoration: underline; }}
+  .saved-meta {{ color: var(--muted); font-size: 0.78rem; margin-top: 2px; }}
+  .saved-remove {{
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 6px; padding: 6px 10px; font-size: 0.78rem; cursor: pointer; flex: 0 0 auto;
+  }}
+  .saved-remove:hover {{ border-color: #ff6b6b; color: #ff6b6b; }}
 </style>
 </head>
 <body>
 <header>
-  <h1>🧠 AI News</h1>
-  <p>Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
+  <div class="header-text">
+    <h1>🧠 AI News</h1>
+    <p>Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
+  </div>
+  <button type="button" id="saved-toggle" class="saved-toggle-btn">🔖 Saved (<span id="saved-count">0</span>)</button>
 </header>
 <main>
 {stories}
 <div class="updated">Last updated <time id="updated-time" datetime="{updated_iso}">{updated_utc}</time></div>
 </main>
+<div id="saved-overlay" class="saved-overlay" hidden>
+  <div class="saved-panel">
+    <div class="saved-panel-head">
+      <h2>Saved for later</h2>
+      <button type="button" id="saved-close" class="saved-close-btn" aria-label="Close">✕</button>
+    </div>
+    <div id="saved-list"></div>
+  </div>
+</div>
 <script>
 (function () {{
   var el = document.getElementById('updated-time');
@@ -589,6 +643,143 @@ PAGE_TEMPLATE = """<!doctype html>
     year: 'numeric', month: 'short', day: 'numeric',
     hour: '2-digit', minute: '2-digit'
   }});
+}})();
+</script>
+<script>
+(function () {{
+  var STORAGE_KEY = 'ai-news-saved-v1';
+
+  function getSaved() {{
+    try {{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }}
+    catch (e) {{ return []; }}
+  }}
+  function setSaved(list) {{
+    try {{ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }} catch (e) {{}}
+  }}
+  function findIndex(list, url) {{
+    for (var i = 0; i < list.length; i++) {{ if (list[i].url === url) return i; }}
+    return -1;
+  }}
+
+  function updateButtonState(btn) {{
+    var saved = findIndex(getSaved(), btn.getAttribute('data-url')) !== -1;
+    btn.classList.toggle('is-saved', saved);
+    btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
+    var path = btn.querySelector('path');
+    if (path) path.setAttribute('fill', saved ? 'currentColor' : 'none');
+  }}
+
+  function syncButtonsForUrl(url) {{
+    document.querySelectorAll('.save-btn').forEach(function (btn) {{
+      if (btn.getAttribute('data-url') === url) updateButtonState(btn);
+    }});
+  }}
+
+  function updateCount() {{
+    var el = document.getElementById('saved-count');
+    if (el) el.textContent = String(getSaved().length);
+  }}
+
+  function el(tag, className, text) {{
+    var e = document.createElement(tag);
+    if (className) e.className = className;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }}
+
+  function renderSavedPanel() {{
+    var list = getSaved();
+    var container = document.getElementById('saved-list');
+    if (!container) return;
+    container.innerHTML = '';
+    if (!list.length) {{
+      container.appendChild(el('p', 'saved-empty',
+        'No saved articles yet — tap the bookmark on any story to save it for later.'));
+      return;
+    }}
+    list.forEach(function (item) {{
+      var row = el('div', 'saved-item');
+
+      var img = document.createElement('img');
+      img.className = 'saved-thumb';
+      img.loading = 'lazy';
+      img.alt = '';
+      img.src = item.image;
+      row.appendChild(img);
+
+      var body = el('div', 'saved-body');
+      var a = document.createElement('a');
+      a.className = 'saved-title';
+      a.href = item.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = item.title;
+      body.appendChild(a);
+      body.appendChild(el('div', 'saved-meta', item.source));
+      row.appendChild(body);
+
+      var removeBtn = el('button', 'saved-remove', 'Remove');
+      removeBtn.type = 'button';
+      removeBtn.addEventListener('click', function () {{
+        setSaved(getSaved().filter(function (x) {{ return x.url !== item.url; }}));
+        syncButtonsForUrl(item.url);
+        updateCount();
+        renderSavedPanel();
+      }});
+      row.appendChild(removeBtn);
+
+      container.appendChild(row);
+    }});
+  }}
+
+  function toggleSave(btn) {{
+    var url = btn.getAttribute('data-url');
+    var list = getSaved();
+    var idx = findIndex(list, url);
+    if (idx === -1) {{
+      list.unshift({{
+        url: url,
+        title: btn.getAttribute('data-title') || '',
+        image: btn.getAttribute('data-image') || '',
+        source: btn.getAttribute('data-source') || ''
+      }});
+    }} else {{
+      list.splice(idx, 1);
+    }}
+    setSaved(list);
+    updateButtonState(btn);
+    updateCount();
+    renderSavedPanel();
+  }}
+
+  document.querySelectorAll('.save-btn').forEach(function (btn) {{
+    updateButtonState(btn);
+    btn.addEventListener('click', function (e) {{
+      e.preventDefault();
+      e.stopPropagation();
+      toggleSave(btn);
+    }});
+  }});
+  updateCount();
+  renderSavedPanel();
+
+  var overlay = document.getElementById('saved-overlay');
+  var openBtn = document.getElementById('saved-toggle');
+  var closeBtn = document.getElementById('saved-close');
+  if (openBtn && overlay) {{
+    openBtn.addEventListener('click', function () {{
+      overlay.hidden = false;
+      renderSavedPanel();
+    }});
+  }}
+  if (closeBtn && overlay) {{
+    closeBtn.addEventListener('click', function () {{ overlay.hidden = true; }});
+  }}
+  if (overlay) {{
+    overlay.addEventListener('click', function (e) {{
+      if (e.target === overlay) overlay.hidden = true;
+    }});
+  }}
 }})();
 </script>
 </body>
@@ -615,7 +806,10 @@ STORY_TEMPLATE = """<details class="story{hot_class}">
     <div class="story-body">
       <div class="story-head">
         <span class="story-title">{title}{badge}</span>
-        <span class="story-meta">{when}</span>
+        <div class="story-side">
+          <span class="story-meta">{when}</span>
+          {save_button}
+        </div>
       </div>
       {snippet}
     </div>
@@ -631,7 +825,10 @@ SINGLE_STORY_TEMPLATE = """<a class="story story-link{hot_class}" href="{link}" 
   <div class="story-body">
     <div class="story-head">
       <span class="story-title">{title}{badge}</span>
-      <span class="story-meta">{when}</span>
+      <div class="story-side">
+        <span class="story-meta">{when}</span>
+        {save_button}
+      </div>
     </div>
     {snippet}
   </div>
@@ -641,6 +838,16 @@ SINGLE_STORY_TEMPLATE = """<a class="story story-link{hot_class}" href="{link}" 
 THUMB_TEMPLATE = (
     '<img class="story-thumb" src="{src}" alt="" loading="lazy" '
     "onerror=\"this.onerror=null;this.src='" + PLACEHOLDER_THUMB + "'\">"
+)
+
+SAVE_BUTTON_TEMPLATE = (
+    '<button type="button" class="save-btn" aria-label="Save for later" '
+    'aria-pressed="false" data-url="{url}" data-title="{title}" '
+    'data-image="{image}" data-source="{source}">'
+    '<svg viewBox="0 0 24 24" width="16" height="16">'
+    '<path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" '
+    'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>'
+    "</svg></button>"
 )
 
 SOURCE_ITEM_TEMPLATE = """<div class="source-item">
@@ -671,6 +878,12 @@ def render_story(group):
     thumb = THUMB_TEMPLATE.format(src=html.escape(image_src))
     snippet_text = three_line_summary(lead["summary"])
     snippet = f'<div class="story-snippet">{html.escape(snippet_text)}</div>' if snippet_text else ""
+    save_button = SAVE_BUTTON_TEMPLATE.format(
+        url=html.escape(lead["link"]),
+        title=html.escape(lead["title"]),
+        image=html.escape(image_src),
+        source=html.escape(lead["source"]),
+    )
 
     badge_parts = []
     if len(group) > 1:
@@ -694,6 +907,7 @@ def render_story(group):
             badge=badge,
             hot_class=hot_class,
             when=when,
+            save_button=save_button,
             snippet=snippet,
         )
 
@@ -712,6 +926,7 @@ def render_story(group):
         badge=badge,
         hot_class=hot_class,
         when=when,
+        save_button=save_button,
         snippet=snippet,
         source_items=source_items,
     )
