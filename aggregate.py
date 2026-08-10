@@ -501,9 +501,10 @@ PAGE_TEMPLATE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI News Aggregator</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   :root {{
-    --bg: #0f1115; --card: #171a21; --text: #e8e9ec; --muted: #9aa1ac;
+    --bg: #0b0d11; --card: #171a21; --text: #e8e9ec; --muted: #9aa1ac;
     --accent: #7cc4ff; --border: #262b35;
   }}
   * {{ box-sizing: border-box; }}
@@ -512,17 +513,37 @@ PAGE_TEMPLATE = """<!doctype html>
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.45;
   }}
-  header {{ padding: 28px 20px 8px; max-width: 760px; margin: 0 auto; }}
-  header h1 {{ font-size: 1.4rem; margin: 0 0 4px; }}
-  header p {{ color: var(--muted); margin: 0; font-size: 0.9rem; }}
+  header {{
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: rgba(11,13,17,0.92);
+    backdrop-filter: blur(8px); z-index: 10;
+  }}
+  header .header-inner {{
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    max-width: 760px; margin: 0 auto; width: 100%;
+  }}
+  header h1 {{
+    font-size: 1.3rem; margin: 0; font-weight: 800; letter-spacing: -0.02em;
+  }}
+  .intro {{
+    color: var(--muted); font-size: 0.85rem; max-width: 760px;
+    margin: 16px auto 0; padding: 0 20px;
+  }}
   main {{ max-width: 760px; margin: 0 auto; padding: 12px 20px 60px; }}
   .story {{
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; margin-bottom: 12px; overflow: hidden;
+    border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }}
+  .story:hover {{
+    border-color: #37404f; transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   }}
   .story.story-hot {{
     border: 2px solid #ffffff;
   }}
+  .story.story-hot:hover {{ border-color: #ffffff; }}
   .story summary, a.story-link {{
     cursor: pointer; list-style: none; padding: 14px 16px;
     display: flex; gap: 12px; align-items: flex-start;
@@ -552,10 +573,16 @@ PAGE_TEMPLATE = """<!doctype html>
   .source-summary {{ color: var(--muted); font-size: 0.85rem; margin-top: 2px; }}
   .badge {{
     display: inline-block; background: #22303f; color: var(--accent);
-    font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; margin-left: 8px;
+    font-size: 0.7rem; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+    margin-left: 8px; letter-spacing: 0.01em;
   }}
   .day-heading {{
-    font-size: 1rem; font-weight: 700; margin: 22px 4px 10px; color: var(--text);
+    font-size: 1.02rem; font-weight: 700; margin: 26px 4px 12px; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }}
+  .day-heading::before {{
+    content: ""; width: 8px; height: 8px; border-radius: 999px;
+    background: var(--accent); flex: 0 0 auto;
   }}
   main > *:first-child .day-heading {{ margin-top: 0; }}
   details.day-collapsed {{ margin-bottom: 12px; }}
@@ -575,8 +602,6 @@ PAGE_TEMPLATE = """<!doctype html>
   }}
   .save-btn:hover {{ color: var(--accent); }}
   .save-btn.is-saved {{ color: var(--accent); }}
-  header {{ display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }}
-  header .header-text {{ flex: 1 1 auto; min-width: 0; }}
   .saved-toggle-btn {{
     background: var(--card); border: 1px solid var(--border); color: var(--text);
     border-radius: 999px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;
@@ -614,12 +639,15 @@ PAGE_TEMPLATE = """<!doctype html>
 </head>
 <body>
 <header>
-  <div class="header-text">
-    <h1>🧠 AI News</h1>
-    <p>Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
+  <div class="header-inner">
+    <h1>AI News</h1>
+    <button type="button" id="saved-toggle" class="saved-toggle-btn">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      Saved (<span id="saved-count">0</span>)
+    </button>
   </div>
-  <button type="button" id="saved-toggle" class="saved-toggle-btn">🔖 Saved (<span id="saved-count">0</span>)</button>
 </header>
+<p class="intro">Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
 <main>
 {stories}
 <div class="updated">Last updated <time id="updated-time" datetime="{updated_iso}">{updated_utc}</time></div>
