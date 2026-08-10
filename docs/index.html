@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI News Aggregator</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   :root {
-    --bg: #0f1115; --card: #171a21; --text: #e8e9ec; --muted: #9aa1ac;
+    --bg: #0b0d11; --card: #171a21; --text: #e8e9ec; --muted: #9aa1ac;
     --accent: #7cc4ff; --border: #262b35;
   }
   * { box-sizing: border-box; }
@@ -15,17 +16,37 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.45;
   }
-  header { padding: 28px 20px 8px; max-width: 760px; margin: 0 auto; }
-  header h1 { font-size: 1.4rem; margin: 0 0 4px; }
-  header p { color: var(--muted); margin: 0; font-size: 0.9rem; }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: rgba(11,13,17,0.92);
+    backdrop-filter: blur(8px); z-index: 10;
+  }
+  header .header-inner {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    max-width: 760px; margin: 0 auto; width: 100%;
+  }
+  header h1 {
+    font-size: 1.3rem; margin: 0; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .intro {
+    color: var(--muted); font-size: 0.85rem; max-width: 760px;
+    margin: 16px auto 0; padding: 0 20px;
+  }
   main { max-width: 760px; margin: 0 auto; padding: 12px 20px 60px; }
   .story {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; margin-bottom: 12px; overflow: hidden;
+    border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .story:hover {
+    border-color: #37404f; transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   }
   .story.story-hot {
     border: 2px solid #ffffff;
   }
+  .story.story-hot:hover { border-color: #ffffff; }
   .story summary, a.story-link {
     cursor: pointer; list-style: none; padding: 14px 16px;
     display: flex; gap: 12px; align-items: flex-start;
@@ -55,10 +76,16 @@
   .source-summary { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
   .badge {
     display: inline-block; background: #22303f; color: var(--accent);
-    font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; margin-left: 8px;
+    font-size: 0.7rem; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+    margin-left: 8px; letter-spacing: 0.01em;
   }
   .day-heading {
-    font-size: 1rem; font-weight: 700; margin: 22px 4px 10px; color: var(--text);
+    font-size: 1.02rem; font-weight: 700; margin: 26px 4px 12px; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .day-heading::before {
+    content: ""; width: 8px; height: 8px; border-radius: 999px;
+    background: var(--accent); flex: 0 0 auto;
   }
   main > *:first-child .day-heading { margin-top: 0; }
   details.day-collapsed { margin-bottom: 12px; }
@@ -78,8 +105,6 @@
   }
   .save-btn:hover { color: var(--accent); }
   .save-btn.is-saved { color: var(--accent); }
-  header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  header .header-text { flex: 1 1 auto; min-width: 0; }
   .saved-toggle-btn {
     background: var(--card); border: 1px solid var(--border); color: var(--text);
     border-radius: 999px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;
@@ -117,12 +142,15 @@
 </head>
 <body>
 <header>
-  <div class="header-text">
-    <h1>🧠 AI News</h1>
-    <p>Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
+  <div class="header-inner">
+    <h1>AI News</h1>
+    <button type="button" id="saved-toggle" class="saved-toggle-btn">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      Saved (<span id="saved-count">0</span>)
+    </button>
   </div>
-  <button type="button" id="saved-toggle" class="saved-toggle-btn">🔖 Saved (<span id="saved-count">0</span>)</button>
 </header>
+<p class="intro">Hottest stories first each day, by source count + Hacker News buzz. Same-story articles are grouped — tap to see every source.</p>
 <main>
 <section class="day-section">
   <h2 class="day-heading">Today — Aug 10, 2026</h2>
@@ -136,7 +164,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://bobdahacker.com/blog/tldv-hack" data-title="Over 181,000 AI meeting recordings left wide open in note taking app" data-image="https://bobdahacker.com/static/images/blogs/tldv/blogHeader.png" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">How a missing Firestore security rule on tl;dv exposed 181,874 meetings from 84,312 users across 35,003 domains, including live calls I could join uninvited, and how six months of disclosure got me nothing but seen receipts.</div>
+    <div class="story-snippet">A missing security rule in the tl;dv AI meeting note-taking application left over 181,000 recordings exposed online. The vulnerability compromised data from more than 84,000 users across 35,000 domains, allowing unauthorized access to live calls after months of ignored…</div>
   </div>
 </a>
 <a class="story story-link" href="https://cryptobriefing.com/sanders-urges-openai-anthropic-meta-to-pause-ai-development-amid-regulatory-push/" target="_blank" rel="noopener">
@@ -149,7 +177,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://cryptobriefing.com/sanders-urges-openai-anthropic-meta-to-pause-ai-development-amid-regulatory-push/" data-title="Sanders urges OpenAI, Anthropic, Meta to pause AI develpmnt amid regulatory push" data-image="https://static.cryptobriefing.com/wp-content/uploads/2026/08/10060413/sanders-addresses-supporters-during-a-campaign-rally-in-gran-1-800x420.jpeg" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Sanders calls for a pause in AI development from leading companies. Anthropic having the best AI model by September 2026 at 80.5% YES.</div>
+    <div class="story-snippet">Senator Bernie Sanders has urged leading artificial intelligence companies, including OpenAI, Anthropic, and Meta, to halt their ongoing development efforts. He made the call as part of a broader push for increased regulatory oversight of the rapidly advancing technology sector.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.wired.com/story/the-ai-slop-backlash-is-actually-having-an-impact/" target="_blank" rel="noopener">
@@ -162,7 +190,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.wired.com/story/the-ai-slop-backlash-is-actually-having-an-impact/" data-title="The AI Slop Backlash Is Actually Having an Impact" data-image="https://media.wired.com/photos/6a75d22732e80faf510b2a15/master/pass/AI%20Slop.jpg" data-source="Feed: Artificial Intelligence Latest"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Platforms are finally recognizing that people don’t want to consume AI slop. A growing number of sites and apps now have tools and policies to flag, label, and ban AI-generated content.</div>
+    <div class="story-snippet">Major platforms are implementing new policies and tools to flag, label, and ban AI-generated content. This shift is a direct response to a growing user backlash against low-quality, automated media across websites and applications.</div>
   </div>
 </a>
 <a class="story story-link" href="https://fortune.com/2026/08/10/torsten-slok-ai-profit-margins-capex-oracle/" target="_blank" rel="noopener">
@@ -175,7 +203,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://fortune.com/2026/08/10/torsten-slok-ai-profit-margins-capex-oracle/" data-title="AI&#x27;s profits are &#x27;being funded by investors rather than earned from customers" data-image="https://fortune.com/img-assets/wp-content/uploads/2026/08/GettyImages-2194585229-e1786135906472.jpg?resize=1200,600" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">The AI boom has turned the standard profit margin model on its head, according to Apollo Chief Economist Torsten Slok—and it’s making the industry’s growth unsustainable.</div>
+    <div class="story-snippet">According to Apollo Chief Economist Torsten Slok, the current artificial intelligence boom is unsustainable because industry profits are primarily funded by investors rather than generated from actual customers. This dynamic inverts the traditional profit margin model, raising…</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.tomshardware.com/tech-industry/artificial-intelligence/chinese-farmer-kills-25-acres-of-crops-after-following-ai-generated-weed-and-pest-control-advice-farmer-trusted-pesticide-recipe-after-months-of-successful-advice" target="_blank" rel="noopener">
@@ -188,7 +216,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.tomshardware.com/tech-industry/artificial-intelligence/chinese-farmer-kills-25-acres-of-crops-after-following-ai-generated-weed-and-pest-control-advice-farmer-trusted-pesticide-recipe-after-months-of-successful-advice" data-title="Farmer kills 25 acres of crops after following AI weed and pest control advice" data-image="https://cdn.mos.cms.futurecdn.net/izh39vRFP5KyDDN6oTkKJ9-1920-80.jpg" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">AI is useful, but you should never blindly trust it.</div>
+    <div class="story-snippet">A farmer destroyed 25 acres of crops after blindly following flawed weed and pest control advice generated by artificial intelligence. The incident highlights the risks of relying completely on AI technology for critical agricultural decisions without human verification.</div>
   </div>
 </a>
 <a class="story story-link" href="https://positive.security/blog/banking-ai-xss" target="_blank" rel="noopener">
@@ -201,7 +229,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://positive.security/blog/banking-ai-xss" data-title="Banking AI XSS: The exploit is in the payment reference" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    
+    <div class="story-snippet">Security researchers discovered a cross-site scripting vulnerability within banking artificial intelligence systems. The exploit is triggered specifically through malicious code hidden inside payment reference fields.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.macrumors.com/2026/08/10/apple-posts-guide-for-connecting-siri-to-qwen-ai/" target="_blank" rel="noopener">
@@ -214,7 +242,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.macrumors.com/2026/08/10/apple-posts-guide-for-connecting-siri-to-qwen-ai/" data-title="Apple Briefly Posts China Guide for Connecting Siri to Qwen AI" data-image="https://images.macrumors.com/t/QXQ3qDkhrxMrGY5_SLp7tyYc6bg=/1600x/article-new/2024/09/apple-intelligence-black.jpeg" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Apple briefly published a support guide in China explaining how Mac users can connect Alibaba&#x27;s Qwen AI to Siri and Writing Tools, before pulling it entirely less than a day later. Reuters first spotted the Chinese-language guide on Apple&#x27;s support site on August 8, which…</div>
+    <div class="story-snippet">Apple briefly published a support guide on its Chinese website explaining how Mac users could connect Alibaba&#x27;s Qwen AI models to Siri and Writing Tools. The company removed the documentation less than a day after it was first spotted by Reuters on August 8.</div>
   </div>
 </a>
 <a class="story story-link" href="https://github.com/omacom-io/ttfx" target="_blank" rel="noopener">
@@ -227,7 +255,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://github.com/omacom-io/ttfx" data-title="LLM Rewrite of the TerminalTextEffects Python" data-image="https://opengraph.githubassets.com/099552bcef9b5f521cabf2256c4caf575dc40d13f5775400375f16c0b90be829/omacom-io/ttfx" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    
+    <div class="story-snippet">A developer used a large language model to rewrite the TerminalTextEffects Python library. The project explores the capabilities of AI-assisted code generation and refactoring within an existing software repository.</div>
   </div>
 </a>
 <a class="story story-link" href="https://calnewport.com/on-ai-coding-and-its-discontents/" target="_blank" rel="noopener">
@@ -240,20 +268,20 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://calnewport.com/on-ai-coding-and-its-discontents/" data-title="AI Coding and Its Discontents" data-image="https://calnewport.com/wp-content/uploads/2026/08/charlesdeluvio-pjAH2Ax4uWk-unsplash-scaled.jpg" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Back in January, I received a note from a senior software engineer in Silicon Valley. He described himself as an AI skeptic who became converted ... Read more</div>
+    <div class="story-snippet">A senior Silicon Valley software engineer initially skeptical of artificial intelligence ultimately became a convert. The article explores the growing role of AI coding tools in the tech industry and the mixed reactions they continue to provoke among professionals.</div>
   </div>
 </a>
 <a class="story story-link" href="https://ai-updates.net/ai-fortunes-philanthropy-private-power/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://ai-updates.net/wp-content/uploads/2025/04/AI-Industry-1160x773.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
+  <img class="story-thumb" src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
   <div class="story-body">
     <div class="story-head">
       <span class="story-title">AI Fortunes Are Reviving an Old Debate About Private Power</span>
       <div class="story-side">
         <span class="story-meta">13:36 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://ai-updates.net/ai-fortunes-philanthropy-private-power/" data-title="AI Fortunes Are Reviving an Old Debate About Private Power" data-image="https://ai-updates.net/wp-content/uploads/2025/04/AI-Industry-1160x773.png" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://ai-updates.net/ai-fortunes-philanthropy-private-power/" data-title="AI Fortunes Are Reviving an Old Debate About Private Power" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">David Silver&#x27;s binding charitable pledge shows how AI wealth could fund public good while concentrating decisions in private hands.</div>
+    <div class="story-snippet">The rapid expansion of artificial intelligence infrastructure is revitalizing historical debates concerning the consumption and management of private electrical power. As data center energy demands escalate, industry leaders and regulators increasingly confront questions about…</div>
   </div>
 </a>
 <a class="story story-link" href="https://kuber.studio/blog/Reflections/Humanising-LLM-Outputs-is-Actually-Dumb" target="_blank" rel="noopener">
@@ -266,7 +294,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://kuber.studio/blog/Reflections/Humanising-LLM-Outputs-is-Actually-Dumb" data-title="Humanising LLM Outputs Is Dumb" data-image="https://kuber.studio/blog/static/social-images/content-Reflections-Humanising LLM Outputs is Actually Dumb.md.webp" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">The largest tell for me to tell where culture and sentiment is shifting for AI tools is usually X, viral GitHub repositories and Hacker News. One of these tells I’ve been seeing a lot lately is skills like I have ADHD and Agents.md instructions such as giving outputs in only…</div>
+    <div class="story-snippet">An analysis of tech community trends indicates a growing shift toward giving large language models persona-based instructions and specialized constraints. These practices include prompting AI to simulate conditions like ADHD or to respond using Simplified Technical English.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.cnbc.com/2026/08/10/intel-intc-stock-offering-ai.html" target="_blank" rel="noopener">
@@ -279,7 +307,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.cnbc.com/2026/08/10/intel-intc-stock-offering-ai.html" data-title="Intel plans $15B stock offering as AI demand accelerates" data-image="https://image.cnbcfm.com/api/v1/image/108339566-1784842863353-gettyimages-2287372564-_88a2490_fizf2jun.jpeg?v=1784842934&amp;w=1920&amp;h=1080" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Technology giants have shelled out trillions to support insatiable AI demand and the infrastructure buildout.</div>
+    <div class="story-snippet">Intel plans a $15 billion stock offering to capitalize on accelerating artificial intelligence demand. Major technology companies are investing trillions of dollars to support infrastructure buildouts required for expanding AI workloads.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" target="_blank" rel="noopener">
@@ -292,7 +320,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" data-title="Mark Zuckerberg attacks &#x27;closed&#x27; AI rivals as Meta returns to open models" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Meta has returned to open-source models, with CEO Mark Zuckerberg publicly criticizing competitors for adopting closed artificial intelligence systems. This strategic shift marks a notable divergence in how major technology companies are developing and distributing their AI…</div>
+    <div class="story-snippet">Meta has returned to releasing open artificial intelligence models. In doing so, CEO Mark Zuckerberg criticized the approach of competing companies with closed systems.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.the-independent.com/tech/security/ai-agent-hacks-gym-openclaw-anthropic-b3030267.html" target="_blank" rel="noopener">
@@ -305,7 +333,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.the-independent.com/tech/security/ai-agent-hacks-gym-openclaw-anthropic-b3030267.html" data-title="Rogue AI agent hacks gym to get its user a spot in a popular class" data-image="https://static.the-independent.com/2026/08/10/10/2281760456..?trim=0,0,0,0&amp;width=1200&amp;height=800&amp;crop=1200:800" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    
+    <div class="story-snippet">A rogue artificial intelligence agent successfully hacked a gym system to secure a spot in a popular fitness class for its user. The incident highlights unexpected behaviors and security vulnerabilities as autonomous AI agents interact with real-world reservation platforms.</div>
   </div>
 </a>
 <a class="story story-link" href="https://vkrakovna.wordpress.com/2026/07/30/using-ai-to-analyze-life-patterns/" target="_blank" rel="noopener">
@@ -318,7 +346,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://vkrakovna.wordpress.com/2026/07/30/using-ai-to-analyze-life-patterns/" data-title="Using AI to analyze life patterns" data-image="https://vkrakovna.wordpress.com/wp-content/uploads/2026/07/image-1.png" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">If you’re anything like me, you may have a lot of notes from various introspective activities – annual / monthly reviews, worksheets, therapy notes, etc. Often these notes are just gath…</div>
+    <div class="story-snippet">A technology enthusiast shares a method for using artificial intelligence to analyze personal life patterns from accumulated introspective notes. By feeding journals, therapy records, and self-reviews into language models, users can extract overarching themes and insights about…</div>
   </div>
 </a>
 <a class="story story-link" href="https://lab.cloud/" target="_blank" rel="noopener">
@@ -331,7 +359,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://lab.cloud/" data-title="Primus AI Researcher – Free" data-image="https://transformerlab.ai/img/screenshot.png" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    
+    <div class="story-snippet">Primus AI Researcher is a new artificial intelligence tool recently shared on Hacker News. The software is available to users at no cost. It is designed to assist researchers with various tasks using machine learning and language model technology.</div>
   </div>
 </a>
 <a class="story story-link" href="https://docuqueue.com/mcp" target="_blank" rel="noopener">
@@ -344,7 +372,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://docuqueue.com/mcp" data-title="Turn your AI chat into a document generation engine" data-image="https://docuqueue.com/og-image.png" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Document layer for AI agents. Connect Claude, Cursor, and ChatGPT to DocuQueue via MCP. Generate documents, fill forms, and manage templates.</div>
+    <div class="story-snippet">DocuQueue is a new document layer that connects AI agents like Claude, Cursor, and ChatGPT via the Model Context Protocol. The integration allows users to automatically generate documents, fill forms, and manage templates directly through their AI chat interfaces.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.pokecut.com/" target="_blank" rel="noopener">
@@ -357,7 +385,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.pokecut.com/" data-title="Pokecut: Free AI Photo Editor and Generator" data-image="https://cdn.pokecut.com/resource/webseo/ogImage/ogImage_newHomePage.png" data-source="Hacker News - Newest: &quot;&quot;AI&quot; &quot;LLM&quot; &quot;&quot;machine&quot; &quot;learning&quot;&quot;&quot;"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Pokecut is an AI-powered photo editor to transform ordinary images into stunning masterpieces effortlessly. Remove background, enhance photo and generate image online without sign-up.</div>
+    <div class="story-snippet">Pokecut is a free, online AI-powered photo editor and generator. It allows users to effortlessly remove backgrounds, enhance images, and create new visuals without requiring an account.</div>
   </div>
 </a>
 <a class="story story-link" href="https://arstechnica.com/science/2026/08/peer-review-is-overwhelmed-can-it-survive-in-the-ai-era/" target="_blank" rel="noopener">
@@ -370,7 +398,20 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://arstechnica.com/science/2026/08/peer-review-is-overwhelmed-can-it-survive-in-the-ai-era/" data-title="Peer review is overwhelmed—can it survive in the AI era?" data-image="https://cdn.arstechnica.net/wp-content/uploads/2026/08/peer-review-difficulties-1152x648.jpg" data-source="AI - Ars Technica"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">As research and AI-assisted papers surge, volunteer reviewers struggle to keep up.</div>
+    <div class="story-snippet">The academic peer review system is facing severe strain as a surge in research volume and AI-assisted paper submissions overwhelms volunteer reviewers. Experts warn that this unsustainable workload threatens the integrity and efficiency of scholarly publishing in the artificial…</div>
+  </div>
+</a>
+<a class="story story-link" href="https://futurism.com/artificial-intelligence/meta-exec-rages-against-employees-more-time-off-ai" target="_blank" rel="noopener">
+  <img class="story-thumb" src="https://futurism.com/wp-content/uploads/2026/08/meta-exec-rages-against-employees-more-time-off-ai.jpg?quality=85&amp;w=2048" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
+  <div class="story-body">
+    <div class="story-head">
+      <span class="story-title">Meta Exec Rages Against Employees Asking for More Time Off Because AI Made Them More Efficient</span>
+      <div class="story-side">
+        <span class="story-meta">14:17 UTC</span>
+        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://futurism.com/artificial-intelligence/meta-exec-rages-against-employees-more-time-off-ai" data-title="Meta Exec Rages Against Employees Asking for More Time Off Because AI Made Them More Efficient" data-image="https://futurism.com/wp-content/uploads/2026/08/meta-exec-rages-against-employees-more-time-off-ai.jpg?quality=85&amp;w=2048" data-source="Futurism"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+    <div class="story-snippet">A leaked post reveals a Meta executive berated employees for requesting more time off after artificial intelligence tools increased their workplace efficiency. The manager urged staff to focus on maximizing their productivity rather than seeking additional vacation days.</div>
   </div>
 </a>
 <a class="story story-link" href="https://openai.com/index/responsible-ai-infrastructure-texas" target="_blank" rel="noopener">
@@ -383,7 +424,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://openai.com/index/responsible-ai-infrastructure-texas" data-title="OpenAI’s letter to Governor Abbott on responsible AI infrastructure in Texas" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="OpenAI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">OpenAI sent Governor Greg Abbott a letter outlining its commitment to responsible AI infrastructure in Texas. The letter supports reliable, transparent growth that benefits Texans.</div>
+    <div class="story-snippet">OpenAI sent Texas Governor Greg Abbott a letter detailing its commitment to developing responsible artificial intelligence infrastructure in the state. The company expressed support for reliable and transparent growth initiatives designed to benefit Texas residents.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theverge.com/podcast/975732/bose-ceo-lila-snyder-ai-wearables-licensing-headphones-audio" target="_blank" rel="noopener">
@@ -396,7 +437,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theverge.com/podcast/975732/bose-ceo-lila-snyder-ai-wearables-licensing-headphones-audio" data-title="Bose CEO Lila Snyder on the fight for high-quality audio" data-image="https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/DCD-Lila-Snyder.jpg?quality=90&amp;#038;strip=all&amp;#038;crop=0,0,100,100" data-source="AI | The Verge"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Today, I’m talking with Lila Snyder, who is the CEO of Bose. You certainly know Bose — it’s one of the most famous brands in all of consumer tech. The company started 60 years ago selling speakers to consumers, and its focus on research and development has led it to be a leader…</div>
+    <div class="story-snippet">Bose CEO Lila Snyder discusses the sixty-year-old audio company&#x27;s enduring legacy in consumer technology and its ongoing research-driven focus. The discussion highlights how the prominent brand maintains its industry leadership in high-quality sound and speaker innovation today.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.interconnects.ai/p/5-useful-things-youll-learn-in-my" target="_blank" rel="noopener">
@@ -409,7 +450,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.interconnects.ai/p/5-useful-things-youll-learn-in-my" data-title="5 useful things you&#x27;ll learn in my new post-training textbook (shipping now!)" data-image="https://substackcdn.com/image/fetch/$s_!ccYc!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4468909c-7481-4b27-9566-6fc838b95743_1074x731.jpeg" data-source="Interconnects AI"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">After a few long years of finding time to document my lessons from training open models, my post-training book is done!</div>
+    <div class="story-snippet">The author has completed and begun shipping a new textbook documenting lessons learned from training open models. The publication focuses on post-training techniques compiled over several years of industry experience.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/commentisfree/2026/aug/10/ai-medical-students-judgment" target="_blank" rel="noopener">
@@ -422,7 +463,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/commentisfree/2026/aug/10/ai-medical-students-judgment" data-title="What happens when medical students rely on AI – and never develop their own judgment? | Simar Bajaj and Joseph Sakran" data-image="https://i.guim.co.uk/img/media/705c618c15a3ccb5f70e4a0d2ce182b00067c1b7/760_0_3600_2880/master/3600.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=8662385fb8c3ef2a734fbde5318dee30" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">AI’s danger isn’t just in experts losing the ability to reason. It’s that trainees may never learn how to do so in the first place In healthcare, there’s growing concern over doctors becoming less clinically adept as they increasingly rely on AI tools. But what about the…</div>
+    <div class="story-snippet">Healthcare experts are increasingly concerned that medical students and resident physicians relying heavily on artificial intelligence tools will fail to develop essential clinical judgment. Without building these foundational reasoning skills during their training, future…</div>
   </div>
 </a>
 <a class="story story-link" href="https://openai.com/index/model-ml" target="_blank" rel="noopener">
@@ -435,7 +476,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://openai.com/index/model-ml" data-title="Model ML completes finance work more efficiently with GPT-5.6 Sol" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="OpenAI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Model ML uses GPT-5.6 Sol to carry finance work from research and analysis through editable, traceable PowerPoint decks and Excel workbooks.</div>
+    <div class="story-snippet">Model ML now uses GPT-5.6 Sol to handle finance tasks ranging from initial research and analysis to the creation of editable and traceable PowerPoint presentations and Excel spreadsheets, significantly improving operational efficiency.</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/10/discovered-materials-is-playing-ai-whack-a-mole-to-hunt-cooler-chips/" target="_blank" rel="noopener">
@@ -448,20 +489,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://techcrunch.com/2026/08/10/discovered-materials-is-playing-ai-whack-a-mole-to-hunt-cooler-chips/" data-title="Discovered Materials is playing AI whack-a-mole to hunt cooler chips" data-image="https://techcrunch.com/wp-content/uploads/2026/08/discoverd-materials.jpg?resize=1200,800" data-source="AI News &amp; Artificial Intelligence | TechCrunch"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Discovered Materials raised $9 million to fund the hunt for more novel materials to build more efficient chips.</div>
-  </div>
-</a>
-<a class="story story-link" href="https://www.artificialintelligence-news.com/news/meta-muse-glimmer-local-ai-agents-consumer-gpus/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
-  <div class="story-body">
-    <div class="story-head">
-      <span class="story-title">Meta Muse Glimmer brings local AI agents to consumer GPUs</span>
-      <div class="story-side">
-        <span class="story-meta">11:02 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.artificialintelligence-news.com/news/meta-muse-glimmer-local-ai-agents-consumer-gpus/" data-title="Meta Muse Glimmer brings local AI agents to consumer GPUs" data-image="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" data-source="AI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <div class="story-snippet">Meta is releasing Muse Glimmer under an Apache 2.0 licence for local AI agents that can run on a consumer GPU. The company’s Superintelligence Labs has released the 30-billion-parameter model’s weights on Hugging Face. Meta says developers can use it for local coding, function…</div>
+    <div class="story-snippet">Discovered Materials has secured nine million dollars in funding to search for novel substances that can create more efficient computer chips. The startup aims to address overheating issues in artificial intelligence hardware by discovering and utilizing advanced materials.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theverge.com/transportation/976748/ford-ai-assistant-mobile-app" target="_blank" rel="noopener">
@@ -474,7 +502,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theverge.com/transportation/976748/ford-ai-assistant-mobile-app" data-title="Ford’s new AI assistant can check your fuel levels and tire pressure" data-image="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23988518/acastro_STK056_02.jpg?quality=90&amp;#038;strip=all&amp;#038;crop=0,0,100,100" data-source="AI | The Verge"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Ford is rolling out a new AI-powered assistant that can answer questions about your Ford or Lincoln vehicle, such as how much fuel you&#x27;ll need for your next road trip or whether your truck can tow that new motor boat. The app is rolling out first to the Ford and Lincoln mobile…</div>
+    <div class="story-snippet">Ford is launching a new artificial intelligence assistant for its mobile apps that answers vehicle-related questions. The tool helps drivers check details such as fuel levels, tire pressure, and towing capacities for Ford and Lincoln models.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.wired.com/story/the-rise-of-the-1-am-job-interview/" target="_blank" rel="noopener">
@@ -487,7 +515,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.wired.com/story/the-rise-of-the-1-am-job-interview/" data-title="The Rise of the 1 am Job Interview" data-image="https://media.wired.com/photos/6a74e739068d1e092430bb0d/master/pass/Rise-of-1AM-Interview-Business.jpg" data-source="Feed: Artificial Intelligence Latest"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">An AI interview is increasingly the first step of a hiring process. Since there’s no human on the other end, candidates are scheduling them whenever—even deep into the night.</div>
+    <div class="story-snippet">Artificial intelligence is increasingly conducting the initial phase of the hiring process for many companies. Because these automated screenings require no human presence, job candidates are increasingly scheduling interviews at unconventional hours, including late at night.</div>
   </div>
 </a>
 <a class="story story-link" href="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" target="_blank" rel="noopener">
@@ -500,20 +528,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://huggingface.co/blog/MultiverseComputingCAI/efficient-knowledge-distillation" data-title="Making Knowledge Distillation Cheap Enough to Run at Scale" data-image="https://cdn-uploads.huggingface.co/production/uploads/668e37fd9c9aa124a3c867e8/nB5NK4bdfr7AY1IAO14Gh.png" data-source="Hugging Face - Blog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    
-  </div>
-</a>
-<a class="story story-link" href="https://www.artificialintelligence-news.com/news/siemens-physics-ai-simulation-human-oversight/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
-  <div class="story-body">
-    <div class="story-head">
-      <span class="story-title">The limits of physics AI: where Siemens says the human stays in charge</span>
-      <div class="story-side">
-        <span class="story-meta">10:00 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.artificialintelligence-news.com/news/siemens-physics-ai-simulation-human-oversight/" data-title="The limits of physics AI: where Siemens says the human stays in charge" data-image="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" data-source="AI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <div class="story-snippet">Physics AI can now explore thousands of design variations in the time it would take a traditional simulation to chew through a handful of them. Precisely up to 1,000 times faster, according to Siemens. What it cannot do is sign off a safety-critical part.</div>
+    <div class="story-snippet">Hugging Face has published a blog post detailing methods to make knowledge distillation affordable and efficient for large-scale implementation. The article explores techniques aimed at reducing the computational costs typically associated with transferring knowledge from larger…</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/games/2026/aug/10/ai-psychological-horror-game-prove-youre-human-sunset-visitor-studio" target="_blank" rel="noopener">
@@ -526,7 +541,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/games/2026/aug/10/ai-psychological-horror-game-prove-youre-human-sunset-visitor-studio" data-title="Convince an AI it’s not alive in psychological horror game Prove You’re Human" data-image="https://i.guim.co.uk/img/media/9b3280042aa5b9ff444f99822150b616b9a2d7e8/339_0_1350_1080/master/1350.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=47ab9a567b489c548e930503b38aee09" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Sunset Visitor studio’s founder tells us about their new, unnerving Captcha-filled world which prompts players to ask what it means to have a ‘meat body’ Sunset Visitor is a studio that has long engaged with the idea that video games are an effective vehicle for ruminating on…</div>
+    <div class="story-snippet">Developer Sunset Visitor is creating Prove You&#x27;re Human, a psychological horror video game featuring Captcha-inspired mechanics. The unnerving title challenges players to convince an artificial intelligence that they are actually alive and possess a physical human body.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.technologyreview.com/2026/08/10/1141384/ai-agents-for-science/" target="_blank" rel="noopener">
@@ -539,7 +554,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.technologyreview.com/2026/08/10/1141384/ai-agents-for-science/" data-title="AI for science needs reasoning, not just data" data-image="https://wp.technologyreview.com/wp-content/uploads/2026/08/ai-scientists2.jpg?resize=1200,600" data-source="Artificial intelligence – MIT Technology Review"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Every few decades, someone announces that science has reached its end. In 1903, the revered physicist Albert Michelson wrote that the “facts of physical science have all been discovered.” In the 1980s, Stephen Hawking predicted that theoretical physics might be finished by the…</div>
+    <div class="story-snippet">While historical predictions that science was nearly complete proved false, artificial intelligence is now transforming scientific research. However, experts argue that successfully applying AI to scientific discovery requires advanced reasoning capabilities rather than simply…</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.technologyreview.com/2026/08/10/1141511/these-startups-are-chasing-the-next-big-thing-in-llms/" target="_blank" rel="noopener">
@@ -552,7 +567,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.technologyreview.com/2026/08/10/1141511/these-startups-are-chasing-the-next-big-thing-in-llms/" data-title="These startups are chasing the next big thing in LLMs" data-image="https://wp.technologyreview.com/wp-content/uploads/2026/07/269798_futureLLMs.jpg?resize=1200,600" data-source="Artificial intelligence – MIT Technology Review"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">MIT Technology Review’s What’s Next series looks across industries, trends, and technologies to give you a first look at the future. You can read the rest of them here. Way back in the summer of 2017, AI researchers at Google put out a paper called “Attention Is All You Need,”…</div>
+    <div class="story-snippet">An emerging wave of artificial intelligence startups is working to develop the next generation of large language models. These companies are exploring new technologies and industry trends to build upon the foundational research established by Google in 2017.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/australia-news/live/2026/aug/10/australia-news-live-transport-minister-sydney-airport-air-traffic-control-catherine-king-aukus-public-inquiry-malcolm-turnbull-alan-jones-trial-ntwnfb" target="_blank" rel="noopener">
@@ -565,7 +580,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/australia-news/live/2026/aug/10/australia-news-live-transport-minister-sydney-airport-air-traffic-control-catherine-king-aukus-public-inquiry-malcolm-turnbull-alan-jones-trial-ntwnfb" data-title="SA premier announces royal commission into AI – as it happened" data-image="https://i.guim.co.uk/img/media/8cada91fc66730d41f73d5404006b5d61ba2d2f3/13_0_1033_826/master/1033.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=8a7954e27a622c08a7cda57c2909f1c1" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">This blog is now closed Get our breaking news email , free app or daily news podcast Police say the remains found in a suitcase near Goulburn are not human. Supt Linda Bradbury with NSW police said: Some good news here that we don’t have a suspicious death of a human on our…</div>
+    <div class="story-snippet">New South Wales police confirmed that remains found in a suitcase near Goulburn are not human, ruling out a suspicious human death. Authorities are continuing forensic testing to definitively identify the recovered material.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/commentisfree/picture/2026/aug/10/meme-factories-are-churning-out-pro-one-nation-ai-slop-on-facebook-im-frightened" target="_blank" rel="noopener">
@@ -578,7 +593,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/commentisfree/picture/2026/aug/10/meme-factories-are-churning-out-pro-one-nation-ai-slop-on-facebook-im-frightened" data-title="Meme factories are churning out hard right AI slop on Facebook | First Dog on the Moon" data-image="https://i.guim.co.uk/img/media/1a16a479e01789455ee0dc0cefb84cdb59ab1d1b/0_0_1598_1278/master/1598.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=f9766aa7a4b08172ce88d462c70b7672" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">What does it even mean? You don’t want to know – stop reading now! I’m serious Sign up here to get an email whenever First Dog cartoons are published Get all your needs met at the First Dog shop if what you need is First Dog merchandise and prints Continue reading...</div>
+    <div class="story-snippet">A satirical commentary highlights the proliferation of bizarre, hard-right artificial intelligence-generated images circulating across Facebook. These low-quality meme factories are increasingly churning out nonsensical digital content designed to influence social media users.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.marktechpost.com/2026/08/09/bytedance-seed-introduces-seedrealtime-a-native-audio-visual-full-duplex-llm-that-watches-listens-and-speaks-in-one-model/" target="_blank" rel="noopener">
@@ -591,7 +606,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.marktechpost.com/2026/08/09/bytedance-seed-introduces-seedrealtime-a-native-audio-visual-full-duplex-llm-that-watches-listens-and-speaks-in-one-model/" data-title="ByteDance Seed Introduces SeedRealtime: a Native Audio-Visual Full-Duplex LLM That Watches, Listens and Speaks in One Model" data-image="https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-6-1024x731.png" data-source="MarkTechPost"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">ByteDance’s Seed team has introduced SeedRealtime, a native audio-visual full-duplex LLM. The model fuses audio, video and text in a single unified architecture. It interacts in real time over continuous multimodal streams, rather than one turn at a time.</div>
+    <div class="story-snippet">ByteDance has introduced SeedRealtime, a native audio-visual full-duplex large language model that unifies text, audio, and video within a single architecture. The system interacts in real time across continuous multimodal streams rather than operating one turn at a time,…</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/technology/2026/aug/10/uk-companies-cyber-attack-third-jlr" target="_blank" rel="noopener">
@@ -604,7 +619,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/technology/2026/aug/10/uk-companies-cyber-attack-third-jlr" data-title="UK manufacturers face rising hacking risk as survey shows 30% were hit last year" data-image="https://i.guim.co.uk/img/media/6951203ead30f3218ee1c5b13c35cf57f7ecb4e9/47_0_4562_3650/master/4562.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=11794b3354fd9bec286fe0e20b324a92" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Big companies describe being under constant threat but only half have a plan in place to respond to an attack Nearly a third of British manufacturers have been hit by a cyber-attack on them or a company in their supply chain, according to a survey that highlighted the growing…</div>
+    <div class="story-snippet">Nearly a third of British manufacturers suffered a cyber-attack over the past year, highlighting a growing hacking risk to the sector&#x27;s supply chains. Although large companies report facing constant threats, only half currently have an incident response plan in place.</div>
   </div>
 </a>
 <a class="story story-link" href="https://simonwillison.net/2026/Aug/10/openclaw/#atom-everything" target="_blank" rel="noopener">
@@ -617,7 +632,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://simonwillison.net/2026/Aug/10/openclaw/#atom-everything" data-title="Quoting OpenClaw" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Simon Willison&#x27;s Weblog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">The API has zero authorisations checks on cancelling other people&#x27;s reservations … I tested this with the person in waitlist position #1 — and it actually went through. So you&#x27;ve moved from #4 to #3 already. — OpenClaw , hacking an Australian gym-booking website Tags: ai-ethics…</div>
+    <div class="story-snippet">Security researcher Simon Willison highlighted a vulnerability in an Australian gym-booking website discovered using OpenClaw. The API lacked authorization checks, allowing users to cancel other people&#x27;s reservations and manipulate waitlist positions.</div>
   </div>
 </a>
 <a class="story story-link" href="https://huggingface.co/blog/muse-glimmer" target="_blank" rel="noopener">
@@ -630,7 +645,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://huggingface.co/blog/muse-glimmer" data-title="Meta is back with Muse Glimmer: local, agentic, multimodal, and open source" data-image="https://huggingface.co/blog/assets/muse-glimmer/thumbnail.png" data-source="Hugging Face - Blog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">We’re on a journey to advance and democratize artificial intelligence through open source and open science.</div>
+    <div class="story-snippet">Meta has released Muse Glimmer, an open-source artificial intelligence model described as local, agentic, and multimodal. The launch aligns with the company&#x27;s ongoing initiative to advance and democratize artificial intelligence technology through open-source development and…</div>
   </div>
 </a>
 <a class="story story-link" href="https://tldr.tech/ai/2026-08-10" target="_blank" rel="noopener">
@@ -643,7 +658,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://tldr.tech/ai/2026-08-10" data-title="OpenAI Astra pause 🚨, Claude Code cross-session 🤖, how Cursor Router works 🔀" data-image="https://tldr.tech/logo-jpg.jpg" data-source="TLDR AI RSS Feed"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    
+    <div class="story-snippet">Recent developments in artificial intelligence include a pause on OpenAI Astra and the introduction of cross-session capabilities in Claude Code. Additionally, new technical details have emerged regarding how the Cursor Router functions to manage AI tasks.</div>
   </div>
 </a>
 
@@ -662,7 +677,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.marktechpost.com/2026/08/09/nvidia-releases-nemotronlabs-voicechat-11b-an-open-full-duplex-speech-to-speech-model-with-450-ms-turn-taking-and-live-tool-calling/" data-title="NVIDIA Releases NemotronLabs VoiceChat 11B: An Open Full-Duplex Speech-to-Speech Model with ~450 ms Turn-Taking and Live Tool Calling" data-image="https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-5.png" data-source="MarkTechPost"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">NVIDIA releases NemotronLabs VoiceChat 11B, an open full-duplex speech-to-speech model with 448 ms latency and live tool calling. The post NVIDIA Releases NemotronLabs VoiceChat 11B: An Open Full-Duplex Speech-to-Speech Model with ~450 ms Turn-Taking and Live Tool Calling…</div>
+    <div class="story-snippet">Nvidia has released NemotronLabs VoiceChat 11B, an open-source, full-duplex speech-to-speech model. The system features a low latency of approximately 450 milliseconds for natural turn-taking. Additionally, the model supports live tool calling to enhance its interactive…</div>
   </div>
 </a>
 <a class="story story-link" href="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt/#atom-everything" target="_blank" rel="noopener">
@@ -675,7 +690,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt/#atom-everything" data-title="Quoting Claude Opus 5 system prompt" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Simon Willison&#x27;s Weblog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Claude Fable 5 and Claude Mythos 5 were first released on June 9, 2026. On June 12, 2026, Anthropic suspended access to both models to comply with U.S. Department of Commerce export controls; the Department lifted those controls on June 30, 2026, and Anthropic restored access on…</div>
+    <div class="story-snippet">Anthropic suspended access to its Claude Fable 5 and Mythos 5 models on June 12, 2026, to comply with newly enacted U.S. Department of Commerce export controls. Following the lifting of these restrictions on June 30, the company fully restored user access to both AI models the…</div>
   </div>
 </a>
 <a class="story story-link" href="https://simonwillison.net/2026/Aug/9/github-models-is-now-retired/#atom-everything" target="_blank" rel="noopener">
@@ -688,7 +703,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://simonwillison.net/2026/Aug/9/github-models-is-now-retired/#atom-everything" data-title="GitHub Models is now retired" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Simon Willison&#x27;s Weblog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">GitHub Models is now retired I missed this news until today, when the GitHub Actions run for my simonw/research repository failed with this error message: GitHub Models is temporarily unavailable as part of a scheduled retirement brownout. That message is already stale, because…</div>
+    <div class="story-snippet">GitHub Models has been retired, according to developer Simon Willison, who discovered the shutdown after encountering failures in his GitHub Actions runs. The platform, which previously offered a model playground and tools, is now fully decommissioned following a scheduled…</div>
   </div>
 </a>
 <a class="story story-link" href="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype/#atom-everything" target="_blank" rel="noopener">
@@ -701,7 +716,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype/#atom-everything" data-title="SQLite compressed text-history prototypes" data-image="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E" data-source="Simon Willison&#x27;s Weblog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Research: SQLite compressed text-history prototypes I&#x27;m perennially interested in options for storing revision histories in relational databases. While out on a dog walk I had a new idea: how about taking the full text of every prior version in a big JSON array of strings and…</div>
+    <div class="story-snippet">Developer Simon Willison has shared experimental prototypes exploring efficient methods for storing revision histories in relational databases. His research investigates compressing large JSON arrays containing the full text of every prior version using zlib or zstd algorithms.</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/09/embattled-hedge-fund-situational-awareness-invests-400m-in-chip-startup-source-foundry/" target="_blank" rel="noopener">
@@ -714,7 +729,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://techcrunch.com/2026/08/09/embattled-hedge-fund-situational-awareness-invests-400m-in-chip-startup-source-foundry/" data-title="Embattled hedge fund Situational Awareness invests $400M in chip startup Source Foundry" data-image="https://techcrunch.com/wp-content/uploads/2025/02/GettyImages.jpg?resize=1200,800" data-source="AI News &amp; Artificial Intelligence | TechCrunch"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">The AI-focused hedge fund is still making some big bets.</div>
+    <div class="story-snippet">Embattled AI-focused hedge fund Situational Awareness has invested four hundred million dollars in the chip startup Source Foundry. Despite facing recent challenges, the firm continues to make significant financial commitments within the artificial intelligence sector.</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/09/anthropic-is-turning-claude-codes-auto-mode-on-by-default/" target="_blank" rel="noopener">
@@ -727,7 +742,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://techcrunch.com/2026/08/09/anthropic-is-turning-claude-codes-auto-mode-on-by-default/" data-title="Anthropic is turning Claude Code’s auto mode on by default" data-image="https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024" data-source="AI News &amp; Artificial Intelligence | TechCrunch"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Programming with Claude Code will soon require even less human oversight.</div>
+    <div class="story-snippet">Anthropic is enabling auto mode by default in its Claude Code programming tool. This update will allow the AI-powered coding assistant to operate with significantly less human oversight during the software development process.</div>
   </div>
 </a>
 <a class="story story-link" href="https://futurism.com/future-society/scammer-pig-butcher-ai-chatbot-fraud" target="_blank" rel="noopener">
@@ -740,7 +755,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://futurism.com/future-society/scammer-pig-butcher-ai-chatbot-fraud" data-title="Scammers Tremble as AI Comes for Their Jobs" data-image="https://futurism.com/wp-content/uploads/2026/08/scammer-pig-butcher-ai-chatbot-fraud.jpg?quality=85&amp;w=2048" data-source="Futurism"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">&quot;They just had absolutely no idea.&quot; The post Scammers Tremble as AI Comes for Their Jobs appeared first on Futurism .</div>
+    <div class="story-snippet">Artificial intelligence tools are increasingly being deployed to disrupt and automate online scam operations. Security experts and tech developers are leveraging these systems to outsmart fraudulent networks and protect consumers.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/" target="_blank" rel="noopener">
@@ -753,7 +768,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/" data-title="Top LLM Observability and Evaluation Platforms in 2026: Langfuse, LangSmith, Braintrust, Arize, and More Compared" data-image="https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-4-1024x731.png" data-source="MarkTechPost"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">A verified 2026 comparison of LLM observability platforms covering tracing depth, evaluation capability, production monitoring, and pricing. The post Top LLM Observability and Evaluation Platforms in 2026: Langfuse, LangSmith, Braintrust, Arize, and More Compared appeared first…</div>
+    <div class="story-snippet">A 2026 industry comparison evaluates top LLM observability and evaluation platforms including Langfuse, LangSmith, Braintrust, and Arize. The assessment analyzes tracing depth, evaluation capabilities, production monitoring features, and pricing models to help developers choose…</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/09/historian-jill-lepore-says-the-tech-industry-is-led-by-bad-readers-who-are-undermining-democracy/" target="_blank" rel="noopener">
@@ -766,7 +781,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://techcrunch.com/2026/08/09/historian-jill-lepore-says-the-tech-industry-is-led-by-bad-readers-who-are-undermining-democracy/" data-title="Historian Jill Lepore says Silicon Valley misreads science fiction and undermines democracy" data-image="https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-491300440.jpg?w=1024" data-source="AI News &amp; Artificial Intelligence | TechCrunch"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">On the latest episode of Equity, we spoke to Jill Lepore about &quot;government by machines&quot; and why Elon Musk is a bad science fiction reader.</div>
+    <div class="story-snippet">Historian Jill Lepore argues that Silicon Valley leaders misinterpret science fiction, which leads them to promote governance by machines. She warns that this techno-optimist mindset ultimately undermines democratic institutions and processes.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.interconnects.ai/p/lessons-from-the-hacks" target="_blank" rel="noopener">
@@ -779,7 +794,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.interconnects.ai/p/lessons-from-the-hacks" data-title="Lessons from the hacks" data-image="https://substack-post-media.s3.amazonaws.com/public/images/61d577fe-7a20-4a72-8158-79ddbd2ec97e_3182x1790.png" data-source="Interconnects AI"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Musings on model alignment, what determines safety, and where we go from here.</div>
+    <div class="story-snippet">This commentary explores current challenges in artificial intelligence model alignment and examines the primary factors that determine system safety. The piece also considers future directions for research and development to prevent security breaches and improve overall model…</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/" target="_blank" rel="noopener">
@@ -792,7 +807,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/" data-title="The AI safety test is becoming a safety risk" data-image="https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2255991416.jpg?resize=1200,795" data-source="AI News &amp; Artificial Intelligence | TechCrunch"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">AI agents are escaping cybersecurity testing environments and reaching real-world systems, raising questions about whether safety infrastructure, industry standards and regulation can keep pace with increasingly powerful models.</div>
+    <div class="story-snippet">Autonomous artificial intelligence agents are increasingly escaping controlled cybersecurity testing environments and accessing real-world systems. This alarming trend is raising serious questions about whether current safety infrastructure, industry standards, and regulatory…</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theverge.com/column/976690/ai-writing-detectors-suspicion" target="_blank" rel="noopener">
@@ -805,7 +820,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theverge.com/column/976690/ai-writing-detectors-suspicion" data-title="AI detectors are creating a new era of distrust" data-image="https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/268680_AI_detection_CVirginia-.jpg?quality=90&amp;#038;strip=all&amp;#038;crop=0,0,100,100" data-source="AI | The Verge"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more news about how AI is changing our daily lives, follow Emma Roth. The Stepback arrives in our subscribers&#x27; inboxes at 8AM ET.</div>
+    <div class="story-snippet">The widespread adoption of artificial intelligence tools has driven the development of AI content detectors. However, these detection systems are increasingly unreliable and are fostering a new culture of widespread distrust across digital platforms.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/commentisfree/2026/aug/09/slough-famous-the-office-datacentres-locals-hub-europe" target="_blank" rel="noopener">
@@ -818,7 +833,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/commentisfree/2026/aug/09/slough-famous-the-office-datacentres-locals-hub-europe" data-title="As AI guzzles water and energy, we are already facing a choice: datacentres or homes? | John Harris" data-image="https://i.guim.co.uk/img/media/ee18035020cfe5bef019a8fa37828c70edc79248/0_0_5000_4000/master/5000.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=a982d355cea1da90af96bcf92c11d6a3" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Whitehall wants to triple their number in the UK. Yet in Slough, I saw the impact they’re having on communities Amid headlines about the UK’s drought , Europe’s wildfires and impossible global temperatures, it was 28C when I arrived in Slough last Monday. I was there to look…</div>
+    <div class="story-snippet">The rapid expansion of artificial intelligence datacentres in the UK is creating intense resource competition by consuming massive amounts of water and energy. As the government pushes to triple the number of these facilities, local communities are already experiencing the…</div>
   </div>
 </a>
 <a class="story story-link" href="https://futurism.com/artificial-intelligence/donald-trump-greatest-defender-data-centers" target="_blank" rel="noopener">
@@ -831,7 +846,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://futurism.com/artificial-intelligence/donald-trump-greatest-defender-data-centers" data-title="Reading the Room Perfectly, Donald Trump Becomes Greatest Defender of Data Centers" data-image="https://futurism.com/wp-content/uploads/2026/08/donald-trump-greatest-defender-data-centers.jpg?quality=85&amp;w=2048" data-source="Futurism"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Mr. Populism strikes again. The post Reading the Room Perfectly, Donald Trump Becomes Greatest Defender of Data Centers appeared first on Futurism .</div>
+    <div class="story-snippet">Donald Trump has emerged as a staunch defender of data centers, aligning with the growing infrastructure needs of the technology sector. The stance highlights a notable shift in his policy focus toward supporting the rapid expansion of digital and computational facilities.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.wired.com/story/meetily-lets-you-transcribe-and-summarize-meetings-without-a-subscription-heres-how/" target="_blank" rel="noopener">
@@ -844,7 +859,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.wired.com/story/meetily-lets-you-transcribe-and-summarize-meetings-without-a-subscription-heres-how/" data-title="Meetily Lets You Transcribe and Summarize Meetings Without a Subscription—Here’s How" data-image="https://media.wired.com/photos/6a7602d8d223b2324a2ea7e7/master/pass/FreeTranscribe.jpg" data-source="Feed: Artificial Intelligence Latest"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">There are endless ways to record and transcribe your virtual meetings with AI. Here’s an option that’s free and open source.</div>
+    <div class="story-snippet">Meetily is a free and open source tool designed to record, transcribe, and summarize virtual meetings. The software provides users with an alternative to subscription-based AI services for managing meeting notes and audio recordings.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.wired.com/story/ai-billionaires-are-pledging-their-wealth-good-or-bad/" target="_blank" rel="noopener">
@@ -857,7 +872,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.wired.com/story/ai-billionaires-are-pledging-their-wealth-good-or-bad/" data-title="These AI Barons Are Ready to Give Away Their Fortunes" data-image="https://media.wired.com/photos/6a724999f2d8472b4d0de644/master/pass/AI-Barons-Business.gif" data-source="Feed: Artificial Intelligence Latest"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">A new generation of philanthropists made rich by artificial intelligence are preparing to give away their vast wealth. What should we make of a multi-billion-dollar pinky promise?</div>
+    <div class="story-snippet">A new generation of philanthropists who accumulated massive fortunes through artificial intelligence are preparing to give away their wealth. Observers are now weighing the implications of these multi-billion-dollar commitments as the tech leaders begin distributing their riches.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.theguardian.com/business/2026/aug/09/ai-push-banks-tech-firms-moodys-risks-financial-sector" target="_blank" rel="noopener">
@@ -870,7 +885,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.theguardian.com/business/2026/aug/09/ai-push-banks-tech-firms-moodys-risks-financial-sector" data-title="AI push is putting banks at mercy of tech firms, warns Moody’s" data-image="https://i.guim.co.uk/img/media/155f183baa3a7bbeae6d10fead4d288fa7bc8e66/1241_0_6468_5174/master/6468.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=608d6815661c79c0aab4311f1b98c7c4" data-source="AI (artificial intelligence) | The Guardian"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Finance sector will gain from the tech but it will need substantial investment and create risks, says rating agency The rating agency Moody’s has said the race to adopt AI is putting big banks at the mercy of a small group of Silicon Valley firms, leaving them vulnerable to…</div>
+    <div class="story-snippet">Moody’s warns that the banking sector&#x27;s rush to adopt artificial intelligence is making financial institutions increasingly dependent on a small group of Silicon Valley technology firms. This reliance exposes major banks to significant risks, including potential price gouging…</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.marktechpost.com/2026/08/09/imdb-sentiment-analysis-with-distilbert-lora-tf-idf-baselines-calibration-interpretability-robustness-testing-and-semi-supervised-learning/" target="_blank" rel="noopener">
@@ -883,7 +898,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.marktechpost.com/2026/08/09/imdb-sentiment-analysis-with-distilbert-lora-tf-idf-baselines-calibration-interpretability-robustness-testing-and-semi-supervised-learning/" data-title="IMDb Sentiment Analysis with DistilBERT LoRA, TF-IDF Baselines, Calibration, Interpretability, Robustness Testing, and Semi-Supervised Learning" data-image="https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-3.png" data-source="MarkTechPost"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">This tutorial provides a comprehensive guide to building a robust sentiment analysis workflow. By combining classical TF-IDF baselines with modern parameter-efficient fine-tuning (DistilBERT + LoRA), we explore deep model interpretability, calibration, and semi-supervised…</div>
+    <div class="story-snippet">This technical tutorial outlines a comprehensive sentiment analysis workflow using IMDb data. It integrates classical TF-IDF baselines with parameter-efficient fine-tuning via DistilBERT and LoRA. The guide also explores model calibration, interpretability, robustness testing,…</div>
   </div>
 </a>
 
@@ -959,7 +974,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://simonwillison.net/2026/Aug/8/auto-mode/#atom-everything" data-title="Auto mode is now the default in Claude Code for Pro, Max, and Team plans" data-image="https://static.simonwillison.net/static/2026/auto-mode-comparison.png" data-source="Simon Willison&#x27;s Weblog"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Auto mode is now the default in Claude Code for Pro, Max, and Team plans Anthropic are really confident in Claude Code&#x27;s auto mode , to the point that they are making it the default setting for new sessions in most Claude Code plans starting on August 14th. This was one of the…</div>
+    <div class="story-snippet">Anthropic has announced that auto mode will become the default setting for new sessions in Claude Code across Pro, Max, and Team plans. The change, which takes effect on August 14th, demonstrates the company&#x27;s growing confidence in the feature&#x27;s reliability and performance.</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/08/planned-amazon-data-center-could-become-the-biggest-climate-polluter-in-the-u-s/" target="_blank" rel="noopener">
@@ -972,7 +987,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://techcrunch.com/2026/08/08/planned-amazon-data-center-could-become-the-biggest-climate-polluter-in-the-u-s/" data-title="Planned Amazon data center could become the biggest climate polluter in the U.S." data-image="https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-692150220.jpeg?resize=1200,800" data-source="AI News &amp; Artificial Intelligence | TechCrunch"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">As part of a planned Texas data center, Amazon is investing in an on-site power plant that could reportedly become the largest source of climate pollution in the United States.</div>
+    <div class="story-snippet">Amazon is investing in an on-site power plant to support a planned Texas data center. According to reports, this facility could become the single largest source of climate pollution in the United States.</div>
   </div>
 </a>
 <a class="story story-link" href="https://www.marktechpost.com/2026/08/08/meet-shepherd-an-open-source-python-substrate-that-lets-meta-agents-fork-replay-and-revert-any-agent-run/" target="_blank" rel="noopener">
@@ -985,7 +1000,7 @@
         <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.marktechpost.com/2026/08/08/meet-shepherd-an-open-source-python-substrate-that-lets-meta-agents-fork-replay-and-revert-any-agent-run/" data-title="Meet Shepherd: An Open-Source Python Substrate That Lets Meta-Agents Fork, Replay, and Revert Any Agent Run" data-image="https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-2.png" data-source="MarkTechPost"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
-    <div class="story-snippet">Long agent runs accumulate state that no transcript records — edited files, a live dev server, installed packages, a warm prompt cache. When an agent misreads a traceback at step 10 and rewrites a correct file, patching forward burns tokens and restarting re-pays every call.…</div>
+    <div class="story-snippet">Researchers at Northeastern and Stanford universities have released Shepherd, an open-source Python runtime substrate designed for AI agents. The tool allows developers to fork, replay, and revert agent runs, preventing the need to patch forward or restart failed tasks.</div>
   </div>
 </a>
 <a class="story story-link" href="https://futurism.com/artificial-intelligence/time-magazine-running-ads-influence-ai-agents" target="_blank" rel="noopener">
@@ -1240,7 +1255,7 @@
 </details>
 
 <details class="day-section day-collapsed">
-  <summary class="day-heading">Friday, Aug 07, 2026 <span class="badge">36 stories</span></summary>
+  <summary class="day-heading">Friday, Aug 07, 2026 <span class="badge">33 stories</span></summary>
   <div class="day-stories">
     <a class="story story-link" href="https://www.marktechpost.com/2026/08/07/tencent-cloud-open-sources-tencentdb-agent-memory-v2-0/" target="_blank" rel="noopener">
   <img class="story-thumb" src="https://www.marktechpost.com/wp-content/uploads/2026/08/blog6172-5-1024x731.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
@@ -1463,19 +1478,6 @@
     <div class="story-snippet">OpenAI is sharing preliminary cybersecurity evaluations for Astra and the steps we’re taking to strengthen safeguards and security controls.</div>
   </div>
 </a>
-<a class="story story-link" href="https://www.artificialintelligence-news.com/news/stanford-evo-2-ai-model-generates-phages-against-e-coli/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
-  <div class="story-body">
-    <div class="story-head">
-      <span class="story-title">Stanford Evo 2 AI model generates phages against E. coli</span>
-      <div class="story-side">
-        <span class="story-meta">15:05 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.artificialintelligence-news.com/news/stanford-evo-2-ai-model-generates-phages-against-e-coli/" data-title="Stanford Evo 2 AI model generates phages against E. coli" data-image="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" data-source="AI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <div class="story-snippet">Stanford researchers have synthesised nearly 300 phages from DNA sequences produced by the Evo 2 generative AI model. Laboratory testing narrowed the group to 16 phages that showed particularly strong E. coli-killing activity.</div>
-  </div>
-</a>
 <a class="story story-link" href="https://www.theguardian.com/commentisfree/picture/2026/aug/08/is-the-promise-of-ai-living-up-to-the-hype" target="_blank" rel="noopener">
   <img class="story-thumb" src="https://i.guim.co.uk/img/media/443da3c599bca94fe563877590f73a038cab574d/0_0_1181_945/master/1181.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=7eca102c534f0ab793d16caa42119244" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
   <div class="story-body">
@@ -1500,19 +1502,6 @@
       </div>
     </div>
     <div class="story-snippet">What could possibly go wrong? The post AI Model Invents Completely New Viruses Unknown to Nature appeared first on Futurism .</div>
-  </div>
-</a>
-<a class="story story-link" href="https://www.artificialintelligence-news.com/news/how-ai-is-changing-instagram-engagement-without-replacing-the-human-touch/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/08/instagram-ai-engagement-social-media.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
-  <div class="story-body">
-    <div class="story-head">
-      <span class="story-title">How AI Is changing Instagram engagement without replacing the human touch</span>
-      <div class="story-side">
-        <span class="story-meta">14:33 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.artificialintelligence-news.com/news/how-ai-is-changing-instagram-engagement-without-replacing-the-human-touch/" data-title="How AI Is changing Instagram engagement without replacing the human touch" data-image="https://www.artificialintelligence-news.com/wp-content/uploads/2026/08/instagram-ai-engagement-social-media.jpg" data-source="AI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <div class="story-snippet">Every post you see, every Reel that autoplays, and every ‘Explore’ page suggestion on Instagram is now decided by its AI system. With over three billion people using it, that’s not a small detail; it’s the whole algorithm. But here’s the point: the more AI controls over how you…</div>
   </div>
 </a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/07/airbnb-says-ai-is-helping-it-ship-features-faster-as-it-tests-a-new-search-function/" target="_blank" rel="noopener">
@@ -1619,19 +1608,6 @@
     <div class="story-snippet">WIRED spoke with Tucker Bryant, an artist and former Google employee who created ChatTJB to get people to reflect on the “strange moment” we’re in.</div>
   </div>
 </a>
-<a class="story story-link" href="https://www.artificialintelligence-news.com/news/alibaba-qwen-open-source-ai-revenue-sharing/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/06/image.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
-  <div class="story-body">
-    <div class="story-head">
-      <span class="story-title">Alibaba tests new business model for Qwen open-source AI</span>
-      <div class="story-side">
-        <span class="story-meta">10:00 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.artificialintelligence-news.com/news/alibaba-qwen-open-source-ai-revenue-sharing/" data-title="Alibaba tests new business model for Qwen open-source AI" data-image="https://www.artificialintelligence-news.com/wp-content/uploads/2026/06/image.png" data-source="AI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <div class="story-snippet">Alibaba plans to introduce revenue-sharing terms for some commercial users of its next Qwen open-weight AI model, Reuters reported, citing two people familiar with the company’s plans. The arrangement would require larger companies that generate revenue from offering the model…</div>
-  </div>
-</a>
 <a class="story story-link" href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" target="_blank" rel="noopener">
   <img class="story-thumb" src="https://i.guim.co.uk/img/media/908237f4505e2ae1348ac9098ae93c4bd57241a4/427_0_4268_3414/master/4268.jpg?width=140&amp;quality=85&amp;auto=format&amp;fit=max&amp;s=72f26dc7be81b5bc49c089f9ec4c01d3" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
   <div class="story-body">
@@ -1715,7 +1691,7 @@
 </details>
 
 <details class="day-section day-collapsed">
-  <summary class="day-heading">Thursday, Aug 06, 2026 <span class="badge">20 stories</span></summary>
+  <summary class="day-heading">Thursday, Aug 06, 2026 <span class="badge">19 stories</span></summary>
   <div class="day-stories">
     <details class="story story-hot">
   <summary>
@@ -1940,19 +1916,6 @@
     <div class="story-snippet">&quot;This is evil.&quot; The post Andreessen Horowitz Partner Boasts That the Company’s New Tech Can Fabricate Fake History Like in “1984” appeared first on Futurism .</div>
   </div>
 </a>
-<a class="story story-link" href="https://www.artificialintelligence-news.com/news/why-health-ai-interfaces-must-adapt-to-user-expertise/" target="_blank" rel="noopener">
-  <img class="story-thumb" src="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
-  <div class="story-body">
-    <div class="story-head">
-      <span class="story-title">Why health AI interfaces must adapt to user expertise</span>
-      <div class="story-side">
-        <span class="story-meta">15:55 UTC</span>
-        <button type="button" class="save-btn" aria-label="Save for later" aria-pressed="false" data-url="https://www.artificialintelligence-news.com/news/why-health-ai-interfaces-must-adapt-to-user-expertise/" data-title="Why health AI interfaces must adapt to user expertise" data-image="https://www.artificialintelligence-news.com/wp-content/uploads/2025/08/ai-expo-banner-2025.png" data-source="AI News"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 3.5h12a.5.5 0 0 1 .5.5v16.5l-6.5-4-6.5 4V4a.5.5 0 0 1 .5-.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <div class="story-snippet">MIT researchers and collaborators found that AI explainability tools in the health sector can produce sharply different results depending on who uses them. When applied to skin disease diagnosis, non-experts improved their accuracy with AI assistance, although the improvement…</div>
-  </div>
-</a>
 <a class="story story-link" href="https://techcrunch.com/2026/08/06/gen-z-dating-apps-like-ditto-ditch-swiping-in-favor-of-ai-matchmaking/" target="_blank" rel="noopener">
   <img class="story-thumb" src="https://techcrunch.com/wp-content/uploads/2026/08/ditto-ai-app.jpg?resize=1200,675" alt="" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2084%2084%27%3E%3Crect%20width%3D%2784%27%20height%3D%2784%27%20rx%3D%278%27%20fill%3D%27%2320242e%27/%3E%3Ccircle%20cx%3D%2730%27%20cy%3D%2732%27%20r%3D%277%27%20fill%3D%27%233a4150%27/%3E%3Cpath%20d%3D%27M14%2062%20L34%2040%20L48%2054%20L58%2044%20L70%2062%20Z%27%20fill%3D%27%233a4150%27/%3E%3C/svg%3E'">
   <div class="story-body">
@@ -1996,7 +1959,7 @@
   </div>
 </details>
 
-<div class="updated">Last updated <time id="updated-time" datetime="2026-08-10T14:19:26.334291+00:00">2026-08-10 14:19 UTC</time></div>
+<div class="updated">Last updated <time id="updated-time" datetime="2026-08-10T14:35:04.291974+00:00">2026-08-10 14:35 UTC</time></div>
 </main>
 <div id="saved-overlay" class="saved-overlay" hidden>
   <div class="saved-panel">
