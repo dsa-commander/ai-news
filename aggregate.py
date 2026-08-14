@@ -672,6 +672,15 @@ PAGE_TEMPLATE = """<!doctype html>
     hour: '2-digit', minute: '2-digit'
   }});
 }})();
+(function () {{
+  document.querySelectorAll('time.local-time').forEach(function (el) {{
+    var d = new Date(el.getAttribute('datetime'));
+    if (isNaN(d.getTime())) return;
+    el.textContent = d.toLocaleTimeString(undefined, {{
+      hour: '2-digit', minute: '2-digit'
+    }});
+  }});
+}})();
 </script>
 <script>
 (function () {{
@@ -835,7 +844,7 @@ STORY_TEMPLATE = """<details class="story{hot_class}">
       <div class="story-head">
         <span class="story-title">{title}{badge}</span>
         <div class="story-side">
-          <span class="story-meta">{when}</span>
+          <span class="story-meta"><time class="local-time" datetime="{when_iso}">{when}</time></span>
           {save_button}
         </div>
       </div>
@@ -854,7 +863,7 @@ SINGLE_STORY_TEMPLATE = """<a class="story story-link{hot_class}" href="{link}" 
     <div class="story-head">
       <span class="story-title">{title}{badge}</span>
       <div class="story-side">
-        <span class="story-meta">{when}</span>
+        <span class="story-meta"><time class="local-time" datetime="{when_iso}">{when}</time></span>
         {save_button}
       </div>
     </div>
@@ -902,6 +911,7 @@ def hotness_score(group):
 def render_story(group):
     lead = group[0]
     when = lead["published"].strftime("%H:%M UTC")
+    when_iso = lead["published"].isoformat()
     image_src = lead.get("image") or PLACEHOLDER_THUMB
     thumb = THUMB_TEMPLATE.format(src=html.escape(image_src))
     snippet_text = three_line_summary(lead["summary"])
@@ -935,6 +945,7 @@ def render_story(group):
             badge=badge,
             hot_class=hot_class,
             when=when,
+            when_iso=when_iso,
             save_button=save_button,
             snippet=snippet,
         )
@@ -954,6 +965,7 @@ def render_story(group):
         badge=badge,
         hot_class=hot_class,
         when=when,
+        when_iso=when_iso,
         save_button=save_button,
         snippet=snippet,
         source_items=source_items,
