@@ -26,7 +26,14 @@ monthly cost.
   Agent (`WhatsApp/2.0`) before a regular browser one, since paywalled sites
   (confirmed on WSJ, which 401s a normal request) commonly allowlist
   link-preview bots so their og:image/description still show up when shared
-  — exactly the metadata we want, nothing paywalled. And a 3-line summary —
+  — exactly the metadata we want, nothing paywalled — and retries the whole
+  pair once after a short pause, since most failures here turn out to be
+  transient (confirmed by re-fetching "failed" URLs from a live run and
+  having most of them succeed) rather than a hard block. A genuine miss
+  (site sets no og:image at all — confirmed happens, e.g. some Streamlit
+  apps and z.ai) just falls back to the placeholder icon; nothing more to
+  do for those without heavier scraping this project intentionally avoids.
+  And a 3-line summary —
   a real Gemini-written one if `GEMINI_API_KEY` is set
   (see below), otherwise a text-extracted excerpt from the feed's own
   description.

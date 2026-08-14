@@ -163,16 +163,25 @@ def fetch_og_meta(article_url):
     and og:description meta tags. Only called for cluster leads missing an
     image and/or a usable summary from the feed itself. Tries a link-preview
     bot UA first, then a regular browser UA, since different sites block
-    different ones."""
+    different ones. Most failures we've seen here are transient (a site
+    momentarily rate-limiting or timing out, not a hard block — confirmed
+    by manually retrying "failed" URLs from a live run and having most of
+    them succeed), so retry the whole pair once after a short pause before
+    giving up."""
     chunk = None
-    for ua in (OG_FETCH_USER_AGENT, USER_AGENT):
-        try:
-            req = urllib.request.Request(article_url, headers={"User-Agent": ua})
-            with urllib.request.urlopen(req, timeout=6) as resp:
-                chunk = resp.read(65536).decode("utf-8", errors="ignore")
+    for attempt in range(2):
+        for ua in (OG_FETCH_USER_AGENT, USER_AGENT):
+            try:
+                req = urllib.request.Request(article_url, headers={"User-Agent": ua})
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    chunk = resp.read(65536).decode("utf-8", errors="ignore")
+                break
+            except Exception:
+                continue
+        if chunk is not None:
             break
-        except Exception:
-            continue
+        if attempt == 0:
+            time.sleep(1.5)
     if chunk is None:
         return {}
     meta = {}
